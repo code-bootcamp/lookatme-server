@@ -9,6 +9,7 @@ import {
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { User } from 'src/apis/users/entities/user.entity';
 import { Mood } from 'src/apis/moods/entities/mood.entity';
+import { Tag } from 'src/apis/tags/entities/tag.entity';
 
 @Entity()
 @ObjectType()
@@ -45,4 +46,9 @@ export class Board {
   @ManyToMany(() => Mood, (moods) => moods.boards)
   @Field(() => [Mood])
   moods: Mood[];
+
+  @JoinColumn()
+  @ManyToMany(() => Tag, (tags) => tags.boards)
+  @Field(() => [Tag])
+  tags: Tag[];
 }
