@@ -1,0 +1,35 @@
+import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { AppController } from './app.controller';
+import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { helloWorldsModule } from './apis/helloWorld/helloWorld.module';
+
+@Module({
+  imports: [
+    helloWorldsModule,
+    ConfigModule.forRoot({
+      // to read .env files
+      isGlobal: true, // globalize .env file so that every files can use .env
+    }),
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      autoSchemaFile: 'src/commons/graphql/schema.gql',
+      context: ({ req, res }) => ({ req, res }), // enable to use graphql req, res
+    }),
+    TypeOrmModule.forRoot({
+      type: process.env.DATABASE_TYPE as 'mysql',
+      host: process.env.DATABASE_HOST,
+      port: Number(process.env.DATABASE_PORT),
+      username: process.env.DATABASE_USERNAME,
+      password: process.env.DATABASE_PASSWORD,
+      database: process.env.DATABASE_DATABASE,
+      entities: [__dirname + '/apis/**/*.entity.*'],
+      synchronize: true,
+      logging: true, //SQL query will be displayed on terminal
+    }),
+  ],
+  controllers: [AppController], // health cheacking
+})
+export class AppModule {}
