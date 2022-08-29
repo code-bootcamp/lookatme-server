@@ -2,6 +2,7 @@ import {
   Column,
   Entity,
   JoinColumn,
+  JoinTable,
   ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
@@ -18,7 +19,7 @@ export class Board {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ type: 'int', unsigned: true, nullable: false })
+  @Column({ type: 'int', unsigned: true, nullable: false, default: 0 })
   @Field(() => Int)
   like: number;
 
@@ -43,11 +44,12 @@ export class Board {
   @Field(() => [User])
   users: User[];
 
+  @JoinTable()
   @ManyToMany(() => Mood, (moods) => moods.boards)
   @Field(() => [Mood])
   moods: Mood[];
 
-  @JoinColumn()
+  @JoinTable()
   @ManyToMany(() => Tag, (tags) => tags.boards)
   @Field(() => [Tag])
   tags: Tag[];
