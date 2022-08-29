@@ -23,7 +23,7 @@ export class Address {
   @Field(() => String)
   addressDetail: string;
 
-  @Column({ type: 'char', length: 10, nullable: false })
+  @Column({ type: 'char', length: 5, nullable: false })
   @Field(() => String)
   zipcode: string;
 

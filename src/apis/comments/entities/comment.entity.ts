@@ -7,6 +7,7 @@ import {
 } from 'typeorm';
 import { Field, ObjectType } from '@nestjs/graphql';
 import { User } from 'src/apis/users/entities/user.entity';
+import { Board } from 'src/apis/boards/etities/board.entity';
 
 @Entity()
 @ObjectType()
@@ -23,4 +24,9 @@ export class Comment {
   @ManyToOne(() => User)
   @Field(() => User)
   user: User;
+
+  @JoinColumn()
+  @ManyToOne(() => Board)
+  @Field(() => Board)
+  board: Board;
 }

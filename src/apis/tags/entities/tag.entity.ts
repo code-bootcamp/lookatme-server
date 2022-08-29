@@ -1,12 +1,6 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Board } from 'src/apis/boards/etities/board.entity';
-import {
-  Column,
-  Entity,
-  JoinTable,
-  ManyToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 @ObjectType()
@@ -19,7 +13,6 @@ export class Tag {
   @Column({ type: 'varchar', length: 100, nullable: false })
   name: string;
 
-  @JoinTable()
   @ManyToMany(() => Board, (boards) => boards.tags)
   @Field(() => [Board])
   boards: Board[];

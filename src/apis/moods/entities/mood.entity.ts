@@ -1,7 +1,9 @@
-import { Field } from '@nestjs/graphql';
+import { Field, ObjectType } from '@nestjs/graphql';
 import { Board } from 'src/apis/boards/etities/board.entity';
-import { Column, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 
+@Entity()
+@ObjectType()
 export class Mood {
   @Field(() => String)
   @PrimaryGeneratedColumn('uuid')
@@ -11,7 +13,6 @@ export class Mood {
   @Field(() => String)
   name: string;
 
-  @JoinTable()
   @ManyToMany(() => Board, (boards) => boards.moods)
   @Field(() => [Board])
   boards: Board[];
