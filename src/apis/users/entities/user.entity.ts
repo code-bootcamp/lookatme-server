@@ -15,7 +15,7 @@ export class User {
   @Field(() => String)
   id: string;
 
-  @Column({ type: 'varchar', length: 50, nullable: false })
+  @Column({ type: 'varchar', length: 50, nullable: false, unique: true })
   @Field(() => String)
   email: string;
 
@@ -26,7 +26,7 @@ export class User {
   @Field(() => String)
   nickname: string;
 
-  @Column({ type: 'varchar', length: 20, nullable: false })
+  @Column({ type: 'varchar', length: 20, nullable: false, unique: true })
   @Field(() => String)
   phone_number: string;
 

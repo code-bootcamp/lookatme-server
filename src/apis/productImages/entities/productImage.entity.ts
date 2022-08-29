@@ -1,5 +1,12 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Product } from 'src/apis/products/entities/product.entity';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 @ObjectType()
@@ -11,4 +18,9 @@ export class ProductImage {
   @Column({ type: 'varchar', length: 300, nullable: false })
   @Field(() => String)
   url: string;
+
+  @JoinColumn()
+  @ManyToOne(() => Product)
+  @Field(() => Product)
+  product: Product;
 }
