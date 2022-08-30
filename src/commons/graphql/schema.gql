@@ -1,0 +1,51 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Mood {
+  id: String!
+  name: String!
+  boards: [Board!]!
+}
+
+type Tag {
+  id: String!
+  name: String!
+  boards: [Board!]!
+}
+
+type Board {
+  id: String!
+  like: Int!
+  season: String!
+  isMaker: Boolean!
+  contents: String!
+  user: User!
+  users: [User!]!
+  moods: [Mood!]!
+  tags: [Tag!]!
+}
+
+type User {
+  id: String!
+  email: String!
+  nickname: String!
+  phone_number: String!
+  gender: String!
+  height: Int!
+  point: Int!
+  savedBoards: [Board!]!
+}
+
+type Product {
+  id: String!
+  name: String!
+  price: Int!
+  isSoldout: Boolean!
+  user: User!
+  board: Board!
+}
+
+type Query {
+  fetchUsers: [User!]!
+}

@@ -4,9 +4,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { UsersModule } from './apis/users/users.module';
 
 @Module({
   imports: [
+    UsersModule,
     ConfigModule.forRoot({
       // to read .env files
       isGlobal: true, // globalize .env file so that every files can use .env
