@@ -1,5 +1,6 @@
-import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Field, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { Board } from 'src/apis/boards/entities/board.entity';
+import { GenderDefault } from 'src/commons/type/enum';
 import {
   Column,
   Entity,
@@ -7,6 +8,10 @@ import {
   ManyToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+
+registerEnumType(GenderDefault, {
+  name: 'GenderDefault',
+});
 
 @Entity()
 @ObjectType()
@@ -26,13 +31,13 @@ export class User {
   @Field(() => String)
   nickname: string;
 
-  @Column({ type: 'varchar', length: 20, nullable: false, unique: true })
+  @Column({ type: 'varchar', length: 20, nullable: false })
   @Field(() => String)
   phone_number: string;
 
-  @Column({ type: 'char', length: 4, nullable: false })
-  @Field(() => String)
-  gender: string;
+  @Column({ type: 'enum', enum: GenderDefault })
+  @Field(() => GenderDefault)
+  gender: GenderDefault;
 
   @Column({ type: 'int', unsigned: true, nullable: false })
   @Field(() => Int)
@@ -41,6 +46,10 @@ export class User {
   @Column({ type: 'int', unsigned: true, default: 0, nullable: false })
   @Field(() => Int)
   point: number;
+
+  @Column({ type: 'boolean', default: false })
+  @Field(() => Boolean)
+  admin: boolean;
 
   @JoinTable()
   @ManyToMany(() => Board, (savedBoards) => savedBoards.users)
