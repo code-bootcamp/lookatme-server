@@ -24,6 +24,14 @@ export class Product {
   @Column({ type: 'int', unsigned: true, nullable: false })
   price: number;
 
+  @Field(() => String)
+  @Column({ type: 'varchar', length: 200, nullable: false })
+  description: string;
+
+  @Field(() => String)
+  @Column({ type: 'varchar', length: 100, nullable: false })
+  img_url: string;
+
   @Field(() => Boolean)
   @Column({ type: 'boolean', default: false, nullable: false })
   isSoldout: boolean;
