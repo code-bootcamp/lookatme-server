@@ -8,11 +8,15 @@ import { UsersModule } from './apis/users/users.module';
 import { RedisClientOptions } from 'redis';
 import * as redisStore from 'cache-manager-redis-store';
 import { AuthsModule } from './apis/auth/auths.module';
+import { ProductModule } from './apis/products/product.module';
+import { FileModule } from './apis/file/file.module';
 
 @Module({
   imports: [
     AuthsModule,
+    FileModule,
     UsersModule,
+    ProductModule,
     ConfigModule.forRoot({
       // to read .env files
       isGlobal: true, // globalize .env file so that every files can use .env

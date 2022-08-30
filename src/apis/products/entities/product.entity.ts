@@ -29,7 +29,7 @@ export class Product {
   description: string;
 
   @Field(() => String)
-  @Column({ type: 'varchar', length: 100, nullable: false })
+  @Column({ type: 'varchar', length: 100, nullable: true })
   img_url: string;
 
   @Field(() => Boolean)
