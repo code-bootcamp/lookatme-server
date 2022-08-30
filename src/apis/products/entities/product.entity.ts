@@ -25,11 +25,11 @@ export class Product {
   price: number;
 
   @Field(() => String)
-  @Column({ type: 'varchar', length: 200, nullable: true })
-  desc: string;
+  @Column({ type: 'varchar', length: 200 })
+  description: string;
 
   @Field(() => String)
-  @Column({ type: 'varchar', length: 100, nullable: true })
+  @Column({ type: 'varchar', length: 100 })
   imgUrl: string;
 
   @Field(() => Boolean)

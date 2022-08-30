@@ -41,6 +41,8 @@ type Product {
   id: String!
   name: String!
   price: Int!
+  desc: String!
+  imgUrl: String!
   isSoldout: Boolean!
   user: User!
   board: Board!
