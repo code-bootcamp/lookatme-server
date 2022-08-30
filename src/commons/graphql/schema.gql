@@ -2,6 +2,23 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type User {
+  id: String!
+  email: String!
+  nickname: String!
+  phone_number: String!
+  gender: GenderDefault!
+  height: Int!
+  point: Int!
+  admin: Boolean!
+  savedBoards: [Board!]!
+}
+
+enum GenderDefault {
+  MALE
+  FEMALE
+}
+
 type Mood {
   id: String!
   name: String!
@@ -26,17 +43,6 @@ type Board {
   tags: [Tag!]!
 }
 
-type User {
-  id: String!
-  email: String!
-  nickname: String!
-  phone_number: String!
-  gender: String!
-  height: Int!
-  point: Int!
-  savedBoards: [Board!]!
-}
-
 type Product {
   id: String!
   name: String!
@@ -48,4 +54,39 @@ type Product {
 
 type Query {
   fetchUsers: [User!]!
+  fetchUser(email: String!): User!
+  fetchLoginUser: User!
+  fetchUsersWithDeleted: [User!]!
+}
+
+type Mutation {
+  login(email: String!, password: String!): String!
+  logout: String!
+  restoreAccessToken: String!
+  createUser(createUserInput: CreateUserInput!): User!
+  updateUser(userId: String!, updateUserInput: UpdateUserInput!): User!
+  updateUserPwd(newPassword: String!): User!
+  deleteUser(userId: String!): Boolean!
+  deleteLoginUser: Boolean!
+  restoreUser(userId: String!): Boolean!
+}
+
+input CreateUserInput {
+  email: String!
+  password: String!
+  nickname: String!
+  phone_number: String!
+  gender: String!
+  height: Int!
+  admin: Boolean
+}
+
+input UpdateUserInput {
+  email: String
+  password: String
+  nickname: String
+  phone_number: String
+  gender: String
+  height: Int
+  admin: Boolean
 }

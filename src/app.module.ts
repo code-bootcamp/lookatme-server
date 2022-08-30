@@ -1,13 +1,17 @@
-import { Module } from '@nestjs/common';
+import { CacheModule, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { UsersModule } from './apis/users/users.module';
+import { RedisClientOptions } from 'redis';
+import * as redisStore from 'cache-manager-redis-store';
+import { AuthsModule } from './apis/auth/auths.module';
 
 @Module({
   imports: [
+    AuthsModule,
     UsersModule,
     ConfigModule.forRoot({
       // to read .env files
@@ -28,6 +32,11 @@ import { UsersModule } from './apis/users/users.module';
       entities: [__dirname + '/apis/**/*.entity.*'],
       synchronize: true,
       logging: true, //SQL query will be displayed on terminal
+    }),
+    CacheModule.register<RedisClientOptions>({
+      store: redisStore, // type of storage
+      url: 'redis://my-redis:6379', // access to redis of docker using name resolution
+      isGlobal: true, // able to use on every modules
     }),
   ],
   controllers: [AppController], // health cheacking
