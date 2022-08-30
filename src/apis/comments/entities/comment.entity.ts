@@ -7,7 +7,7 @@ import {
 } from 'typeorm';
 import { Field, ObjectType } from '@nestjs/graphql';
 import { User } from 'src/apis/users/entities/user.entity';
-import { Board } from 'src/apis/boards/etities/board.entity';
+import { Board } from 'src/apis/boards/entities/board.entity';
 
 @Entity()
 @ObjectType()
