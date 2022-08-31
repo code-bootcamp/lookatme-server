@@ -7,6 +7,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -28,7 +29,7 @@ export class OrderHistory {
   user: User;
 
   @JoinColumn()
-  @ManyToOne(() => Product)
+  @OneToOne(() => Product)
   @Field(() => Product)
   product: Product;
 }
