@@ -6,6 +6,8 @@ import { JwtRefreshStrategy } from 'src/commons/auth/jwt-refresh.strategy';
 import { JwtGoogleStrategy } from 'src/commons/auth/jwt-social-google.strategy';
 import { JwtKakaoStrategy } from 'src/commons/auth/jwt-social-kakao.strategy';
 import { JwtNaverStrategy } from 'src/commons/auth/jwt-social-naver.strategy';
+import { AddressService } from '../addresses/addresses.service';
+import { Address } from '../addresses/entities/address.entity';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 import { AuthsController } from './auths.controller';
@@ -17,6 +19,7 @@ import { AuthsService } from './auths.service';
     JwtModule.register({}), //
     TypeOrmModule.forFeature([
       User, // usersSevice uses Product, User Repository
+      Address,
     ]),
   ],
   providers: [
@@ -28,6 +31,7 @@ import { AuthsService } from './auths.service';
     AuthsResolver,
     AuthsService,
     UsersService,
+    AddressService,
   ],
   controllers: [
     AuthsController, //

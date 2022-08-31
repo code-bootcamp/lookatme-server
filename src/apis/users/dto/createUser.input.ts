@@ -1,5 +1,6 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
 import { Min } from 'class-validator';
+import { CreateAddressInput } from 'src/apis/addresses/dto/createAddress.input';
 
 @InputType()
 export class CreateUserInput {
@@ -24,4 +25,7 @@ export class CreateUserInput {
 
   @Field(() => Boolean, { nullable: true })
   admin: boolean;
+
+  @Field(() => [CreateAddressInput])
+  addresses: CreateAddressInput[];
 }

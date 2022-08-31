@@ -2,23 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type User {
-  id: String!
-  email: String!
-  nickname: String!
-  phone_number: String!
-  gender: GenderDefault!
-  height: Int!
-  point: Int!
-  admin: Boolean!
-  savedBoards: [Board!]!
-}
-
-enum GenderDefault {
-  MALE
-  FEMALE
-}
-
 type Mood {
   id: String!
   name: String!
@@ -41,6 +24,32 @@ type Board {
   users: [User!]!
   moods: [Mood!]!
   tags: [Tag!]!
+}
+
+type User {
+  id: String!
+  email: String!
+  nickname: String!
+  phone_number: String!
+  gender: GenderDefault!
+  height: Int!
+  point: Int!
+  admin: Boolean!
+  savedBoards: [Board!]!
+  addresses: [Address!]!
+}
+
+enum GenderDefault {
+  MALE
+  FEMALE
+}
+
+type Address {
+  id: String!
+  address: String!
+  addressDetail: String!
+  zipcode: String!
+  user: User!
 }
 
 type Product {
@@ -86,16 +95,23 @@ input CreateUserInput {
   gender: String!
   height: Int!
   admin: Boolean
+  addresses: [CreateAddressInput!]!
+}
+
+input CreateAddressInput {
+  address: String!
+  addressDetail: String!
+  zipcode: String!
 }
 
 input UpdateUserInput {
   email: String
-  password: String
   nickname: String
   phone_number: String
   gender: String
   height: Int
   admin: Boolean
+  addresses: [CreateAddressInput!]
 }
 
 input CreateProductInput {
