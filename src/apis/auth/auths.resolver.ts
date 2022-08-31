@@ -84,8 +84,8 @@ export class AuthsResolver {
     const refreshToken = header.cookie.replace('refreshToken=', '');
 
     try {
-      jwt.verify(accessToken, 'myAccessKey');
-      jwt.verify(refreshToken, 'myRefreshKey');
+      jwt.verify(accessToken, process.env.JWT_ACCESS_SECRET);
+      jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
     } catch (error) {
       throw new HttpException(
         error.response.message, //

@@ -26,7 +26,7 @@ export class AuthsService {
         sub: user.id,
       },
       {
-        secret: 'myRefreshKey', // secret code
+        secret: process.env.JWT_REFRESH_SECRET, // secret code
         expiresIn: '2w', // expiration period
       },
     );
@@ -49,7 +49,7 @@ export class AuthsService {
         sub: user.id,
       },
       {
-        secret: 'myAccessKey', // secret code
+        secret: process.env.JWT_ACCESS_SECRET, // secret code
         expiresIn: '1h', // expiration period
       },
     );
