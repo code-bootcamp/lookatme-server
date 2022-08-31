@@ -1,11 +1,14 @@
 import { Field, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
+import { Address } from 'src/apis/addresses/entities/address.entity';
 import { Board } from 'src/apis/boards/entities/board.entity';
 import { GenderDefault } from 'src/commons/type/enum';
 import {
   Column,
+  DeleteDateColumn,
   Entity,
   JoinTable,
   ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -55,4 +58,11 @@ export class User {
   @ManyToMany(() => Board, (savedBoards) => savedBoards.users)
   @Field(() => [Board])
   savedBoards: Board[];
+
+  @OneToMany(() => Address, (addresses) => addresses.user)
+  @Field(() => [Address])
+  addresses: Address[];
+
+  @DeleteDateColumn()
+  deletedAt: Date;
 }

@@ -2,6 +2,7 @@ import { Field, ObjectType } from '@nestjs/graphql';
 import { User } from 'src/apis/users/entities/user.entity';
 import {
   Column,
+  DeleteDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -31,4 +32,7 @@ export class Address {
   @ManyToOne(() => User)
   @Field(() => User)
   user: User;
+
+  @DeleteDateColumn()
+  deletedAt: Date;
 }
