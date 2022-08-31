@@ -1,5 +1,8 @@
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { UseGuards } from '@nestjs/common';
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { CreateProductInput } from './dto/createProduct.input';
+import { updateProductInput } from './dto/updateProduct.input';
 import { Product } from './entities/product.entity';
 import { ProductService } from './product.service';
 
@@ -9,10 +12,26 @@ export class ProductResolver {
     private readonly productService: ProductService, //
   ) {}
 
+  @Query(() => [Product])
+  fetchProducts() {
+    return this.productService.findAll();
+  }
+
+  @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => Product)
   createProduct(
+    @Context() context: any, //
     @Args('createProductInput') createProductInput: CreateProductInput,
   ) {
-    return this.productService.create({ createProductInput });
+    const userId = context.req.user.id;
+    return this.productService.create({ createProductInput, userId });
   }
+
+  // @Mutation(() => Product)
+  // updateProduct(
+  //   @Args('id') id: string,
+  //   @Args('updateProductInput') updateProductInput: updateProductInput,
+  // ) {
+  //   return this.productService.update({ id, updateProductInput });
+  // }
 }
