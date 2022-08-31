@@ -26,7 +26,6 @@ export class FileService {
         .on('finish', () => resolve(`${BUCKET_NAME}/${fname}`))
         .on('error', () => reject('이미지 업로드에 실패했습니다.'));
     });
-
-    return result;
+    return 'https://storage.googleapis.com/' + result;
   }
 }
