@@ -23,7 +23,7 @@ export class AuthsService {
     const refreshToken = this.jwtServices.sign(
       {
         email: user.email, //
-        sub: user.user_id,
+        sub: user.id,
       },
       {
         secret: 'myRefreshKey', // secret code

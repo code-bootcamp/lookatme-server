@@ -50,10 +50,6 @@ export class User {
   @Field(() => Int)
   point: number;
 
-  @Column({ type: 'boolean', default: false })
-  @Field(() => Boolean)
-  admin: boolean;
-
   @JoinTable()
   @ManyToMany(() => Board, (savedBoards) => savedBoards.users)
   @Field(() => [Board])

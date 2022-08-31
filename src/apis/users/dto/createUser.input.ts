@@ -23,9 +23,6 @@ export class CreateUserInput {
   @Field(() => Int)
   height: number;
 
-  @Field(() => Boolean, { nullable: true })
-  admin: boolean;
-
   @Field(() => [CreateAddressInput])
   addresses: CreateAddressInput[];
 }

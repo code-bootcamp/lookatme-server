@@ -10,6 +10,7 @@ import * as bcrypt from 'bcrypt';
 import { IContext } from 'src/commons/type/context';
 import { GqlAuthRefreshGuard } from 'src/commons/auth/gql-auth.guard';
 import * as jwt from 'jsonwebtoken';
+import { AdminsService } from '../admin/admins.service';
 
 @Resolver()
 export class AuthsResolver {
@@ -17,6 +18,8 @@ export class AuthsResolver {
     private readonly authsService: AuthsService, //
 
     private readonly usersService: UsersService,
+
+    private readonly adminsService: AdminsService,
   ) {}
 
   /////////////////////////////// Mutation //////////////////////////////////////
@@ -43,6 +46,33 @@ export class AuthsResolver {
     // 5. 일치하는 유저, 비밀번호도 맞은 경우
     //  ==> accessToken(=JWT) 만들어서 브라우저에 전달하기
     return this.authsService.getAccessToken({ user });
+  }
+
+  @Mutation(() => String)
+  async adminLogin(
+    @Args('email') email: string, //
+    @Args('password') password: string,
+    @Context() context: IContext,
+  ) {
+    // 1. 로그인 (이메일이 일치하는 관리자를 DB에서 찾기)
+    const admin = await this.adminsService.findOne({ email });
+
+    // 2. 일치하는 관리자가 없으면 에러 던지기
+    if (!admin)
+      throw new UnprocessableEntityException(
+        '존재하지 않는 관리자 이메일 입니다.',
+      );
+
+    // 3. 일치하는 관리자가 있지만 비밀번호가 틀렸을 경우
+    const isAuth = await bcrypt.compare(password, admin.password);
+    if (!isAuth) throw new UnprocessableEntityException('암호가 틀렸습니다.');
+
+    // 4. refreshToken(=JWT) 생성 및 프론트엔드 브라우저 쿠키에 저장해서 보내주기
+    this.authsService.setRefreshToken({ user: admin, res: context.res });
+
+    // 5. 일치하는 관리자, 비밀번호도 맞은 경우
+    //  ==> accessToken(=JWT) 만들어서 브라우저에 전달하기
+    return this.authsService.getAccessToken({ user: admin });
   }
 
   @Mutation(() => String)

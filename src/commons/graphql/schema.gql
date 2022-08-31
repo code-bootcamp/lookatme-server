@@ -34,7 +34,6 @@ type User {
   gender: GenderDefault!
   height: Int!
   point: Int!
-  admin: Boolean!
   savedBoards: [Board!]!
   addresses: [Address!]!
 }
@@ -50,6 +49,12 @@ type Address {
   addressDetail: String!
   zipcode: String!
   user: User!
+}
+
+type Admin {
+  id: String!
+  email: String!
+  nickname: String!
 }
 
 type Product {
@@ -71,21 +76,36 @@ type Query {
 }
 
 type Mutation {
+  createAdmin(createAdminInput: CreateAdminInput!): Admin!
   login(email: String!, password: String!): String!
+  adminLogin(email: String!, password: String!): String!
   logout: String!
   restoreAccessToken: String!
   uploadProductFile(files: [Upload!]!): String!
+  createProduct(createProductInput: CreateProductInput!): Product!
   createUser(createUserInput: CreateUserInput!): User!
   updateUser(userId: String!, updateUserInput: UpdateUserInput!): User!
   updateUserPwd(newPassword: String!): User!
   deleteUser(userId: String!): Boolean!
   deleteLoginUser: Boolean!
   restoreUser(userId: String!): Boolean!
-  createProduct(createProductInput: CreateProductInput!): Product!
+}
+
+input CreateAdminInput {
+  email: String!
+  password: String!
+  nickname: String!
 }
 
 """The `Upload` scalar type represents a file upload."""
 scalar Upload
+
+input CreateProductInput {
+  name: String!
+  price: Int!
+  description: String!
+  img_url: String!
+}
 
 input CreateUserInput {
   email: String!
@@ -94,7 +114,6 @@ input CreateUserInput {
   phone_number: String!
   gender: String!
   height: Int!
-  admin: Boolean
   addresses: [CreateAddressInput!]!
 }
 
@@ -110,13 +129,5 @@ input UpdateUserInput {
   phone_number: String
   gender: String
   height: Int
-  admin: Boolean
   addresses: [CreateAddressInput!]
-}
-
-input CreateProductInput {
-  name: String!
-  price: Int!
-  description: String!
-  img_url: String!
 }
