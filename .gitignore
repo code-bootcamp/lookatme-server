@@ -36,3 +36,4 @@ lerna-debug.log*
 
 # Environmet Variable
 .env*
+team06-storage.json

@@ -47,6 +47,8 @@ type Product {
   id: String!
   name: String!
   price: Int!
+  description: String!
+  img_url: String!
   isSoldout: Boolean!
   user: User!
   board: Board!
@@ -63,13 +65,18 @@ type Mutation {
   login(email: String!, password: String!): String!
   logout: String!
   restoreAccessToken: String!
+  uploadFile(files: [Upload!]!): [String!]!
   createUser(createUserInput: CreateUserInput!): User!
   updateUser(userId: String!, updateUserInput: UpdateUserInput!): User!
   updateUserPwd(newPassword: String!): User!
   deleteUser(userId: String!): Boolean!
   deleteLoginUser: Boolean!
   restoreUser(userId: String!): Boolean!
+  createProduct(createProductInput: CreateProductInput!): Product!
 }
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
 
 input CreateUserInput {
   email: String!
@@ -89,4 +96,11 @@ input UpdateUserInput {
   gender: String
   height: Int
   admin: Boolean
+}
+
+input CreateProductInput {
+  name: String!
+  price: Int!
+  description: String!
+  img_url: String!
 }
