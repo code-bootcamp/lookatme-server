@@ -2,7 +2,7 @@ import { UseGuards } from '@nestjs/common';
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { CreateProductInput } from './dto/createProduct.input';
-import { updateProductInput } from './dto/updateProduct.input';
+import { UpdateProductInput } from './dto/updateProduct.input';
 import { Product } from './entities/product.entity';
 import { ProductService } from './product.service';
 
@@ -30,7 +30,7 @@ export class ProductResolver {
   @Mutation(() => Product)
   updateProduct(
     @Args('id') id: string,
-    @Args('updateProductInput') updateProductInput: updateProductInput,
+    @Args('updateProductInput') updateProductInput: UpdateProductInput,
   ) {
     return this.productService.update({ id, updateProductInput });
   }
