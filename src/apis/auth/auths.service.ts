@@ -35,11 +35,11 @@ export class AuthsService {
     res.setHeader('Set-Cookie', `refreshToken=${refreshToken}; path=/;`); // 프론트 브라우저 쿠키에 저장하기
 
     // 배포환경
-    // res.setHeader(
-    //   'Set-Cookie',
-    //   `refreshToken=${refreshToken}; path=/; domain=.mybackendsite.com; SameSite=None; Secure; httpOnly;`,
-    // );
-    // res.setHeader('Access-Control-Allow-Origin', 'https://myfrontsite.com');
+    res.setHeader(
+      'Set-Cookie',
+      `refreshToken=${refreshToken}; path=/; domain=.x0ng120x.shop; SameSite=None; Secure; httpOnly;`,
+    );
+    res.setHeader('Access-Control-Allow-Origin', 'https://x0ng120x.shop');
   }
 
   getAccessToken({ user }) {
