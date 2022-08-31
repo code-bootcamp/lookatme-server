@@ -69,11 +69,11 @@ type Product {
 }
 
 type Query {
+  fetchProducts: [Product!]!
   fetchUsers: [User!]!
   fetchUser(email: String!): User!
   fetchLoginUser: User!
   fetchUsersWithDeleted: [User!]!
-  fetchProducts: [Product!]!
 }
 
 type Mutation {
@@ -84,6 +84,8 @@ type Mutation {
   restoreAccessToken: String!
   uploadProductFile(files: [Upload!]!): String!
   createProduct(createProductInput: CreateProductInput!): Product!
+  updateProduct(id: String!, updateProductInput: updateProductInput!): Product!
+  deleteProduct(id: String!): Boolean!
   createUser(createUserInput: CreateUserInput!): User!
   updateUser(userId: String!, updateUserInput: UpdateUserInput!): User!
   updateUserPwd(newPassword: String!): User!
@@ -106,6 +108,13 @@ input CreateProductInput {
   price: Int!
   description: String!
   img_url: String!
+}
+
+input updateProductInput {
+  name: String
+  price: Int
+  description: String
+  img_url: String
 }
 
 input CreateUserInput {

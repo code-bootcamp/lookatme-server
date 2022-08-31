@@ -27,11 +27,18 @@ export class ProductResolver {
     return this.productService.create({ createProductInput, userId });
   }
 
-  // @Mutation(() => Product)
-  // updateProduct(
-  //   @Args('id') id: string,
-  //   @Args('updateProductInput') updateProductInput: updateProductInput,
-  // ) {
-  //   return this.productService.update({ id, updateProductInput });
-  // }
+  @Mutation(() => Product)
+  updateProduct(
+    @Args('id') id: string,
+    @Args('updateProductInput') updateProductInput: updateProductInput,
+  ) {
+    return this.productService.update({ id, updateProductInput });
+  }
+
+  @Mutation(() => Boolean)
+  deleteProduct(
+    @Args('id') id: string, //
+  ) {
+    return this.productService.delete({ id });
+  }
 }
