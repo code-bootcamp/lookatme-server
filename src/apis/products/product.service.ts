@@ -23,6 +23,7 @@ export class ProductService {
       img_url,
       user: userId,
     });
+
     return result;
   }
 
@@ -40,6 +41,7 @@ export class ProductService {
       description,
       img_url,
     });
+
     return result;
   }
 
