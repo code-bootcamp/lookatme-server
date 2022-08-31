@@ -47,7 +47,10 @@ export class UsersResolver {
   async createUser(
     @Args('createUserInput') createUserInput: CreateUserInput, //
   ) {
-    const hashedPassword = await bcrypt.hash(createUserInput.password, 10.2);
+    const hashedPassword = await bcrypt.hash(
+      createUserInput.password,
+      Number(process.env.HASH_SALT),
+    );
     return this.usersService.create({ hashedPassword, ...createUserInput });
   }
 

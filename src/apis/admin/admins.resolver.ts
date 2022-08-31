@@ -15,7 +15,10 @@ export class AdminsResolver {
   async createAdmin(
     @Args('createAdminInput') createAdminInput: CreateAdminInput, //
   ) {
-    const hashedPassword = await bcrypt.hash(createAdminInput.password, 10.2);
+    const hashedPassword = await bcrypt.hash(
+      createAdminInput.password,
+      Number(process.env.HASH_SALT),
+    );
     return this.adminsService.create({ hashedPassword, ...createAdminInput });
   }
 }
