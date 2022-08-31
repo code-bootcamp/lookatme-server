@@ -6,7 +6,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
   catch(exception: any) {
     const status = exception.getStatus();
     const message = exception.message;
-
+    // 배포때 콘솔 지우기
     console.log('-------------------');
     console.log('Exception Occur');
     console.log('message: ', message);
