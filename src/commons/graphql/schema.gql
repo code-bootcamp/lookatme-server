@@ -65,7 +65,7 @@ type Mutation {
   login(email: String!, password: String!): String!
   logout: String!
   restoreAccessToken: String!
-  uploadFile(files: [Upload!]!): [String!]!
+  uploadProductFile(files: [Upload!]!): String!
   createUser(createUserInput: CreateUserInput!): User!
   updateUser(userId: String!, updateUserInput: UpdateUserInput!): User!
   updateUserPwd(newPassword: String!): User!
