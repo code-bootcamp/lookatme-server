@@ -68,6 +68,7 @@ type Query {
   fetchUser(email: String!): User!
   fetchLoginUser: User!
   fetchUsersWithDeleted: [User!]!
+  fetchProducts: [Product!]!
 }
 
 type Mutation {
