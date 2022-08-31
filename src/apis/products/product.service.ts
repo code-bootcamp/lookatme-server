@@ -26,12 +26,25 @@ export class ProductService {
     return result;
   }
 
-  // async update({ id, updateProductInput }) {
-  //   const { name, price, description, img_url } = updateProductInput;
+  async update({ id, updateProductInput }) {
+    const { name, price, description, img_url } = updateProductInput;
 
-  //   const productForUpdate = await this.productRepository.findOne({
-  //     where: { id },
-  //   });
+    const productForUpdate = await this.productRepository.findOne({
+      where: { id },
+    });
 
-  // }
+    const result = this.productRepository.save({
+      ...productForUpdate,
+      name,
+      price,
+      description,
+      img_url,
+    });
+    return result;
+  }
+
+  async delete({ id }) {
+    const result = await this.productRepository.softDelete({ id });
+    return result.affected ? true : false;
+  }
 }

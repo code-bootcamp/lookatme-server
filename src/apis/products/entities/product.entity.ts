@@ -3,6 +3,7 @@ import { Board } from 'src/apis/boards/entities/board.entity';
 import { User } from 'src/apis/users/entities/user.entity';
 import {
   Column,
+  DeleteDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -35,6 +36,9 @@ export class Product {
   @Field(() => Boolean)
   @Column({ type: 'boolean', default: false, nullable: false })
   isSoldout: boolean;
+
+  @DeleteDateColumn()
+  deleteAt: Date;
 
   @JoinColumn()
   @ManyToOne(() => User)
