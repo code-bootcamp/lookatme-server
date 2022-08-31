@@ -1,10 +1,5 @@
-import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
-import { GenderDefault } from 'src/commons/type/enum';
+import { Field, ObjectType } from '@nestjs/graphql';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-
-registerEnumType(GenderDefault, {
-  name: 'GenderDefault',
-});
 
 @Entity()
 @ObjectType()
