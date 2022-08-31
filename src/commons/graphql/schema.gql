@@ -69,11 +69,11 @@ type Product {
 }
 
 type Query {
+  fetchProducts: [Product!]!
   fetchUsers: [User!]!
   fetchUser(email: String!): User!
   fetchLoginUser: User!
   fetchUsersWithDeleted: [User!]!
-  fetchProducts: [Product!]!
 }
 
 type Mutation {

@@ -5,7 +5,10 @@ import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
 import * as bcrypt from 'bcrypt';
 import { UseGuards } from '@nestjs/common';
-import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
+import {
+  GqlAuthAccessGuard,
+  GqlAuthAdminAccessGuard,
+} from 'src/commons/auth/gql-auth.guard';
 
 @Resolver()
 export class UsersResolver {
@@ -15,6 +18,7 @@ export class UsersResolver {
 
   ////////////////////Query/////////////////////////
 
+  @UseGuards(GqlAuthAdminAccessGuard)
   @Query(() => [User])
   fetchUsers() {
     return this.usersService.findAll();

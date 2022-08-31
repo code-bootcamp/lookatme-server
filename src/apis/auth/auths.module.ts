@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtAccessStrategy } from 'src/commons/auth/jwt-access.strategy';
+import { JwtAdminAccessStrategy } from 'src/commons/auth/jwt-admin-access.strategy';
 import { JwtRefreshStrategy } from 'src/commons/auth/jwt-refresh.strategy';
 import { JwtGoogleStrategy } from 'src/commons/auth/jwt-social-google.strategy';
 import { JwtKakaoStrategy } from 'src/commons/auth/jwt-social-kakao.strategy';
@@ -26,7 +27,8 @@ import { AuthsService } from './auths.service';
     ]),
   ],
   providers: [
-    JwtAccessStrategy, // declare location of provider doesn't matter
+    JwtAdminAccessStrategy, // declare location of provider doesn't matter
+    JwtAccessStrategy,
     JwtRefreshStrategy,
     JwtKakaoStrategy,
     JwtNaverStrategy,
