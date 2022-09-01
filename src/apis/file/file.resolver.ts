@@ -14,4 +14,11 @@ export class FileResolver {
   ) {
     return this.fileService.uploadProductImage({ files });
   }
+
+  @Mutation(() => [String])
+  uploadBoardFile(
+    @Args({ name: 'files', type: () => [GraphQLUpload] }) files: FileUpload[],
+  ) {
+    return this.fileService.uploadBoardImage({ files });
+  }
 }
