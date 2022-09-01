@@ -10,6 +10,8 @@ import { CreateAddressInput } from '../addresses/dto/createAddress.input';
 import { Address } from '../addresses/entities/address.entity';
 import { User } from './entities/user.entity';
 import * as coolsms from 'coolsms-node-sdk';
+import * as nodemailer from 'nodemailer';
+import { getToday } from 'src/commons/libraries/utills';
 
 @Injectable()
 export class UsersService {
@@ -74,7 +76,7 @@ export class UsersService {
   async update({ userId, updateUserInput }) {
     const { addresses, ...user } = updateUserInput;
 
-    // 1. fine user from User table with user_id
+    // 1. find user from User table with user_id
     const myuser = await this.userRepository.findOne({
       where: { id: userId },
       relations: ['addresses'],
@@ -204,6 +206,39 @@ export class UsersService {
       from: process.env.SMS_SENDER,
       text: `[LookAtMe] 요청하신 인증번호는 [${token}] 입니다.`,
       autoTypeDetect: true,
+    });
+  }
+
+  getWelcomeTemplate({ nickname }) {
+    return `
+    <html>
+        <body>
+            <div style="display: flex; flex-direction: column; align-items: center;">
+                <div style="width:500px;">
+                    <h1>${nickname}님 가입을 환영합니다!!!</h1>
+                    <hr />
+                    <div>가입일: ${getToday()}</div>
+                </div>
+            </div>
+        </body>
+    </html>
+    `;
+  }
+
+  async sendTemplate({ email, template }) {
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+
+    return await transporter.sendMail({
+      from: process.env.EMAIL_SENDER,
+      to: email,
+      subject: '[LookAtMe] 가입을 축하합니다!',
+      html: template,
     });
   }
 }

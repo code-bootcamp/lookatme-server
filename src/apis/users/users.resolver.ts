@@ -6,6 +6,8 @@ import { UsersService } from './users.service';
 import * as bcrypt from 'bcrypt';
 import {
   CACHE_MANAGER,
+  // ConflictException,
+  // HttpException,
   Inject,
   UnprocessableEntityException,
   UseGuards,
@@ -56,15 +58,40 @@ export class UsersResolver {
 
   ////////////////////Mutation/////////////////////////
 
-  @Mutation(() => User, { description: '회원 가입' })
+  @Mutation(() => User, { description: '회원 가입 및 환영 이메일 전송' })
   async createUser(
     @Args('createUserInput') createUserInput: CreateUserInput, //
   ) {
+    // 1. 비밀번호 암호화
     const hashedPassword = await bcrypt.hash(
       createUserInput.password,
       Number(process.env.HASH_SALT),
     );
-    return this.usersService.create({ hashedPassword, ...createUserInput });
+
+    // 배포환경
+    // 2. 가입환영 템플릿 만들기
+    // const template = this.usersService.getWelcomeTemplate({
+    //   nickname: createUserInput.nickname,
+    // });
+
+    // 3. 이메일에 가입환영 템플릿 전송하기
+    // try {
+    //   await this.usersService.sendTemplate({
+    //     email: createUserInput.email,
+    //     template,
+    //   });
+    // } catch (error) {
+    //   throw new HttpException(
+    //     error.response.message, //
+    //     error.status,
+    //   );
+    // }
+
+    // 4. 회원 생성
+    return this.usersService.create({
+      hashedPassword,
+      ...createUserInput,
+    });
   }
 
   @Mutation(() => User, { description: '회원정보 수정' })
