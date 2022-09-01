@@ -9,6 +9,7 @@ import { AddressService } from '../addresses/addresses.service';
 import { CreateAddressInput } from '../addresses/dto/createAddress.input';
 import { Address } from '../addresses/entities/address.entity';
 import { User } from './entities/user.entity';
+import * as coolsms from 'coolsms-node-sdk';
 
 @Injectable()
 export class UsersService {
@@ -185,5 +186,24 @@ export class UsersService {
     );
 
     return result.affected ? true : false;
+  }
+
+  getToken() {
+    return String(Math.floor(Math.random() * 10 ** 6)).padStart(6, '0');
+  }
+
+  async sendToken({ phone_number, token }) {
+    const mysms = coolsms.default;
+    const messageService = new mysms(
+      process.env.SMS_KEY,
+      process.env.SMS_SECRET,
+    );
+
+    return await messageService.sendOne({
+      to: phone_number,
+      from: process.env.SMS_SENDER,
+      text: `[LookAtMe] 요청하신 인증번호는 [${token}] 입니다.`,
+      autoTypeDetect: true,
+    });
   }
 }

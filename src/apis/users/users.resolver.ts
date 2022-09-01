@@ -4,27 +4,36 @@ import { UpdateUserInput } from './dto/updateUserInput';
 import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
 import * as bcrypt from 'bcrypt';
-import { UseGuards } from '@nestjs/common';
+import {
+  CACHE_MANAGER,
+  Inject,
+  UnprocessableEntityException,
+  UseGuards,
+} from '@nestjs/common';
 import {
   GqlAuthAccessGuard,
   GqlAuthAdminAccessGuard,
 } from 'src/commons/auth/gql-auth.guard';
+import { Cache } from 'cache-manager';
 
 @Resolver()
 export class UsersResolver {
   constructor(
     private readonly usersService: UsersService, //
+
+    @Inject(CACHE_MANAGER)
+    private readonly cacheManager: Cache,
   ) {}
 
   ////////////////////Query/////////////////////////
 
   @UseGuards(GqlAuthAdminAccessGuard)
-  @Query(() => [User])
+  @Query(() => [User], { description: '모든 회원 조회' })
   fetchUsers() {
     return this.usersService.findAll();
   }
 
-  @Query(() => User)
+  @Query(() => User, { description: '이메일로 회원 조회' })
   fetchUser(
     @Args('email') email: string, //
   ) {
@@ -32,7 +41,7 @@ export class UsersResolver {
   }
 
   @UseGuards(GqlAuthAccessGuard)
-  @Query(() => User)
+  @Query(() => User, { description: '로그인한 회원 정보 조회' })
   fetchLoginUser(
     @Context() context: any, //
   ) {
@@ -40,14 +49,14 @@ export class UsersResolver {
     return this.usersService.findOne({ email });
   }
 
-  @Query(() => [User])
+  @Query(() => [User], { description: '삭제된 회원도 같이 조회' })
   fetchUsersWithDeleted() {
     return this.usersService.findWithDeleted();
   }
 
   ////////////////////Mutation/////////////////////////
 
-  @Mutation(() => User)
+  @Mutation(() => User, { description: '회원 가입' })
   async createUser(
     @Args('createUserInput') createUserInput: CreateUserInput, //
   ) {
@@ -58,7 +67,7 @@ export class UsersResolver {
     return this.usersService.create({ hashedPassword, ...createUserInput });
   }
 
-  @Mutation(() => User)
+  @Mutation(() => User, { description: '회원정보 수정' })
   updateUser(
     @Args('userId') userId: string,
     @Args('updateUserInput') updateUserInput: UpdateUserInput,
@@ -67,18 +76,28 @@ export class UsersResolver {
   }
 
   @UseGuards(GqlAuthAccessGuard)
-  @Mutation(() => User)
+  @Mutation(() => User, { description: '회원 비밀번호 변경' })
   async updateUserPwd(
     @Context() context: any, //
     @Args('newPassword') newPassword: string,
   ) {
+    // 1. 이메일이 일치하는 유저를 DB에서 찾기
+    const user = await this.usersService.findOne({
+      email: context.req.user.email,
+    });
+
+    // 2. 비밀번호가 같으면
+    const isAuth = await bcrypt.compare(newPassword, user.password);
+    if (!isAuth) throw new UnprocessableEntityException('기존 비밀번호 입니다');
+
     const userId = context.req.user.id;
     const password = await bcrypt.hash(newPassword, 10.2);
 
+    // 3. 새로운 비밀번호 설정
     return this.usersService.updatePwd({ userId, password });
   }
 
-  @Mutation(() => Boolean)
+  @Mutation(() => Boolean, { description: '회원 삭제' })
   deleteUser(
     @Args('userId') userId: string, //
   ) {
@@ -86,7 +105,7 @@ export class UsersResolver {
   }
 
   @UseGuards(GqlAuthAccessGuard)
-  @Mutation(() => Boolean)
+  @Mutation(() => Boolean, { description: '회원탈퇴' })
   deleteLoginUser(
     @Context() context: any, //
   ) {
@@ -94,8 +113,31 @@ export class UsersResolver {
     return this.usersService.delete({ userId });
   }
 
-  @Mutation(() => Boolean)
+  @Mutation(() => Boolean, { description: '토큰 생성' })
   restoreUser(@Args('userId') userId: string) {
     return this.usersService.undoDelete({ userId });
+  }
+
+  @Mutation(() => String, { description: '토큰 보내기' })
+  async sendTokenToSMS(@Args('phone_number') phone_number: string) {
+    const token = this.usersService.getToken();
+    const result = await this.usersService.sendToken({ phone_number, token });
+
+    // in 3mins
+    await this.cacheManager.set(token, phone_number, {
+      ttl: 180,
+    });
+
+    if (result.statusCode === '2000')
+      // succeed
+      return `phone:${phone_number} token:${token}`;
+    else return `${result.statusCode}: ${result.statusMessage}`;
+  }
+
+  @Mutation(() => Boolean, { description: '토큰 확인' })
+  async checkToken(@Args('token') token: string) {
+    const tokenCache = await this.cacheManager.get(token);
+
+    return tokenCache ? true : false;
   }
 }
