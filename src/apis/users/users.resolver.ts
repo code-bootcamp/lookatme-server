@@ -88,10 +88,13 @@ export class UsersResolver {
 
     // 2. 비밀번호가 같으면
     const isAuth = await bcrypt.compare(newPassword, user.password);
-    if (!isAuth) throw new UnprocessableEntityException('기존 비밀번호 입니다');
+    if (isAuth) throw new UnprocessableEntityException('기존 비밀번호 입니다');
 
     const userId = context.req.user.id;
-    const password = await bcrypt.hash(newPassword, 10.2);
+    const password = await bcrypt.hash(
+      newPassword,
+      Number(process.env.HASH_SALT),
+    );
 
     // 3. 새로운 비밀번호 설정
     return this.usersService.updatePwd({ userId, password });
@@ -113,7 +116,7 @@ export class UsersResolver {
     return this.usersService.delete({ userId });
   }
 
-  @Mutation(() => Boolean, { description: '토큰 생성' })
+  @Mutation(() => Boolean, { description: '삭제된 회원 복구' })
   restoreUser(@Args('userId') userId: string) {
     return this.usersService.undoDelete({ userId });
   }
@@ -121,17 +124,22 @@ export class UsersResolver {
   @Mutation(() => String, { description: '토큰 보내기' })
   async sendTokenToSMS(@Args('phone_number') phone_number: string) {
     const token = this.usersService.getToken();
-    const result = await this.usersService.sendToken({ phone_number, token });
+    // 배포환경
+    // const result = await this.usersService.sendToken({ phone_number, token });
 
     // in 3mins
     await this.cacheManager.set(token, phone_number, {
       ttl: 180,
     });
 
-    if (result.statusCode === '2000')
-      // succeed
-      return `phone:${phone_number} token:${token}`;
-    else return `${result.statusCode}: ${result.statusMessage}`;
+    // 개발환경
+    return `phone:${phone_number} token:${token}`;
+
+    // 배포환경
+    // if (result.statusCode === '2000')
+    //   // succeed
+    //   return `phone:${phone_number} token:${token}`;
+    // else return `${result.statusCode}: ${result.statusMessage}`;
   }
 
   @Mutation(() => Boolean, { description: '토큰 확인' })

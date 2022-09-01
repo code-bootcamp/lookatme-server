@@ -11,7 +11,7 @@ export class AdminsResolver {
   ) {}
 
   ///////////////////////// Mutation ///////////////////////
-  @Mutation(() => Admin)
+  @Mutation(() => Admin, { description: '관리자 회원가입' })
   async createAdmin(
     @Args('createAdminInput') createAdminInput: CreateAdminInput, //
   ) {
