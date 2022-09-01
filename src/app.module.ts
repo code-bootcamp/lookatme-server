@@ -34,7 +34,7 @@ import { PaymentsModule } from './apis/payments/payments.module';
       autoSchemaFile: 'src/commons/graphql/schema.gql',
       context: ({ req, res }) => ({ req, res }), // enable to use graphql req, res
       cors: {
-        origin: ['https://lookatme.world'],
+        origin: ['https://lookatme.world', 'http://localhost:3000'],
         methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'PATCH', 'DELETE'],
         allowedHeaders: [
           'Access-Control-Allow-Headers',
