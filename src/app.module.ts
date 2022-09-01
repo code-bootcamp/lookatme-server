@@ -33,6 +33,18 @@ import { PaymentsModule } from './apis/payments/payments.module';
       driver: ApolloDriver,
       autoSchemaFile: 'src/commons/graphql/schema.gql',
       context: ({ req, res }) => ({ req, res }), // enable to use graphql req, res
+      cors: {
+        origin: ['https://lookatme.world'],
+        methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'PATCH', 'DELETE'],
+        allowedHeaders: [
+          'Access-Control-Allow-Headers',
+          'Authorization',
+          'X-Requested-With',
+          'Content-Type',
+          'Accept',
+        ],
+        credentials: true,
+      },
     }),
     TypeOrmModule.forRoot({
       type: process.env.DATABASE_TYPE as 'mysql',

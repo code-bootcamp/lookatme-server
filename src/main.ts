@@ -9,6 +9,18 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalFilters(new HttpExceptionFilter());
   app.use(graphqlUploadExpress());
+  app.enableCors({
+    origin: ['https://lookatme.world'],
+    methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'PATCH', 'DELETE'],
+    allowedHeaders: [
+      'Access-Control-Allow-Headers',
+      'Authorization',
+      'X-Requested-With',
+      'Content-Type',
+      'Accept',
+    ],
+    credentials: true,
+  });
   await app.listen(3000);
 }
 bootstrap();
