@@ -38,4 +38,5 @@ lerna-debug.log*
 .env*
 team06-storage.json
 
+# schema git conflict
 schema.gql
