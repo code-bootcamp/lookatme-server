@@ -12,6 +12,8 @@ import { ProductModule } from './apis/products/product.module';
 import { FileModule } from './apis/file/file.module';
 import { AdminsModule } from './apis/admin/admins.module';
 import { BoardModule } from './apis/boards/board.module';
+import { IamportsModule } from './apis/iamport/iamports.module';
+import { PaymentsModule } from './apis/payments/payments.module';
 
 @Module({
   imports: [
@@ -19,6 +21,8 @@ import { BoardModule } from './apis/boards/board.module';
     AuthsModule,
     BoardModule,
     FileModule,
+    IamportsModule,
+    PaymentsModule,
     ProductModule,
     UsersModule,
     ConfigModule.forRoot({

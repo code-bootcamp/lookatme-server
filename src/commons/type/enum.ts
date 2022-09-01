@@ -9,3 +9,8 @@ export enum BOARD_SEASON {
   FALL = 'FALL',
   WINTER = 'WINTER',
 }
+
+export enum PAYMENT_ENUM {
+  PAYMENT = 'PAYMENT',
+  CANCEL = 'CANCEL',
+}
