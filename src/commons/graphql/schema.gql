@@ -70,9 +70,17 @@ type Product {
 
 type Query {
   fetchProducts: [Product!]!
+
+  """모든 회원 조회"""
   fetchUsers: [User!]!
+
+  """이메일로 회원 조회"""
   fetchUser(email: String!): User!
+
+  """로그인한 회원 정보 조회"""
   fetchLoginUser: User!
+
+  """삭제된 회원도 같이 조회"""
   fetchUsersWithDeleted: [User!]!
 }
 
@@ -84,14 +92,32 @@ type Mutation {
   restoreAccessToken: String!
   uploadProductFile(files: [Upload!]!): String!
   createProduct(createProductInput: CreateProductInput!): Product!
-  updateProduct(id: String!, updateProductInput: updateProductInput!): Product!
+  updateProduct(id: String!, updateProductInput: UpdateProductInput!): Product!
   deleteProduct(id: String!): Boolean!
+
+  """회원 가입"""
   createUser(createUserInput: CreateUserInput!): User!
+
+  """회원정보 수정"""
   updateUser(userId: String!, updateUserInput: UpdateUserInput!): User!
+
+  """회원 비밀번호 변경"""
   updateUserPwd(newPassword: String!): User!
+
+  """회원 삭제"""
   deleteUser(userId: String!): Boolean!
+
+  """회원탈퇴"""
   deleteLoginUser: Boolean!
+
+  """토큰 생성"""
   restoreUser(userId: String!): Boolean!
+
+  """토큰 보내기"""
+  sendTokenToSMS(phone_number: String!): String!
+
+  """토큰 확인"""
+  checkToken(token: String!): Boolean!
 }
 
 input CreateAdminInput {
@@ -110,7 +136,7 @@ input CreateProductInput {
   img_url: String!
 }
 
-input updateProductInput {
+input UpdateProductInput {
   name: String
   price: Int
   description: String
