@@ -85,10 +85,19 @@ type Query {
 }
 
 type Mutation {
+  """관리자 회원가입"""
   createAdmin(createAdminInput: CreateAdminInput!): Admin!
+
+  """로그인"""
   login(email: String!, password: String!): String!
+
+  """관리자 로그인"""
   adminLogin(email: String!, password: String!): String!
+
+  """로그아웃"""
   logout: String!
+
+  """악세스 토큰 재발급"""
   restoreAccessToken: String!
   uploadProductFile(files: [Upload!]!): String!
   createProduct(createProductInput: CreateProductInput!): Product!
@@ -110,7 +119,7 @@ type Mutation {
   """회원탈퇴"""
   deleteLoginUser: Boolean!
 
-  """토큰 생성"""
+  """삭제된 회원 복구"""
   restoreUser(userId: String!): Boolean!
 
   """토큰 보내기"""

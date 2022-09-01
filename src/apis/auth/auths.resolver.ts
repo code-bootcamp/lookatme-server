@@ -8,7 +8,10 @@ import { UsersService } from '../users/users.service';
 import { AuthsService } from './auths.service';
 import * as bcrypt from 'bcrypt';
 import { IContext } from 'src/commons/type/context';
-import { GqlAuthRefreshGuard } from 'src/commons/auth/gql-auth.guard';
+import {
+  GqlAuthAccessGuard,
+  GqlAuthRefreshGuard,
+} from 'src/commons/auth/gql-auth.guard';
 import * as jwt from 'jsonwebtoken';
 import { AdminsService } from '../admin/admins.service';
 
@@ -23,7 +26,7 @@ export class AuthsResolver {
   ) {}
 
   /////////////////////////////// Mutation //////////////////////////////////////
-  @Mutation(() => String)
+  @Mutation(() => String, { description: '로그인' })
   async login(
     @Args('email') email: string, //
     @Args('password') password: string,
@@ -48,7 +51,7 @@ export class AuthsResolver {
     return this.authsService.getAccessToken({ user });
   }
 
-  @Mutation(() => String)
+  @Mutation(() => String, { description: '관리자 로그인' })
   async adminLogin(
     @Args('email') email: string, //
     @Args('password') password: string,
@@ -75,7 +78,8 @@ export class AuthsResolver {
     return this.authsService.getAccessToken({ user: admin });
   }
 
-  @Mutation(() => String)
+  @UseGuards(GqlAuthAccessGuard)
+  @Mutation(() => String, { description: '로그아웃' })
   async logout(
     @Context() context: IContext, //
   ) {
@@ -99,7 +103,7 @@ export class AuthsResolver {
   }
 
   @UseGuards(GqlAuthRefreshGuard)
-  @Mutation(() => String)
+  @Mutation(() => String, { description: '악세스 토큰 재발급' })
   restoreAccessToken(
     @Context() context: IContext, //
   ) {
