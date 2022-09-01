@@ -7,10 +7,15 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Field, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { User } from 'src/apis/users/entities/user.entity';
 import { Mood } from 'src/apis/moods/entities/mood.entity';
 import { Tag } from 'src/apis/tags/entities/tag.entity';
+import { BOARD_SEASON } from 'src/commons/type/enum';
+
+registerEnumType(BOARD_SEASON, {
+  name: 'BOARD_SEASON',
+});
 
 @Entity()
 @ObjectType()
@@ -23,9 +28,9 @@ export class Board {
   @Field(() => Int)
   like: number;
 
-  @Column({ type: 'varchar', length: 20, nullable: false })
-  @Field(() => String)
-  season: string;
+  @Column({ type: 'enum', enum: BOARD_SEASON })
+  @Field(() => BOARD_SEASON)
+  season: BOARD_SEASON;
 
   @Column({ type: 'boolean', nullable: false })
   @Field(() => Boolean)

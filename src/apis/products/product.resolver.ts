@@ -12,13 +12,13 @@ export class ProductResolver {
     private readonly productService: ProductService, //
   ) {}
 
-  @Query(() => [Product])
+  @Query(() => [Product], { description: '전체 상품 조회 API' })
   fetchProducts() {
     return this.productService.findAll();
   }
 
   @UseGuards(GqlAuthAccessGuard)
-  @Mutation(() => Product)
+  @Mutation(() => Product, { description: '상품 등록 API' })
   createProduct(
     @Context() context: any, //
     @Args('createProductInput') createProductInput: CreateProductInput,
@@ -27,7 +27,7 @@ export class ProductResolver {
     return this.productService.create({ createProductInput, userId });
   }
 
-  @Mutation(() => Product)
+  @Mutation(() => Product, { description: '상품 수정 API' })
   updateProduct(
     @Args('id') id: string,
     @Args('updateProductInput') updateProductInput: UpdateProductInput,
@@ -35,7 +35,7 @@ export class ProductResolver {
     return this.productService.update({ id, updateProductInput });
   }
 
-  @Mutation(() => Boolean)
+  @Mutation(() => Boolean, { description: '상품 삭제 API' })
   deleteProduct(
     @Args('id') id: string, //
   ) {

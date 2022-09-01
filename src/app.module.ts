@@ -11,11 +11,13 @@ import { AuthsModule } from './apis/auth/auths.module';
 import { ProductModule } from './apis/products/product.module';
 import { FileModule } from './apis/file/file.module';
 import { AdminsModule } from './apis/admin/admins.module';
+import { BoardModule } from './apis/boards/board.module';
 
 @Module({
   imports: [
     AdminsModule,
     AuthsModule,
+    BoardModule,
     FileModule,
     ProductModule,
     UsersModule,
