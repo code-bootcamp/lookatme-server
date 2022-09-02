@@ -12,6 +12,15 @@ export class CreateBoardInput {
   @Field(() => Boolean)
   isMaker: boolean;
 
+  @Field(() => [String])
+  url: string[];
+
+  @Field(() => [String])
+  tags: string[];
+
+  @Field(() => [String])
+  moodId: string[];
+
   @Field(() => [CreateProductInput])
   products: CreateProductInput[];
 }
