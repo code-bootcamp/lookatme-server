@@ -22,6 +22,10 @@ export class BoardService {
     private readonly productService: ProductService,
   ) {}
 
+  async findAll() {
+    return await this.boardRepository.find();
+  }
+
   async create({ createBoardInput, userId }) {
     const { products, url, tags, moodId, ...board } = createBoardInput;
     const inputTags = [];
