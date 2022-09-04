@@ -1,7 +1,8 @@
-import { Field, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
-import { Address } from 'src/apis/addresses/entities/address.entity';
-import { Board } from 'src/apis/boards/entities/board.entity';
-import { GenderDefault } from 'src/commons/type/enum';
+import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Comment } from 'src/apis/comments/entities/comment.entity';
+import { SpecialistReview } from 'src/apis/specialistReviews/entities/specialistReview.entity';
+import { Story } from 'src/apis/stories/entities/story.entity';
+import { Ticket } from 'src/apis/tickets/entities/ticket.entity';
 import {
   Column,
   DeleteDateColumn,
@@ -11,10 +12,6 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-
-registerEnumType(GenderDefault, {
-  name: 'GenderDefault',
-});
 
 @Entity()
 @ObjectType()
@@ -38,27 +35,34 @@ export class User {
   @Field(() => String)
   phone_number: string;
 
-  @Column({ type: 'enum', enum: GenderDefault })
-  @Field(() => GenderDefault)
-  gender: GenderDefault;
-
-  @Column({ type: 'int', unsigned: true, nullable: false })
-  @Field(() => Int)
-  height: number;
-
   @Column({ type: 'int', unsigned: true, default: 0, nullable: false })
   @Field(() => Int)
   point: number;
 
-  @JoinTable()
-  @ManyToMany(() => Board, (savedBoards) => savedBoards.users)
-  @Field(() => [Board])
-  savedBoards: Board[];
-
-  @OneToMany(() => Address, (addresses) => addresses.user)
-  @Field(() => [Address])
-  addresses: Address[];
-
   @DeleteDateColumn()
   deletedAt: Date;
+
+  @JoinTable()
+  @ManyToMany(() => Story, (likedStories) => likedStories.user)
+  @Field(() => [Story])
+  likedStories: Story[];
+
+  @OneToMany(() => Story, (stories) => stories.user)
+  @Field(() => [Story])
+  stories: Story[];
+
+  @OneToMany(() => Ticket, (tickets) => tickets.user)
+  @Field(() => [Ticket])
+  tickets: Ticket[];
+
+  @OneToMany(
+    () => SpecialistReview,
+    (specialistReviews) => specialistReviews.user,
+  )
+  @Field(() => [SpecialistReview])
+  specialistReviews: SpecialistReview[];
+
+  @OneToMany(() => Comment, (comments) => comments.user)
+  @Field(() => [Comment])
+  comments: Comment[];
 }
