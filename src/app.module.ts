@@ -8,10 +8,8 @@ import { UsersModule } from './apis/users/users.module';
 import { RedisClientOptions } from 'redis';
 import * as redisStore from 'cache-manager-redis-store';
 import { AuthsModule } from './apis/auth/auths.module';
-import { ProductModule } from './apis/products/product.module';
 import { FileModule } from './apis/file/file.module';
 import { AdminsModule } from './apis/admin/admins.module';
-import { BoardModule } from './apis/boards/board.module';
 import { IamportsModule } from './apis/iamport/iamports.module';
 import { PaymentsModule } from './apis/payments/payments.module';
 
@@ -19,11 +17,9 @@ import { PaymentsModule } from './apis/payments/payments.module';
   imports: [
     AdminsModule,
     AuthsModule,
-    BoardModule,
     FileModule,
     IamportsModule,
     PaymentsModule,
-    ProductModule,
     UsersModule,
     ConfigModule.forRoot({
       // to read .env files

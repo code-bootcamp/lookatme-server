@@ -5,9 +5,6 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { AddressService } from '../addresses/addresses.service';
-import { CreateAddressInput } from '../addresses/dto/createAddress.input';
-import { Address } from '../addresses/entities/address.entity';
 import { User } from './entities/user.entity';
 import * as coolsms from 'coolsms-node-sdk';
 import * as nodemailer from 'nodemailer';
@@ -18,11 +15,6 @@ export class UsersService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-
-    @InjectRepository(Address)
-    private readonly addressRepository: Repository<Address>,
-
-    private readonly addressesService: AddressService, //
   ) {}
 
   findAll() {
@@ -42,7 +34,7 @@ export class UsersService {
   }
 
   async create({ hashedPassword: password, ...createUserInput }) {
-    const { addresses, ...user } = createUserInput;
+    const { ...user } = createUserInput;
 
     // 1. check if user email exist on User table
     const uniqueEmail = await this.userRepository.findOne({
@@ -57,29 +49,16 @@ export class UsersService {
       password,
     });
 
-    // 3. save addresses
-    await Promise.all(
-      addresses.map((ele: CreateAddressInput) =>
-        this.addressRepository.save({
-          address: ele.address,
-          addressDetail: ele.addressDetail,
-          zipcode: ele.zipcode,
-          user: result,
-        }),
-      ),
-    );
-
-    // 4. return user object
+    // 3. return user object
     return result;
   }
 
   async update({ userId, updateUserInput }) {
-    const { addresses, ...user } = updateUserInput;
+    const { ...user } = updateUserInput;
 
     // 1. find user from User table with user_id
     const myuser = await this.userRepository.findOne({
       where: { id: userId },
-      relations: ['addresses'],
     });
 
     if (!myuser)
@@ -91,27 +70,6 @@ export class UsersService {
       id: userId,
       ...user,
     });
-
-    // 3. save addresses
-    if (addresses) {
-      // 3-1. user_id를 가진 address 전부 지우기
-      const addressIdArray = myuser.addresses.map((ele) => ele.id);
-      await Promise.all(
-        addressIdArray.map((ele) => this.addressRepository.delete({ id: ele })),
-      );
-
-      // 3-2. 새로운 address 저장하기
-      await Promise.all(
-        addresses.map((ele: CreateAddressInput) =>
-          this.addressRepository.save({
-            address: ele.address,
-            addressDetail: ele.addressDetail,
-            zipcode: ele.zipcode,
-            user: result,
-          }),
-        ),
-      );
-    }
 
     // 4. return user object
     return result;
@@ -132,6 +90,7 @@ export class UsersService {
       id: userId,
       password,
     });
+
     return result;
   }
 
@@ -139,7 +98,6 @@ export class UsersService {
     // 1. fine user
     const myuser = await this.userRepository.findOne({
       where: { id: userId },
-      relations: ['addresses'],
     });
 
     if (!myuser)
@@ -149,14 +107,6 @@ export class UsersService {
     const result = await this.userRepository.softDelete({
       id: userId,
     });
-
-    // 3. softdelete addresses
-    const addressIdArray = myuser.addresses.map((ele) => ele.id);
-    await Promise.all(
-      addressIdArray.map((ele) =>
-        this.addressesService.delete({ addressId: ele }),
-      ),
-    );
 
     return result.affected ? true : false;
   }
@@ -178,14 +128,6 @@ export class UsersService {
     const result = await this.userRepository.restore({
       id: userId,
     });
-
-    // 3. restore addresses
-    const addressIdArray = myuser.addresses.map((ele) => ele.id);
-    await Promise.all(
-      addressIdArray.map((ele) =>
-        this.addressesService.undoDelete({ addressId: ele }),
-      ),
-    );
 
     return result.affected ? true : false;
   }

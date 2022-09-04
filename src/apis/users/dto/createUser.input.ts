@@ -1,6 +1,4 @@
-import { Field, InputType, Int } from '@nestjs/graphql';
-import { Min } from 'class-validator';
-import { CreateAddressInput } from 'src/apis/addresses/dto/createAddress.input';
+import { Field, InputType } from '@nestjs/graphql';
 
 @InputType()
 export class CreateUserInput {
@@ -15,14 +13,4 @@ export class CreateUserInput {
 
   @Field(() => String)
   phone_number: string;
-
-  @Field(() => String)
-  gender: string;
-
-  @Min(0)
-  @Field(() => Int)
-  height: number;
-
-  @Field(() => [CreateAddressInput])
-  addresses: CreateAddressInput[];
 }
