@@ -12,11 +12,13 @@ import { FileModule } from './apis/file/file.module';
 import { AdminsModule } from './apis/admin/admins.module';
 import { IamportsModule } from './apis/iamport/iamports.module';
 import { PaymentsModule } from './apis/payments/payments.module';
+import { ChatsModule } from './apis/chat/chats.module';
 
 @Module({
   imports: [
     AdminsModule,
     AuthsModule,
+    ChatsModule,
     FileModule,
     IamportsModule,
     PaymentsModule,
