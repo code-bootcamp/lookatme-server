@@ -1,26 +1,22 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { Board } from 'src/apis/boards/entities/board.entity';
 import {
-  Column,
   Entity,
-  JoinColumn,
-  ManyToOne,
   PrimaryGeneratedColumn,
+  Column,
+  DeleteDateColumn,
 } from 'typeorm';
 
 @Entity()
 @ObjectType()
-export class BoardImage {
-  @Field(() => String)
+export class Quote {
   @PrimaryGeneratedColumn('uuid')
+  @Field(() => String)
   id: string;
 
   @Column({ type: 'varchar', length: 300, nullable: false })
   @Field(() => String)
-  url: string;
+  text: string;
 
-  @JoinColumn()
-  @ManyToOne(() => Board)
-  @Field(() => Board)
-  board: Board;
+  @DeleteDateColumn()
+  deletedAt: Date;
 }

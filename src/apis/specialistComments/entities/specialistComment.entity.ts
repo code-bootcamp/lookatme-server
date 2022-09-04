@@ -1,21 +1,21 @@
+import { Field, ObjectType } from '@nestjs/graphql';
 import {
+  Entity,
+  PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
   DeleteDateColumn,
-  Entity,
   JoinColumn,
   ManyToOne,
-  PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Field, ObjectType } from '@nestjs/graphql';
-import { User } from 'src/apis/users/entities/user.entity';
+import { Specialist } from 'src/apis/specialists/entities/specialist.entity';
 import { Story } from 'src/apis/stories/entities/story.entity';
 
 @Entity()
 @ObjectType()
-export class Comment {
-  @Field(() => String)
+export class SpecialistComment {
   @PrimaryGeneratedColumn('uuid')
+  @Field(() => String)
   id: string;
 
   @Column({ type: 'varchar', length: 300, nullable: false })
@@ -34,9 +34,9 @@ export class Comment {
   deletedAt: Date;
 
   @JoinColumn()
-  @ManyToOne(() => User)
-  @Field(() => User)
-  user: User;
+  @ManyToOne(() => Specialist)
+  @Field(() => Specialist)
+  specialist: Specialist;
 
   @JoinColumn()
   @ManyToOne(() => Story)

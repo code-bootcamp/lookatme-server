@@ -1,33 +1,32 @@
+import { Field, ObjectType, Float } from '@nestjs/graphql';
 import {
+  Entity,
+  PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
   DeleteDateColumn,
-  Entity,
   JoinColumn,
   ManyToOne,
-  PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Field, ObjectType } from '@nestjs/graphql';
 import { User } from 'src/apis/users/entities/user.entity';
-import { Story } from 'src/apis/stories/entities/story.entity';
+import { Specialist } from 'src/apis/specialists/entities/specialist.entity';
 
 @Entity()
 @ObjectType()
-export class Comment {
-  @Field(() => String)
+export class SpecialistReview {
   @PrimaryGeneratedColumn('uuid')
+  @Field(() => String)
   id: string;
 
   @Column({ type: 'varchar', length: 300, nullable: false })
   @Field(() => String)
   text: string;
 
-  @Column({ type: 'boolean', default: false, nullable: false })
-  @Field(() => Boolean)
-  isReported: boolean;
+  @Column({ type: 'float', nullable: false })
+  @Field(() => Float)
+  rate: number;
 
   @CreateDateColumn()
-  @Field(() => Date)
   createdAt: Date;
 
   @DeleteDateColumn()
@@ -39,7 +38,7 @@ export class Comment {
   user: User;
 
   @JoinColumn()
-  @ManyToOne(() => Story)
-  @Field(() => Story)
-  story: Story;
+  @ManyToOne(() => Specialist)
+  @Field(() => Specialist)
+  specialist: Specialist;
 }
