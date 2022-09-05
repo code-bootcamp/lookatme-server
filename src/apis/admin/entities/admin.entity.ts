@@ -8,7 +8,7 @@ export class Admin {
   @Field(() => String)
   id: string;
 
-  @Column({ type: 'varchar', length: 50, nullable: false, unique: true })
+  @Column({ type: 'varchar', length: 50, unique: true, nullable: false })
   @Field(() => String)
   email: string;
 

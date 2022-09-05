@@ -24,6 +24,14 @@ export class AdminsService {
 
     if (uniqueEmail) throw new ConflictException('이미 등록된 이메일 입니다.');
 
+    // 1. check if user email exist on User table
+    const uniqueNickname = await this.adminRepository.findOne({
+      where: { nickname: createAdminInput.nickname },
+    });
+
+    if (uniqueNickname)
+      throw new ConflictException('이미 등록된 닉네임 입니다.');
+
     // 2. save user
     return await this.adminRepository.save({
       ...createAdminInput,

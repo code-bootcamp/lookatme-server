@@ -31,7 +31,7 @@ export class User {
   @Field(() => String)
   nickname: string;
 
-  @Column({ type: 'varchar', length: 20, nullable: false })
+  @Column({ type: 'varchar', length: 20, unique: true, nullable: false })
   @Field(() => String)
   phone_number: string;
 
