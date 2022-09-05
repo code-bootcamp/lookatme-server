@@ -18,6 +18,11 @@ export class QuoteResolver {
     return this.quoteService.findOne({ id });
   }
 
+  @Query(() => Quote, { description: '선택된 명언 조회' })
+  async fetchSelectedQuote() {
+    return this.quoteService.findSelectedQuote();
+  }
+
   @Mutation(() => Quote, { description: '명언 등록' })
   async createQuote(
     @Args('text') text: string, //

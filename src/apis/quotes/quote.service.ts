@@ -23,6 +23,17 @@ export class QuoteService {
     return result;
   }
 
+  async findSelectedQuote() {
+    const result = await this.quoteRepository.findOne({
+      where: { isSelected: true },
+    });
+
+    if (!result)
+      throw new UnprocessableEntityException('선택된 명언이 없습니다.');
+
+    return result;
+  }
+
   async create({ text }) {
     return this.quoteRepository.save({ text });
   }
@@ -52,5 +63,33 @@ export class QuoteService {
     const result = await this.quoteRepository.delete({ id });
 
     return result.affected ? true : false;
+  }
+
+  async selectRandomQuote() {
+    // 1. 기존 selected quote 취소하기
+    const oldQuote = await this.quoteRepository.findOne({
+      where: { isSelected: true },
+    });
+
+    if (oldQuote)
+      await this.quoteRepository.update(
+        { id: oldQuote.id },
+        { isSelected: false },
+      );
+
+    // 2. 랜덤한 quote 선정하기
+    const randomQuote = await this.quoteRepository
+      .createQueryBuilder()
+      .orderBy('RAND()')
+      .getMany();
+
+    if (!randomQuote)
+      throw new UnprocessableEntityException('명언을 생성해 주세요');
+
+    return await this.quoteRepository.save({
+      ...randomQuote[0],
+      id: randomQuote[0].id,
+      isSelected: true,
+    });
   }
 }

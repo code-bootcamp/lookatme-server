@@ -15,11 +15,13 @@ import { PaymentsModule } from './apis/payments/payments.module';
 import { ChatsModule } from './apis/chat/chats.module';
 import { SpecialistModule } from './apis/specialists/specialist.module';
 import { QuoteModule } from './apis/quotes/quote.module';
+import { BatchesModule } from './apis/batch/batches.module';
 
 @Module({
   imports: [
     AdminsModule,
     AuthsModule,
+    BatchesModule,
     ChatsModule,
     FileModule,
     IamportsModule,
