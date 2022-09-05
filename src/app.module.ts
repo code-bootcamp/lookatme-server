@@ -13,6 +13,7 @@ import { AdminsModule } from './apis/admin/admins.module';
 import { IamportsModule } from './apis/iamport/iamports.module';
 import { PaymentsModule } from './apis/payments/payments.module';
 import { ChatsModule } from './apis/chat/chats.module';
+import { SpecialistModule } from './apis/specialists/specialist.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { ChatsModule } from './apis/chat/chats.module';
     IamportsModule,
     PaymentsModule,
     UsersModule,
+    SpecialistModule,
     ConfigModule.forRoot({
       // to read .env files
       isGlobal: true, // globalize .env file so that every files can use .env
