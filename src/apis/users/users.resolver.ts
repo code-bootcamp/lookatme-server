@@ -51,6 +51,7 @@ export class UsersResolver {
     return this.usersService.findOne({ email });
   }
 
+  @UseGuards(GqlAuthAdminAccessGuard)
   @Query(() => [User], { description: '삭제된 회원도 같이 조회' })
   fetchUsersWithDeleted() {
     return this.usersService.findWithDeleted();
@@ -94,6 +95,7 @@ export class UsersResolver {
     });
   }
 
+  @UseGuards(GqlAuthAdminAccessGuard)
   @Mutation(() => User, { description: '회원정보 수정' })
   updateUser(
     @Args('userId') userId: string,
@@ -127,6 +129,7 @@ export class UsersResolver {
     return this.usersService.updatePwd({ userId, password });
   }
 
+  @UseGuards(GqlAuthAdminAccessGuard)
   @Mutation(() => Boolean, { description: '회원 삭제' })
   deleteUser(
     @Args('userId') userId: string, //
@@ -143,6 +146,7 @@ export class UsersResolver {
     return this.usersService.delete({ userId });
   }
 
+  @UseGuards(GqlAuthAdminAccessGuard)
   @Mutation(() => Boolean, { description: '삭제된 회원 복구' })
   restoreUser(@Args('userId') userId: string) {
     return this.usersService.undoDelete({ userId });
