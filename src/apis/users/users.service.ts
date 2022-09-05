@@ -43,13 +43,29 @@ export class UsersService {
 
     if (uniqueEmail) throw new ConflictException('이미 등록된 이메일 입니다.');
 
-    // 2. save user
+    // 2. check if user nickname exist on User table
+    const uniqueNickname = await this.userRepository.findOne({
+      where: { nickname: user.nickname },
+    });
+
+    if (uniqueNickname)
+      throw new ConflictException('이미 등록된 닉네임 입니다.');
+
+    // 3. check if user phone_number exist on User table
+    const uniquePhoneNumber = await this.userRepository.findOne({
+      where: { phone_number: user.phone_number },
+    });
+
+    if (uniquePhoneNumber)
+      throw new ConflictException('이미 등록된 전화번호 입니다.');
+
+    // 4. save user
     const result = await this.userRepository.save({
       ...user,
       password,
     });
 
-    // 3. return user object
+    // 5. return user object
     return result;
   }
 
