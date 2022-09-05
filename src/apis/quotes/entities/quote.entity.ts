@@ -17,6 +17,10 @@ export class Quote {
   @Field(() => String)
   text: string;
 
+  @Column({ type: 'boolean', default: false, nullable: false })
+  @Field(() => Boolean)
+  isSelected: boolean;
+
   @DeleteDateColumn()
   deletedAt: Date;
 }
