@@ -42,7 +42,7 @@ export class Specialist {
 
   @Column({ type: 'varchar', nullable: false })
   @Field(() => String)
-  carrer: string;
+  career: string;
 
   @Column({ type: 'int', unsigned: true, nullable: false })
   @Field(() => Int)
