@@ -19,6 +19,11 @@ export class SpecialistResolver {
     return this.specialistService.findAll();
   }
 
+  @Query(() => Specialist, { description: '전문가 조회' })
+  async fetchSpecialist(@Args('id') id: string) {
+    return this.specialistService.findOne({ id });
+  }
+
   @UseGuards(GqlAuthAdminAccessGuard)
   @Mutation(() => Specialist, { description: '전문가 등록' })
   async createSpecialist(
@@ -45,7 +50,7 @@ export class SpecialistResolver {
 
   @UseGuards(GqlAuthAdminAccessGuard)
   @Mutation(() => Boolean, { description: '전문가 삭제' })
-  async deleteSpecialist(@Args('id') id: string) {
+  deleteSpecialist(@Args('id') id: string) {
     return this.specialistService.delete({ id });
   }
 

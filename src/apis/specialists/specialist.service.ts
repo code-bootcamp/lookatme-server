@@ -18,6 +18,15 @@ export class SpecialistService {
     return await this.specialistRepository.find();
   }
 
+  async findOne({ id }) {
+    const result = await this.specialistRepository.findOne({ where: { id } });
+
+    if (!result)
+      throw new UnprocessableEntityException('존재하지 않는 id값 입니다.');
+
+    return result;
+  }
+
   async create({ hashedPassword, ...createSpecialistInput }) {
     const existAccount = await this.specialistRepository.findOne({
       where: { account: createSpecialistInput.account },
