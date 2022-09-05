@@ -14,10 +14,15 @@ import {
 } from 'src/commons/auth/gql-auth.guard';
 import * as jwt from 'jsonwebtoken';
 import { AdminsService } from '../admin/admins.service';
+import { Repository } from 'typeorm';
+import { Specialist } from '../specialists/entities/specialist.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Resolver()
 export class AuthsResolver {
   constructor(
+    @InjectRepository(Specialist)
+    private readonly specialistRepository: Repository<Specialist>,
     private readonly authsService: AuthsService, //
 
     private readonly usersService: UsersService,
@@ -76,6 +81,29 @@ export class AuthsResolver {
     // 5. 일치하는 관리자, 비밀번호도 맞은 경우
     //  ==> accessToken(=JWT) 만들어서 브라우저에 전달하기
     return this.authsService.getAccessToken({ user: admin });
+  }
+
+  @Mutation(() => String, { description: '전문가 로그인' })
+  async specialistLogin(
+    @Args('account') account: string, //
+    @Args('password') password: string,
+    @Context() context: IContext,
+  ) {
+    const specialist = await this.specialistRepository.findOne({
+      where: { account },
+    });
+
+    if (!specialist)
+      throw new UnprocessableEntityException(
+        '존재하지 않는 전문가 이메일 입니다.',
+      );
+
+    const isAuth = await bcrypt.compare(password, specialist.password);
+    if (!isAuth) throw new UnprocessableEntityException('암호가 틀렸습니다.');
+
+    this.authsService.setRefreshToken({ user: specialist, res: context.res });
+
+    return this.authsService.getAccessToken({ user: specialist });
   }
 
   @UseGuards(GqlAuthAccessGuard)

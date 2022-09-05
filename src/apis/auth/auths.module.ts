@@ -9,6 +9,8 @@ import { JwtKakaoStrategy } from 'src/commons/auth/jwt-social-kakao.strategy';
 import { JwtNaverStrategy } from 'src/commons/auth/jwt-social-naver.strategy';
 import { AdminsService } from '../admin/admins.service';
 import { Admin } from '../admin/entities/admin.entity';
+import { Specialist } from '../specialists/entities/specialist.entity';
+import { SpecialistService } from '../specialists/specialist.service';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 import { AuthsController } from './auths.controller';
@@ -21,6 +23,7 @@ import { AuthsService } from './auths.service';
     TypeOrmModule.forFeature([
       User, // usersSevice uses Product, User Repository
       Admin,
+      Specialist,
     ]),
   ],
   providers: [
