@@ -7,6 +7,7 @@ import {
   Column,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
   JoinTable,
   ManyToMany,
   ManyToOne,
@@ -56,7 +57,8 @@ export class Story {
   @Field(() => [SpecialistComment])
   specialistComments: SpecialistComment[];
 
-  @OneToMany(() => Category, (categories) => categories.story)
-  @Field(() => [Category])
-  categories: Category[];
+  @JoinColumn()
+  @ManyToOne(() => Category)
+  @Field(() => Category)
+  category: Category;
 }
