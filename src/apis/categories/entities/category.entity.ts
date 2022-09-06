@@ -1,12 +1,11 @@
-import { Field, ObjectType } from '@nestjs/graphql';
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  JoinColumn,
-  ManyToOne,
-  Column,
-} from 'typeorm';
+import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { Story } from 'src/apis/stories/entities/story.entity';
+import { CATEGORY_NAME } from 'src/commons/type/enum';
+
+registerEnumType(CATEGORY_NAME, {
+  name: 'CATEGORY_NAME',
+});
 
 @Entity()
 @ObjectType()
@@ -15,12 +14,11 @@ export class Category {
   @Field(() => String)
   id: string;
 
-  @Column({ type: 'varchar', length: 100, nullable: false })
+  @Column({ type: 'enum', enum: CATEGORY_NAME, nullable: false })
   @Field(() => String)
   name: string;
 
-  @JoinColumn()
-  @ManyToOne(() => Story)
+  @OneToMany(() => Story, (story) => story.category)
   @Field(() => Story)
   story: Story;
 }
