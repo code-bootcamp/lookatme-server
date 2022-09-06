@@ -36,8 +36,8 @@ export class AuthsService {
       // res.setHeader('Set-Cookie', `refreshToken=${refreshToken}; path=/;`);
 
       const allowedOrigins = [
-        'https://lookatme.world',
-        'http://localhost:3000',
+        process.env.CLIENT_DOMAIN,
+        process.env.LOCALHOST_DOMAIN,
       ];
       const origin = req.headers.origin;
 
