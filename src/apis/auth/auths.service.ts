@@ -19,27 +19,44 @@ export class AuthsService {
     private readonly cacheManager: Cache,
   ) {}
 
-  setRefreshToken({ user, res }) {
-    const refreshToken = this.jwtServices.sign(
-      {
-        email: user.email, //
-        sub: user.id,
-      },
-      {
-        secret: process.env.JWT_REFRESH_SECRET, // secret code
-        expiresIn: '2w', // expiration period
-      },
-    );
+  setRefreshToken({ user, res, req }) {
+    try {
+      const refreshToken = this.jwtServices.sign(
+        {
+          email: user.email, //
+          sub: user.id,
+        },
+        {
+          secret: process.env.JWT_REFRESH_SECRET, // secret code
+          expiresIn: '24h', // expiration period
+        },
+      );
 
-    // 개발환경 할때 실제 배포에서는 안됨
-    res.setHeader('Set-Cookie', `refreshToken=${refreshToken}; path=/;`); // 프론트 브라우저 쿠키에 저장하기
+      // 개발 graphql 환경
+      // res.setHeader('Set-Cookie', `refreshToken=${refreshToken}; path=/;`);
 
-    // 배포환경
-    // res.setHeader(
-    //   'Set-Cookie',
-    //   `refreshToken=${refreshToken}; path=/; domain=.mybackendsite.com; SameSite=None; Secure; httpOnly;`,
-    // );
-    // res.setHeader('Access-Control-Allow-Origin', 'https://myfrontsite.com');
+      const allowedOrigins = [
+        'https://lookatme.world',
+        'http://localhost:3000',
+      ];
+      const origin = req.headers.origin;
+      console.log(origin);
+
+      if (allowedOrigins.includes(origin)) {
+        res.setHeader('Access-Control-Allow-Origin', origin);
+        console.log('11111');
+      }
+      res.setHeader('Access-Control-Allow-Credentials', 'true');
+      res.setHeader('Access-Control-Allow-Methods', 'POST, GET');
+      res.setHeader(
+        'Set-Cookie',
+        `refreshToken=${refreshToken}; path=/; domain=.x0ng120x.shop; SameSite=None; Secure; httpOnly;`,
+      );
+
+      return true;
+    } catch {
+      return false;
+    }
   }
 
   getAccessToken({ user }) {
@@ -67,7 +84,7 @@ export class AuthsService {
     else throw new ConflictException('이미 등록된 이메일 입니다.');
 
     // 3. 로그인 (accessToken 만들어서 프론트엔드에 추가)
-    this.setRefreshToken({ user, res });
+    this.setRefreshToken({ user, res, req });
     res.redirect(
       'http://localhost:5500/frontend/login/index.html', // 원래 페이지로 돌아기기
     );
