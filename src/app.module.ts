@@ -40,7 +40,7 @@ import { StroyModule } from './apis/stories/story.module';
       autoSchemaFile: 'src/commons/graphql/schema.gql',
       context: ({ req, res }) => ({ req, res }), // enable to use graphql req, res
       cors: {
-        origin: ['https://lookatme.world', 'http://localhost:3000'],
+        origin: [process.env.CLIENT_DOMAIN, process.env.LOCALHOST_DOMAIN],
         methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'PATCH', 'DELETE'],
         allowedHeaders: [
           'Access-Control-Allow-Headers',
