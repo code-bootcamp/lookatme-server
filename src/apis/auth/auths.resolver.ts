@@ -1,4 +1,5 @@
 import {
+  ConflictException,
   HttpException,
   UnprocessableEntityException,
   UseGuards,
@@ -49,7 +50,14 @@ export class AuthsResolver {
     if (!isAuth) throw new UnprocessableEntityException('암호가 틀렸습니다.');
 
     // 4. refreshToken(=JWT) 생성 및 프론트엔드 브라우저 쿠키에 저장해서 보내주기
-    this.authsService.setRefreshToken({ user, res: context.res });
+    if (
+      !this.authsService.setRefreshToken({
+        user,
+        res: context.res,
+        req: context.req,
+      })
+    )
+      throw new ConflictException('쿠키에 refreshToken 세팅을 실패하였습니다.');
 
     // 5. 일치하는 유저, 비밀번호도 맞은 경우
     //  ==> accessToken(=JWT) 만들어서 브라우저에 전달하기
@@ -76,7 +84,14 @@ export class AuthsResolver {
     if (!isAuth) throw new UnprocessableEntityException('암호가 틀렸습니다.');
 
     // 4. refreshToken(=JWT) 생성 및 프론트엔드 브라우저 쿠키에 저장해서 보내주기
-    this.authsService.setRefreshToken({ user: admin, res: context.res });
+    if (
+      !this.authsService.setRefreshToken({
+        user: admin,
+        res: context.res,
+        req: context.req,
+      })
+    )
+      throw new ConflictException('쿠키에 refreshToken 세팅을 실패하였습니다.');
 
     // 5. 일치하는 관리자, 비밀번호도 맞은 경우
     //  ==> accessToken(=JWT) 만들어서 브라우저에 전달하기
@@ -101,7 +116,14 @@ export class AuthsResolver {
     const isAuth = await bcrypt.compare(password, specialist.password);
     if (!isAuth) throw new UnprocessableEntityException('암호가 틀렸습니다.');
 
-    this.authsService.setRefreshToken({ user: specialist, res: context.res });
+    if (
+      !this.authsService.setRefreshToken({
+        user: specialist,
+        res: context.res,
+        req: context.req,
+      })
+    )
+      throw new ConflictException('쿠키에 refreshToken 세팅을 실패하였습니다.');
 
     return this.authsService.getAccessToken({ user: specialist });
   }
