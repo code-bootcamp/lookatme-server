@@ -44,8 +44,17 @@ export class AuthsService {
       if (allowedOrigins.includes(origin)) {
         res.setHeader('Access-Control-Allow-Origin', origin);
       }
+
       res.setHeader('Access-Control-Allow-Credentials', 'true');
-      res.setHeader('Access-Control-Allow-Methods', 'POST, GET');
+      res.setHeader(
+        'Access-Control-Allow-Methods',
+        'GET,HEAD,OPTIONS,POST,PUT',
+      );
+      res.setHeader(
+        'Access-Control-Allow-Header',
+        'Access-Control-Allow-Headers, Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers',
+      );
+
       res.setHeader(
         'Set-Cookie',
         `refreshToken=${refreshToken}; path=/; domain=.x0ng120x.shop; SameSite=None; Secure; httpOnly;`,
