@@ -18,7 +18,7 @@ export class SpecialistService {
     return await this.specialistRepository.find();
   }
 
-  async findOne({ id }) {
+  async findOneWithId({ id }) {
     const result = await this.specialistRepository.findOne({ where: { id } });
 
     if (!result)

@@ -39,7 +39,7 @@ export class AuthsResolver {
     @Context() context: IContext,
   ) {
     // 1. 로그인 (이메일이 일치하는 유저를 DB에서 찾기)
-    const user = await this.usersService.findOne({ email });
+    const user = await this.usersService.findOneWithEmail({ email });
 
     // 2. 일치하는 유저가 없으면 에러 던지기
     if (!user)

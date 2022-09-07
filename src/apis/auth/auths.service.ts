@@ -81,7 +81,9 @@ export class AuthsService {
 
   async socialLogin({ req, res }) {
     // 1. verify if valid user
-    let user = await this.usersService.findOne({ email: req.user.email });
+    let user = await this.usersService.findOneWithEmail({
+      email: req.user.email,
+    });
 
     if (!user)
       // 2. register new user
