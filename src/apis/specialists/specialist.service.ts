@@ -43,15 +43,15 @@ export class SpecialistService {
   }
 
   async update({ id, updateSpecialistInput }) {
-    const specialistForUpdate = await this.specialistRepository.findOne({
+    const specialistToUpdate = await this.specialistRepository.findOne({
       where: { id },
     });
 
-    if (!specialistForUpdate)
+    if (!specialistToUpdate)
       throw new UnprocessableEntityException('존재하지 않는 id값입니다.');
 
     const result = await this.specialistRepository.save({
-      ...specialistForUpdate,
+      ...specialistToUpdate,
       id,
       ...updateSpecialistInput,
     });
@@ -60,11 +60,11 @@ export class SpecialistService {
   }
 
   async delete({ id }) {
-    const specialistForDelete = await this.specialistRepository.findOne({
+    const specialistToDelete = await this.specialistRepository.findOne({
       where: { id },
     });
 
-    if (!specialistForDelete)
+    if (!specialistToDelete)
       throw new UnprocessableEntityException(
         '존재하지 않는 id값이거나 이미 삭제된 대상입니다.',
       );
