@@ -22,7 +22,9 @@ export class SpecialistService {
     const result = await this.specialistRepository.findOne({ where: { id } });
 
     if (!result)
-      throw new UnprocessableEntityException('존재하지 않는 id값 입니다.');
+      throw new UnprocessableEntityException(
+        '존재하지 않는 specialist_id값 입니다.',
+      );
 
     return result;
   }

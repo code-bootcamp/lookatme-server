@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ChatRoom } from './entities/chatRoom.entity';
@@ -82,6 +82,13 @@ export class ChatsService {
     const specialist = await this.specialistRepository.findOne({
       where: { id: specialistId },
     });
+
+    console.log('___________________');
+
+    if (!specialist)
+      throw new UnprocessableEntityException(
+        '존재하지 않는 specialist_id 입니다.',
+      );
 
     // 2. 채팅방 찾아오기
     let chatRoom = await this.chatRoomRepository.findOne({
