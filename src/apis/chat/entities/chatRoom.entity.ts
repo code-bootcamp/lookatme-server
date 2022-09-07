@@ -1,5 +1,6 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Ticket } from 'src/apis/tickets/entities/ticket.entity';
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 @ObjectType()
@@ -11,4 +12,8 @@ export class ChatRoom {
   @Column({ type: 'varchar', unique: true })
   @Field(() => String)
   room: string;
+
+  @OneToOne(() => Ticket)
+  @Field(() => Ticket)
+  ticket: Ticket;
 }

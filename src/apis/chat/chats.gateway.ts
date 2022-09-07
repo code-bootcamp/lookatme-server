@@ -6,28 +6,23 @@ import {
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
-import { ChatMessage } from './entities/chatMessage.entity';
-import { User } from '../users/entities/user.entity';
-import { ChatRoom } from './entities/chatRoom.entity';
+import { UsersService } from '../users/users.service';
+import { SpecialistService } from '../specialists/specialist.service';
+import { ChatsService } from './chats.service';
 
 @WebSocketGateway({
   namespace: 'chat',
-  cors: { origin: '*' },
+  cors: { origin: '*', credentials: true },
 })
 @Injectable()
 export class ChatsGateway {
   constructor(
-    @InjectRepository(ChatMessage)
-    private readonly chatMessageRepository: Repository<ChatMessage>,
+    private readonly chatsService: ChatsService,
 
-    @InjectRepository(ChatRoom)
-    private readonly chatRoomRepository: Repository<ChatRoom>,
+    private readonly usersService: UsersService,
 
-    @InjectRepository(User)
-    private readonly userRepositoey: Repository<User>,
+    private readonly specialistsService: SpecialistService,
   ) {}
 
   @WebSocketServer()
@@ -35,15 +30,39 @@ export class ChatsGateway {
 
   wsClients = [];
 
-  @SubscribeMessage('message')
-  async connectSomeone(
+  @SubscribeMessage('user_enter')
+  async connectUser(
     @MessageBody() data: string, //
     @ConnectedSocket() client,
   ) {
     // 채팅방 입장!
-    const [nickname, room] = data;
-    const receive = `${nickname}님이 입장했습니다.`;
-    this.server.emit('receive' + room, receive);
+    const [ticketId, userId] = data;
+
+    // 유저 닉네임 찾아오기
+    const user = await this.usersService.findOneWithId({ userId });
+
+    const receive = `${user.nickname}님이 입장했습니다.`;
+
+    this.server.emit('receive' + ticketId, receive);
+    this.wsClients.push(client);
+  }
+
+  @SubscribeMessage('specialist_enter')
+  async connectSpecialist(
+    @MessageBody() data: string, //
+    @ConnectedSocket() client,
+  ) {
+    // 채팅방 입장!
+    const [ticketId, specialistId] = data;
+
+    // 전문가 이름 찾아오기
+    const specialist = await this.specialistsService.findOneWithId({
+      id: specialistId,
+    });
+
+    const receive = `${specialist.name}님이 입장했습니다.`;
+
+    this.server.emit('receive' + ticketId, receive);
     this.wsClients.push(client);
   }
 
@@ -55,35 +74,37 @@ export class ChatsGateway {
     }
   }
 
-  @SubscribeMessage('send')
-  async sendMessage(
+  @SubscribeMessage('user_send')
+  async sendUserMessage(
     @MessageBody() data: string, //
     @ConnectedSocket() client,
   ) {
-    const [room, nickname, message] = data;
+    const [ticketId, message, userId] = data;
 
-    // 1. 유저 찾아오기
-    const user = await this.userRepositoey.findOne({
-      where: { nickname: nickname },
+    // 채팅 기록 저장 및 유저 닉네임 불러오기
+    const nickname = await this.chatsService.userSend({
+      userId,
+      ticketId,
+      message,
     });
 
-    // 2. 채팅방 찾아오기
-    let chatRoom = await this.chatRoomRepository.findOne({
-      where: { room: room },
+    this.broadcast(ticketId, client, [nickname, message]);
+  }
+
+  @SubscribeMessage('specialist_send')
+  async sendSpecialistMessage(
+    @MessageBody() data: string, //
+    @ConnectedSocket() client,
+  ) {
+    const [ticketId, message, specialistId] = data;
+
+    // 채팅 기록 저장 및 전문가 이름 불러오기
+    const nickname = await this.chatsService.specialistSend({
+      specialistId,
+      ticketId,
+      message,
     });
 
-    if (!chatRoom)
-      chatRoom = await this.chatRoomRepository.save({
-        room: room,
-      });
-
-    // 3. 채팅 저장하기
-    await this.chatMessageRepository.save({
-      user: user,
-      room: chatRoom,
-      message: data[2],
-    });
-
-    this.broadcast(room, client, [nickname, message]);
+    this.broadcast(ticketId, client, [nickname, message]);
   }
 }

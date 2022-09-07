@@ -39,7 +39,7 @@ export class UsersResolver {
   fetchUser(
     @Args('email') email: string, //
   ) {
-    return this.usersService.findOne({ email });
+    return this.usersService.findOneWithEmail({ email });
   }
 
   @UseGuards(GqlAuthAccessGuard)
@@ -48,7 +48,7 @@ export class UsersResolver {
     @Context() context: any, //
   ) {
     const email = context.req.user.email;
-    return this.usersService.findOne({ email });
+    return this.usersService.findOneWithEmail({ email });
   }
 
   @UseGuards(GqlAuthAdminAccessGuard)
@@ -111,7 +111,7 @@ export class UsersResolver {
     @Args('newPassword') newPassword: string,
   ) {
     // 1. 이메일이 일치하는 유저를 DB에서 찾기
-    const user = await this.usersService.findOne({
+    const user = await this.usersService.findOneWithEmail({
       email: context.req.user.email,
     });
 

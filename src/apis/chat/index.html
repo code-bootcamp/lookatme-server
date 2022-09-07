@@ -16,21 +16,28 @@
 		</script>
 		<script>
 			const socket = io('http://localhost:3000/chat');
-			const nickname = prompt('닉네임을 알려주세요.');
-			const room = prompt('입장할 방의 코드를 적어주세요.');
-			if (!(nickname && room)) {
-				alert('다시 입력해주세요.')
-				window.location.reload();
+			let userId;
+			let specialistId;
+			const ticketId = prompt('입장할 이용권의 코드를 적어주세요.');
+			const isSpecialist = prompt('전문가인가요? (y/n)');
+
+			console.log(isSpecialist)
+
+			if (isSpecialist === 'n') {
+				socket.emit('user_enter', ticketId, userId);
+				userId = prompt('유저id를 알려주세요.');
+			} else if (isSpecialist === 'y') {
+				socket.emit('specialist_enter', ticketId, specialistId);
+				specialistId = prompt('전문가id를 알려주세요.');
 			}
-			socket.emit('message', nickname, room);
 
 			socket.on('connect', () => {
 				/* 누군가 채팅침 */
-				socket.on(room, (data) => {
+				socket.on(ticketId, (data) => {
 					$('#chatList').append(`<div>${data[0]} : ${data[1]}</div>`);
 				});
 				/* 누군가 입장 */
-				socket.on('receive' + room, (receive) => {
+				socket.on('receive' + ticketId, (receive) => {
 					$('#chatList').append(`<div style="color:blue;">${receive}</div>`);
 				});
 			});
@@ -38,7 +45,15 @@
 			function msg_send() {
 				/* 메시지 전송 */
 				let message = $('#msg').val();
-				socket.emit('send', room, nickname, message);
+				socket.emit('user_send', ticketId, message, userId);
+				$('#msg').val('');
+				$('#chatList').append(`<div style="color:blue;">나 : ${message}</div>`);
+			}
+
+			function special_msg_send() {
+				/* 메시지 전송 */
+				let message = '안녕하세요';
+				socket.emit('specialist_send', ticketId, message, specialistId);
 				$('#msg').val('');
 				$('#chatList').append(`<div style="color:blue;">나 : ${message}</div>`);
 			}
@@ -56,8 +71,13 @@
 		</div>
 
 		<div id="sendMessage" style="position: fixed; bottom: 5%;">
-			<input type="text" id="msg" onKeyPress="if( event.keyCode==13 ){msg_send();}" />
+			<input type="text" id="msg"  />
 			<button onclick="msg_send()">제출</button>
+		</div>
+		<br/>
+		<div id="sendMessage" style="position: fixed; bottom: 10%;">
+			<input type="text" id="msg" />
+			<button onclick="special_msg_send()">전문가제출</button>
 		</div>
 	</body>
 </html>

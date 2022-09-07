@@ -21,7 +21,7 @@ export class SpecialistResolver {
 
   @Query(() => Specialist, { description: '전문가 조회' })
   async fetchSpecialist(@Args('id') id: string) {
-    return this.specialistService.findOne({ id });
+    return this.specialistService.findOneWithId({ id });
   }
 
   @UseGuards(GqlAuthAdminAccessGuard)
