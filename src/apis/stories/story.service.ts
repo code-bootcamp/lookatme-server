@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Category } from '../categories/entities/category.entity';
 import { StoryImage } from '../storyImages/entities/storyImage.entity';
 import { User } from '../users/entities/user.entity';
 import { Story } from './entities/story.entity';
@@ -14,6 +15,8 @@ export class StoryService {
     private readonly storyImageRepository: Repository<StoryImage>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    @InjectRepository(Category)
+    private readonly categoryRepository: Repository<Category>,
   ) {}
 
   async find() {
@@ -21,13 +24,15 @@ export class StoryService {
   }
 
   async create({ createStoryInput, userId }) {
-    const { text, imgUrl, categoryId } = createStoryInput;
+    const { text, imgUrl, categoryNumber } = createStoryInput;
 
     const writer = await this.userRepository.findOne({ where: { id: userId } });
-
+    const category = await this.categoryRepository.findOne({
+      where: { number: categoryNumber },
+    });
     const result = await this.storyRepository.save({
       text,
-      category: { id: categoryId },
+      category: { id: category.id },
       user: writer,
     });
 
