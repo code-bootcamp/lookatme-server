@@ -3,7 +3,7 @@ import { Field, InputType } from '@nestjs/graphql';
 @InputType()
 export class CreateCommentInput {
   @Field(() => String)
-  contents: string;
+  text: string;
 
   @Field(() => String)
   storyId: string;

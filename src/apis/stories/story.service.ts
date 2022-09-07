@@ -26,14 +26,14 @@ export class StoryService {
   async create({ createStoryInput, userId }) {
     const { text, imgUrl, categoryNumber } = createStoryInput;
 
-    const writer = await this.userRepository.findOne({ where: { id: userId } });
+    const user = await this.userRepository.findOne({ where: { id: userId } });
     const category = await this.categoryRepository.findOne({
       where: { number: categoryNumber },
     });
     const result = await this.storyRepository.save({
       text,
-      category: { id: category.id },
-      user: writer,
+      category,
+      user,
     });
 
     if (imgUrl !== undefined) {
@@ -51,17 +51,17 @@ export class StoryService {
 
   async update({ id, userId, updateStoryInput }) {
     const { imgUrl, ...rest } = updateStoryInput;
-    const writer = await this.userRepository.findOne({ where: { id: userId } });
+    const user = await this.userRepository.findOne({ where: { id: userId } });
 
-    const storyForUpdate = await this.storyRepository.findOne({
+    const storyToUpdate = await this.storyRepository.findOne({
       where: {
         id,
-        user: writer,
+        user,
       },
     });
 
     const result = await this.storyRepository.save({
-      ...storyForUpdate,
+      ...storyToUpdate,
       id,
       ...rest,
     });
@@ -82,11 +82,11 @@ export class StoryService {
   }
 
   async deleteOwn({ id, userId }) {
-    const writer = await this.userRepository.findOne({ where: { id: userId } });
+    const user = await this.userRepository.findOne({ where: { id: userId } });
 
     const result = await this.storyRepository.softDelete({
       id,
-      user: writer,
+      user,
     });
     return result.affected ? true : false;
   }

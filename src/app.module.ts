@@ -17,6 +17,7 @@ import { SpecialistModule } from './apis/specialists/specialist.module';
 import { QuoteModule } from './apis/quotes/quote.module';
 import { BatchesModule } from './apis/batch/batches.module';
 import { StroyModule } from './apis/stories/story.module';
+import { CommentsModule } from './apis/comments/comment.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { StroyModule } from './apis/stories/story.module';
     AuthsModule,
     BatchesModule,
     ChatsModule,
+    CommentsModule,
     FileModule,
     IamportsModule,
     PaymentsModule,
