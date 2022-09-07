@@ -24,11 +24,11 @@
 			console.log(isSpecialist)
 
 			if (isSpecialist === 'n') {
-				socket.emit('user_enter', ticketId, userId);
 				userId = prompt('유저id를 알려주세요.');
+				socket.emit('user_enter', ticketId, userId);
 			} else if (isSpecialist === 'y') {
-				socket.emit('specialist_enter', ticketId, specialistId);
 				specialistId = prompt('전문가id를 알려주세요.');
+				socket.emit('specialist_enter', ticketId, specialistId);
 			}
 
 			socket.on('connect', () => {

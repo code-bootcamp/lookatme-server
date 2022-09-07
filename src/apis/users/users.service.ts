@@ -21,16 +21,28 @@ export class UsersService {
     return this.userRepository.find();
   }
 
-  findOneWithEmail({ email }) {
-    return this.userRepository.findOne({
+  async findOneWithEmail({ email }) {
+    const result = await this.userRepository.findOne({
       where: { email: email },
     });
+
+    if (!result)
+      throw new UnprocessableEntityException(
+        '존재하지 않는 user_email값 입니다.',
+      );
+
+    return result;
   }
 
-  findOneWithId({ userId }) {
-    return this.userRepository.findOne({
+  async findOneWithId({ userId }) {
+    const result = await this.userRepository.findOne({
       where: { id: userId },
     });
+
+    if (!result)
+      throw new UnprocessableEntityException('존재하지 않는 user_id값 입니다.');
+
+    return result;
   }
 
   findWithDeleted() {
