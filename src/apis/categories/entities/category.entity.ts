@@ -1,4 +1,4 @@
-import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
+import { Field, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { Story } from 'src/apis/stories/entities/story.entity';
 import { CATEGORY_NAME } from 'src/commons/type/enum';
@@ -17,6 +17,10 @@ export class Category {
   @Column({ type: 'enum', enum: CATEGORY_NAME, nullable: false })
   @Field(() => String)
   name: string;
+
+  @Column({ type: 'int', unsigned: true, nullable: false })
+  @Field(() => Int)
+  number: number;
 
   @OneToMany(() => Story, (story) => story.category)
   @Field(() => Story)
