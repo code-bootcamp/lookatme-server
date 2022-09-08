@@ -5,7 +5,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
-import { UsersService } from '../users/users.service';
+import { UsersService } from '../user/users.service';
 import { AuthsService } from './auths.service';
 import * as bcrypt from 'bcrypt';
 import { IContext } from 'src/commons/type/context';
@@ -16,7 +16,7 @@ import {
 import * as jwt from 'jsonwebtoken';
 import { AdminsService } from '../admin/admins.service';
 import { Repository } from 'typeorm';
-import { Specialist } from '../specialists/entities/specialist.entity';
+import { Specialist } from '../specialist/entities/specialist.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 
 @Resolver()

@@ -4,9 +4,9 @@ import { Repository } from 'typeorm';
 import { ChatRoom } from './entities/chatRoom.entity';
 import { ChatMessage } from './entities/chatMessage.entity';
 import { SpecialistChatMessage } from './entities/specialistChatMessage.entity';
-import { User } from '../users/entities/user.entity';
-import { Specialist } from '../specialists/entities/specialist.entity';
-import { Ticket } from '../tickets/entities/ticket.entity';
+import { User } from '../user/entities/user.entity';
+import { Specialist } from '../specialist/entities/specialist.entity';
+import { Ticket } from '../ticket/entities/ticket.entity';
 
 @Injectable()
 export class ChatsService {

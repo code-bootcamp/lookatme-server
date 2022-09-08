@@ -1,5 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { Ticket } from 'src/apis/tickets/entities/ticket.entity';
+import { Ticket } from 'src/apis/ticket/entities/ticket.entity';
 import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
