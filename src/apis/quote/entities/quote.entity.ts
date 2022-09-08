@@ -13,9 +13,13 @@ export class Quote {
   @Field(() => String)
   id: string;
 
-  @Column({ type: 'varchar', length: 300, nullable: false })
+  @Column({ type: 'varchar', length: 100, nullable: false })
   @Field(() => String)
-  text: string;
+  author: string;
+
+  @Column({ type: 'longtext', nullable: false })
+  @Field(() => String)
+  message: string;
 
   @Column({ type: 'boolean', default: false, nullable: false })
   @Field(() => Boolean)

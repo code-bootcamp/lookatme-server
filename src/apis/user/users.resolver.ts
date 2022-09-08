@@ -1,6 +1,6 @@
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CreateUserInput } from './dto/createUser.input';
-import { UpdateUserInput } from './dto/updateUserInput';
+import { UpdateUserInput } from './dto/updateUser.Input';
 import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
 import * as bcrypt from 'bcrypt';

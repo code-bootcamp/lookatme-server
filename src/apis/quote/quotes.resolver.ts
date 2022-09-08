@@ -1,4 +1,6 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { CreateQuoteInput } from './dto/createQuote.input';
+import { UpdateQuoteInput } from './dto/updateQuote.input';
 import { Quote } from './entities/quote.entity';
 import { QuoteService } from './quotes.service';
 
@@ -25,17 +27,22 @@ export class QuoteResolver {
 
   @Mutation(() => Quote, { description: '명언 등록' })
   async createQuote(
-    @Args('text') text: string, //
+    @Args('createQuoteInput') createQuoteInput: CreateQuoteInput, //
   ) {
-    return await this.quoteService.create({ text });
+    return await this.quoteService.create({ createQuoteInput });
+  }
+
+  @Mutation(() => [Quote], { description: '디폴트 명언 목록 등록' })
+  async createQuoteList() {
+    return this.quoteService.createList();
   }
 
   @Mutation(() => Quote, { description: '명언 수정' })
   async updateQuote(
     @Args('id') id: string, //
-    @Args('text') text: string,
+    @Args('updateQuoteInput') updateQuoteInput: UpdateQuoteInput,
   ) {
-    return await this.quoteService.update({ id, text });
+    return await this.quoteService.update({ id, updateQuoteInput });
   }
 
   @Mutation(() => Boolean, { description: '명언 삭제' })

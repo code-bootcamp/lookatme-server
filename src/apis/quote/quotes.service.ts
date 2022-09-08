@@ -2,6 +2,7 @@ import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Quote } from './entities/quote.entity';
+import { DEFAULT_QUOTE_LIST } from './defaultQuoteList';
 
 @Injectable()
 export class QuoteService {
@@ -34,11 +35,17 @@ export class QuoteService {
     return result;
   }
 
-  async create({ text }) {
-    return this.quoteRepository.save({ text });
+  async create({ createQuoteInput }) {
+    return this.quoteRepository.save({ ...createQuoteInput });
   }
 
-  async update({ id, text }) {
+  async createList() {
+    return await Promise.all(
+      DEFAULT_QUOTE_LIST.map((el) => this.quoteRepository.save({ ...el })),
+    );
+  }
+
+  async update({ id, updateQuoteInput }) {
     const quoteForUpdate = this.quoteRepository.findOne({ where: { id } });
 
     if (!quoteForUpdate)
@@ -47,7 +54,7 @@ export class QuoteService {
     const result = await this.quoteRepository.save({
       ...quoteForUpdate,
       id,
-      text,
+      ...updateQuoteInput,
     });
     return result;
   }
