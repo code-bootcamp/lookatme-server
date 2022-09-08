@@ -7,9 +7,9 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Injectable } from '@nestjs/common';
-import { UsersService } from '../users/users.service';
-import { SpecialistService } from '../specialists/specialist.service';
 import { ChatsService } from './chats.service';
+import { UsersService } from '../user/users.service';
+import { SpecialistService } from '../specialist/specialists.service';
 
 @WebSocketGateway({
   namespace: 'chat',

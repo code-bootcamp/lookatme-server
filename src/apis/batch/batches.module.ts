@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Quote } from '../quotes/entities/quote.entity';
-import { QuoteService } from '../quotes/quote.service';
+import { Quote } from '../quote/entities/quote.entity';
+import { QuoteService } from '../quote/quotes.service';
 import { BatchesController } from './batches.controller';
 import { TasksService } from './tasks.service';
 

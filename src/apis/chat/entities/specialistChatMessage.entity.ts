@@ -1,5 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { Specialist } from 'src/apis/specialists/entities/specialist.entity';
+import { Specialist } from 'src/apis/specialist/entities/specialist.entity';
 import {
   Column,
   CreateDateColumn,

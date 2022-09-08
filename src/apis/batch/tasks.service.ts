@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { CronExpression, SchedulerRegistry } from '@nestjs/schedule';
 import { CronJob } from 'cron';
-import { QuoteService } from '../quotes/quote.service';
+import { QuoteService } from '../quote/quotes.service';
 
 @Injectable()
 export class TasksService {

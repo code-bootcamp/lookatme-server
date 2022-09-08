@@ -4,20 +4,20 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-import { UsersModule } from './apis/users/users.module';
+import { UsersModule } from './apis/user/users.module';
 import { RedisClientOptions } from 'redis';
 import * as redisStore from 'cache-manager-redis-store';
 import { AuthsModule } from './apis/auth/auths.module';
-import { FileModule } from './apis/file/file.module';
+import { FileModule } from './apis/file/files.module';
 import { AdminsModule } from './apis/admin/admins.module';
 import { IamportsModule } from './apis/iamport/iamports.module';
-import { PaymentsModule } from './apis/payments/payments.module';
+import { PaymentsModule } from './apis/payment/payments.module';
 import { ChatsModule } from './apis/chat/chats.module';
-import { SpecialistModule } from './apis/specialists/specialist.module';
-import { QuoteModule } from './apis/quotes/quote.module';
+import { SpecialistModule } from './apis/specialist/specialists.module';
+import { QuoteModule } from './apis/quote/quotes.module';
 import { BatchesModule } from './apis/batch/batches.module';
-import { StroyModule } from './apis/stories/story.module';
-import { CommentsModule } from './apis/comments/comment.module';
+import { StroyModule } from './apis/story/stories.module';
+import { CommentsModule } from './apis/comment/comments.module';
 
 @Module({
   imports: [
