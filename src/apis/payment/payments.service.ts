@@ -7,6 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { PAYMENT_ENUM } from 'src/commons/type/enum';
 import { Repository, DataSource } from 'typeorm';
 import { User } from '../user/entities/user.entity';
+import { UsersService } from '../user/users.service';
 import { Payment } from './entities/payment.entity';
 
 @Injectable()
@@ -19,7 +20,17 @@ export class PaymentsService {
     private readonly usersRepository: Repository<User>,
 
     private readonly dataSource: DataSource,
+
+    private readonly usersService: UsersService,
   ) {}
+
+  async findAll({ userId }) {
+    const user = await this.usersService.findOneWithId({ userId });
+
+    return this.paymentsRepository.find({
+      where: { user: user },
+    });
+  }
 
   async create({ impUid, amount, user: _user }) {
     const queryRunner = this.dataSource.createQueryRunner();
