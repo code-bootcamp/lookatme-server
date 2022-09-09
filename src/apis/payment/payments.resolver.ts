@@ -1,5 +1,5 @@
 import { HttpException, UseGuards } from '@nestjs/common';
-import { Args, Context, Int, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Context, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { IContext } from 'src/commons/type/context';
 import { IamportsService } from '../iamport/iamports.service';
@@ -12,6 +12,14 @@ export class PaymentsResolver {
     private readonly paymentsService: PaymentsService, //
     private readonly importsService: IamportsService,
   ) {}
+
+  @UseGuards(GqlAuthAccessGuard)
+  @Query(() => [Payment], { description: '결제 목록 조회' })
+  fetchPayments(
+    @Context() context: IContext, //
+  ) {
+    return this.paymentsService.findAll({ userId: context.req.user.id });
+  }
 
   @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => Payment, { description: '결제 등록하기' })
