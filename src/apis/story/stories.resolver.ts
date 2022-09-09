@@ -18,7 +18,7 @@ export class StoryResolver {
 
   @Query(() => [Story], { description: '사연 전체 목록 조회' })
   async fetchStories() {
-    return this.storyService.find();
+    return this.storyService.findAll();
   }
 
   @UseGuards(GqlAuthAccessGuard)

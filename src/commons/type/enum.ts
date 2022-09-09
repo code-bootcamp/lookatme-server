@@ -4,10 +4,10 @@ export enum PAYMENT_ENUM {
 }
 
 export enum CATEGORY_NAME {
-  JOB = '직업/진로',
-  MARRIAGE = '연애/결혼/비혼',
+  JOB = '직업,진로',
+  MARRIAGE = '연애,결혼',
   RELATIONSHIP = '대인관계',
-  CHARACTER = '자아/성격',
+  CHARACTER = '자아,성격',
   FAMILY = '가족',
-  FREE = '자유',
+  FREE = '자유주제',
 }
