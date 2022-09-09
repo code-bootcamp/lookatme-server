@@ -1,6 +1,5 @@
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CreateUserInput } from './dto/createUser.input';
-import { UpdateUserInput } from './dto/updateUser.Input';
 import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
 import * as bcrypt from 'bcrypt';
@@ -17,6 +16,10 @@ import {
   GqlAuthAdminAccessGuard,
 } from 'src/commons/auth/gql-auth.guard';
 import { Cache } from 'cache-manager';
+import {
+  UpdateUserInput,
+  UpdateUserWithAdminAccessInput,
+} from './dto/updateUser.Input';
 
 @Resolver()
 export class UsersResolver {
@@ -96,16 +99,20 @@ export class UsersResolver {
   }
 
   @UseGuards(GqlAuthAdminAccessGuard)
-  @Mutation(() => User, { description: '회원정보 수정' })
-  updateUser(
+  @Mutation(() => User, { description: '관리자 권한으로 모든 회원정보 수정' })
+  updateUserWithAdminAccess(
     @Args('userId') userId: string,
-    @Args('updateUserInput') updateUserInput: UpdateUserInput,
+    @Args('updateUserWithAdminAccessInput')
+    updateUserWithAdminAccessInput: UpdateUserWithAdminAccessInput,
   ) {
-    return this.usersService.update({ userId, updateUserInput });
+    return this.usersService.updateWithAdminAccess({
+      userId,
+      updateUserWithAdminAccessInput,
+    });
   }
 
   @UseGuards(GqlAuthAccessGuard)
-  @Mutation(() => User, { description: '회원 비밀번호 변경' })
+  @Mutation(() => User, { description: '로그인한 회원 비밀번호 변경' })
   async updateUserPwd(
     @Context() context: any, //
     @Args('newPassword') newPassword: string,
@@ -129,8 +136,20 @@ export class UsersResolver {
     return this.usersService.updatePwd({ userId, password });
   }
 
+  @UseGuards(GqlAuthAccessGuard)
+  @Mutation(() => User, { description: '로그인한 회원 정보 변경' })
+  updateUser(
+    @Context() context: any, //
+    @Args('updateUserInput') updateUserInput: UpdateUserInput,
+  ) {
+    return this.usersService.update({
+      user: context.req.user,
+      updateUserInput,
+    });
+  }
+
   @UseGuards(GqlAuthAdminAccessGuard)
-  @Mutation(() => Boolean, { description: '회원 삭제' })
+  @Mutation(() => Boolean, { description: '관리자 권한으로 회원 삭제' })
   deleteUser(
     @Args('userId') userId: string, //
   ) {
@@ -138,7 +157,7 @@ export class UsersResolver {
   }
 
   @UseGuards(GqlAuthAccessGuard)
-  @Mutation(() => Boolean, { description: '회원탈퇴' })
+  @Mutation(() => Boolean, { description: '로그인한 회원 탈퇴' })
   deleteLoginUser(
     @Context() context: any, //
   ) {
@@ -147,13 +166,15 @@ export class UsersResolver {
   }
 
   @UseGuards(GqlAuthAdminAccessGuard)
-  @Mutation(() => Boolean, { description: '삭제된 회원 복구' })
+  @Mutation(() => Boolean, { description: '관리자 권한으로 삭제된 회원 복구' })
   restoreUser(@Args('userId') userId: string) {
     return this.usersService.undoDelete({ userId });
   }
 
   @Mutation(() => String, { description: '토큰 보내기' })
-  async sendTokenToSMS(@Args('phone_number') phone_number: string) {
+  async sendTokenToSMS(
+    @Args('phone_number') phone_number: string, //
+  ) {
     const token = this.usersService.getToken();
     // 배포환경
     // const result = await this.usersService.sendToken({ phone_number, token });
@@ -174,9 +195,12 @@ export class UsersResolver {
   }
 
   @Mutation(() => Boolean, { description: '토큰 확인' })
-  async checkToken(@Args('token') token: string) {
+  async checkToken(
+    @Args('token') token: string, //
+    @Args('phone_number') phone_number: string,
+  ) {
     const tokenCache = await this.cacheManager.get(token);
 
-    return tokenCache ? true : false;
+    return tokenCache ? tokenCache === phone_number : false;
   }
 }

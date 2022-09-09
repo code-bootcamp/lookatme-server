@@ -87,8 +87,8 @@ export class UsersService {
     return result;
   }
 
-  async update({ userId, updateUserInput }) {
-    const { ...user } = updateUserInput;
+  async updateWithAdminAccess({ userId, updateUserWithAdminAccessInput }) {
+    const { ...user } = updateUserWithAdminAccessInput;
 
     // 1. find user from User table with user_id
     const myuser = await this.userRepository.findOne({
@@ -103,6 +103,32 @@ export class UsersService {
       ...myuser,
       id: userId,
       ...user,
+    });
+
+    // 4. return user object
+    return result;
+  }
+
+  async update({ user, updateUserInput }) {
+    // 1. find user from User table with user_id
+    const myuser = await this.userRepository.findOne({
+      where: { id: user.id },
+    });
+
+    if (!myuser)
+      throw new UnprocessableEntityException('존재하지 않는 user_id 입니다');
+
+    if (myuser.email === updateUserInput.email)
+      throw new ConflictException('기존 이메일과 같은 이메일 입니다');
+
+    if (myuser.nickname === updateUserInput.nickname)
+      throw new ConflictException('기존 닉네임과 같은 닉네임 입니다');
+
+    // 2. save new user
+    const result = await this.userRepository.save({
+      ...myuser,
+      id: user.id,
+      ...updateUserInput,
     });
 
     // 4. return user object
