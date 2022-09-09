@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { CategoryService } from '../categories/category.service';
 import { Category } from '../categories/entities/category.entity';
 import { StoryImage } from '../storyImage/entities/storyImage.entity';
 import { User } from '../user/entities/user.entity';
@@ -19,6 +20,7 @@ import { StoryService } from './stories.service';
   providers: [
     StoryResolver, //
     StoryService,
+    CategoryService,
   ],
 })
 export class StroyModule {}

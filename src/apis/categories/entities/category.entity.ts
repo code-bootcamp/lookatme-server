@@ -18,10 +18,6 @@ export class Category {
   @Field(() => String)
   name: string;
 
-  @Column({ type: 'int', unsigned: true, nullable: false })
-  @Field(() => Int)
-  number: number;
-
   @OneToMany(() => Story, (story) => story.category)
   @Field(() => Story)
   story: Story;
