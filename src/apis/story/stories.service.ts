@@ -21,27 +21,29 @@ export class StoryService {
     private readonly categoryService: CategoryService,
   ) {}
 
-  async find() {
-    return await this.storyRepository.find();
+  async findAll() {
+    return await this.storyRepository.find({
+      relations: ['user', 'category'],
+    });
   }
 
   async create({ createStoryInput, userId }) {
     const { title, text, imgUrl, categoryName } = createStoryInput;
     const category = { id: '', name: '' };
     const user = await this.userRepository.findOne({ where: { id: userId } });
-    const findedCategory = await this.categoryRepository.findOne({
+    const foundCategory = await this.categoryRepository.findOne({
       where: { name: categoryName },
     });
 
-    if (findedCategory === null) {
+    if (foundCategory === null) {
       const createdCategory = await this.categoryService.create({
         categoryName,
       });
       category.id = createdCategory.id;
       category.name = createdCategory.name;
     } else {
-      category.id = findedCategory.id;
-      category.name = findedCategory.name;
+      category.id = foundCategory.id;
+      category.name = foundCategory.name;
     }
 
     const result = await this.storyRepository.save({
