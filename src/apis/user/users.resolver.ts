@@ -39,10 +39,19 @@ export class UsersResolver {
   }
 
   @Query(() => User, { description: '이메일로 회원 조회' })
-  fetchUser(
+  fetchUserWithEmail(
     @Args('email') email: string, //
   ) {
     return this.usersService.findOneWithEmail({ email });
+  }
+
+  @Query(() => User, { description: '전화번호로 회원 조회' })
+  fetchUserWithPhoneNumber(
+    @Args('phoneNumber') phoneNumber: string, //
+  ) {
+    return this.usersService.findOneWithPhoneNumber({
+      phone_number: phoneNumber,
+    });
   }
 
   @UseGuards(GqlAuthAccessGuard)
@@ -126,14 +135,39 @@ export class UsersResolver {
     const isAuth = await bcrypt.compare(newPassword, user.password);
     if (isAuth) throw new UnprocessableEntityException('기존 비밀번호 입니다');
 
-    const userId = context.req.user.id;
     const password = await bcrypt.hash(
       newPassword,
       Number(process.env.HASH_SALT),
     );
 
     // 3. 새로운 비밀번호 설정
-    return this.usersService.updatePwd({ userId, password });
+    return this.usersService.updatePwd({
+      userId: context.req.user.id,
+      password,
+    });
+  }
+
+  @Mutation(() => User, { description: '이메일로 회원 비밀번호 변경' })
+  async updateUserPwdWithEmail(
+    @Args('email') email: string, //
+    @Args('newPassword') newPassword: string,
+  ) {
+    // 1. 이메일이 일치하는 유저를 DB에서 찾기
+    const user = await this.usersService.findOneWithEmail({
+      email,
+    });
+
+    // 2. 비밀번호가 같으면
+    const isAuth = await bcrypt.compare(newPassword, user.password);
+    if (isAuth) throw new UnprocessableEntityException('기존 비밀번호 입니다');
+
+    const password = await bcrypt.hash(
+      newPassword,
+      Number(process.env.HASH_SALT),
+    );
+
+    // 3. 새로운 비밀번호 설정
+    return this.usersService.updatePwd({ userId: user.id, password });
   }
 
   @UseGuards(GqlAuthAccessGuard)
@@ -173,34 +207,37 @@ export class UsersResolver {
 
   @Mutation(() => String, { description: '토큰 보내기' })
   async sendTokenToSMS(
-    @Args('phone_number') phone_number: string, //
+    @Args('phoneNumber') phoneNumber: string, //
   ) {
     const token = this.usersService.getToken();
     // 배포환경
-    // const result = await this.usersService.sendToken({ phone_number, token });
+    // const result = await this.usersService.sendToken({
+    //   phone_number: phoneNumber,
+    //   token,
+    // });
 
     // in 3mins
-    await this.cacheManager.set(token, phone_number, {
+    await this.cacheManager.set(token, phoneNumber, {
       ttl: 180,
     });
 
     // 개발환경
-    return `phone:${phone_number} token:${token}`;
+    return `phone:${phoneNumber} token:${token}`;
 
     // 배포환경
     // if (result.statusCode === '2000')
     //   // succeed
-    //   return `phone:${phone_number} token:${token}`;
+    //   return `phone:${phoneNumber} token:${token}`;
     // else return `${result.statusCode}: ${result.statusMessage}`;
   }
 
   @Mutation(() => Boolean, { description: '토큰 확인' })
   async checkToken(
     @Args('token') token: string, //
-    @Args('phone_number') phone_number: string,
+    @Args('phoneNumber') phoneNumber: string,
   ) {
     const tokenCache = await this.cacheManager.get(token);
 
-    return tokenCache ? tokenCache === phone_number : false;
+    return tokenCache ? tokenCache === phoneNumber : false;
   }
 }
