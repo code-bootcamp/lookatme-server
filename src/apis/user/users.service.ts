@@ -34,6 +34,19 @@ export class UsersService {
     return result;
   }
 
+  async findOneWithPhoneNumber({ phone_number }) {
+    const result = await this.userRepository.findOne({
+      where: { phone_number: phone_number },
+    });
+
+    if (!result)
+      throw new UnprocessableEntityException(
+        '존재하지 않는 user_phone_number값 입니다.',
+      );
+
+    return result;
+  }
+
   async findOneWithId({ userId }) {
     const result = await this.userRepository.findOne({
       where: { id: userId },
