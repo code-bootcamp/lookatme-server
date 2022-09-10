@@ -40,6 +40,17 @@ export class QuoteService {
   }
 
   async createList() {
+    // 1. 존재하는 중복 명언 지우기
+    await Promise.all(
+      DEFAULT_QUOTE_LIST.map((el) =>
+        this.quoteRepository.delete({
+          author: el.author, //
+          message: el.message,
+        }),
+      ),
+    );
+
+    // 2. 새로운 명언 리스트 등록하기
     return await Promise.all(
       DEFAULT_QUOTE_LIST.map((el) => this.quoteRepository.save({ ...el })),
     );
