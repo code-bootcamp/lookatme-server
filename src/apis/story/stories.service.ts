@@ -1,10 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CategoryService } from '../categories/category.service';
 import { Category } from '../categories/entities/category.entity';
 import { StoryImage } from '../storyImage/entities/storyImage.entity';
 import { User } from '../user/entities/user.entity';
+import { UsersService } from '../user/users.service';
 import { Story } from './entities/story.entity';
 
 @Injectable()
@@ -19,12 +20,22 @@ export class StoryService {
     @InjectRepository(Category)
     private readonly categoryRepository: Repository<Category>,
     private readonly categoryService: CategoryService,
+    private readonly usersService: UsersService,
   ) {}
 
   async findAll() {
     return await this.storyRepository.find({
       relations: ['user', 'category'],
     });
+  }
+
+  async findBestStories() {
+    const stories = await this.storyRepository.find({
+      relations: ['user', 'comments'],
+      order: { likes: 'DESC' },
+    });
+
+    return stories.slice(0, 5);
   }
 
   async create({ createStoryInput, userId }) {
@@ -115,5 +126,46 @@ export class StoryService {
 
     const result = await this.storyRepository.softDelete({ id });
     return result.affected ? true : false;
+  }
+
+  async userLikeStory({ userId, storyId }) {
+    const story = await this.storyRepository.findOne({
+      where: { id: storyId },
+      relations: ['likedusers'],
+    });
+    const usersArray = story.likedusers;
+
+    if (usersArray.some((el) => el.id === userId))
+      throw new ConflictException('이미 좋아요를 눌렀습니다.');
+
+    const user = await this.usersService.findOneWithId({ userId });
+
+    usersArray.push(user);
+
+    return this.storyRepository.save({
+      ...story,
+      id: storyId,
+      likedusers: usersArray,
+      likes: usersArray.length,
+    });
+  }
+
+  async userUndoLikeStory({ userId, storyId }) {
+    const story = await this.storyRepository.findOne({
+      where: { id: storyId },
+      relations: ['likedusers'],
+    });
+
+    if (story.likedusers.every((el) => el.id !== userId))
+      throw new ConflictException('좋아요를 누르시지 않은 사연입니다.');
+
+    const usersArray = story.likedusers.filter((el) => el.id !== userId);
+
+    return this.storyRepository.save({
+      ...story,
+      id: storyId,
+      likedusers: usersArray,
+      likes: usersArray.length,
+    });
   }
 }
