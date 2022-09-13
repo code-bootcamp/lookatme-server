@@ -16,6 +16,14 @@ export class TicketsService {
     private readonly specialistRepository: Repository<Specialist>,
   ) {}
 
+  async findOwnTickets({ userId }) {
+    return await this.ticketsRepository.find({
+      where: {
+        user: { id: userId },
+      },
+    });
+  }
+
   async create({ userId, specialistId }) {
     const date = new Date();
     const expired = new Date(date);
