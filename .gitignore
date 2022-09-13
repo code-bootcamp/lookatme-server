@@ -36,7 +36,7 @@ lerna-debug.log*
 
 # Environmet Variable
 .env*
-teamproject06.json
+lookatme-storage.json
 
 # schema git conflict
 schema.gql
