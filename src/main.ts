@@ -3,7 +3,6 @@ import { NestFactory } from '@nestjs/core';
 import { graphqlUploadExpress } from 'graphql-upload';
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './commons/filter/http-exception.filter';
-// import { join } from 'path';
 import { NestExpressApplication } from '@nestjs/platform-express';
 
 async function bootstrap() {
@@ -23,7 +22,6 @@ async function bootstrap() {
     ],
     credentials: true,
   });
-  // app.useStaticAssets(join(__dirname, '..', 'static'));
   await app.listen(3000);
 }
 bootstrap();
