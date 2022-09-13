@@ -131,12 +131,6 @@ export class UsersService {
     if (!myuser)
       throw new UnprocessableEntityException('존재하지 않는 user_id 입니다');
 
-    if (myuser.email === updateUserInput.email)
-      throw new ConflictException('기존 이메일과 같은 이메일 입니다');
-
-    if (myuser.nickname === updateUserInput.nickname)
-      throw new ConflictException('기존 닉네임과 같은 닉네임 입니다');
-
     // 2. save new user
     const result = await this.userRepository.save({
       ...myuser,
