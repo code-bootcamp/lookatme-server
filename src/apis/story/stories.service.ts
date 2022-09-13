@@ -23,19 +23,63 @@ export class StoryService {
     private readonly usersService: UsersService,
   ) {}
 
-  async findAll() {
+  async findAll({ page }) {
     return await this.storyRepository.find({
       relations: ['user', 'category'],
+      take: 10,
+      skip: page ? (page - 1) * 10 : 0,
     });
   }
 
   async findBestStories() {
     const stories = await this.storyRepository.find({
-      relations: ['user', 'comments'],
+      relations: ['user'],
       order: { likes: 'DESC' },
     });
 
     return stories.slice(0, 5);
+  }
+
+  async findAllByTime({ categoryName, page }) {
+    const category = await this.categoryRepository.findOne({
+      where: { name: categoryName },
+    });
+
+    return await this.storyRepository.find({
+      where: { category: category },
+      relations: ['user', 'category'],
+      order: { createAt: 'DESC' },
+      take: 10,
+      skip: page ? (page - 1) * 10 : 0,
+    });
+  }
+
+  async findAllByLike({ categoryName, page }) {
+    const category = await this.categoryRepository.findOne({
+      where: { name: categoryName },
+    });
+
+    return await this.storyRepository.find({
+      where: { category: category },
+      relations: ['user', 'category'],
+      order: { likes: 'DESC' },
+      take: 10,
+      skip: page ? (page - 1) * 10 : 0,
+    });
+  }
+
+  async findAllByComment({ categoryName, page }) {
+    const category = await this.categoryRepository.findOne({
+      where: { name: categoryName },
+    });
+
+    return await this.storyRepository.find({
+      where: { category: category },
+      relations: ['user', 'category'],
+      order: { commentCounts: 'DESC' },
+      take: 10,
+      skip: page ? (page - 1) * 10 : 0,
+    });
   }
 
   async create({ createStoryInput, userId }) {

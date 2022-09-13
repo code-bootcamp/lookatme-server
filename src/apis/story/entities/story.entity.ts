@@ -28,6 +28,10 @@ export class Story {
   @Field(() => Int)
   likes: number;
 
+  @Column({ type: 'int', unsigned: true, default: 0, nullable: false })
+  @Field(() => Int)
+  commentCounts: number;
+
   @Field(() => String)
   @Column({ type: 'varchar', length: 100, nullable: false })
   title: string;
