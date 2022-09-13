@@ -15,9 +15,19 @@ export class CommentsResolver {
     private readonly commentsService: CommentsService, //
   ) {}
 
-  @Query(() => [Comment], { description: '전체 댓글 목록 조회' })
-  async fetchComments() {
-    return await this.commentsService.findAll();
+  @UseGuards(GqlAuthAccessGuard)
+  @Query(() => [Comment], { description: '자신의 댓글 목록 조회' })
+  async fetchOwnComments(
+    @Context() context: any, //
+  ) {
+    const userId = context.req.user.id;
+    return await this.commentsService.findOwnComments({ userId });
+  }
+
+  @UseGuards(GqlAuthAdminAccessGuard)
+  @Query(() => [Comment], { description: '신고 댓글 전체 조회' })
+  async fetchReportedComments() {
+    return await this.commentsService.findReportedComments();
   }
 
   @UseGuards(GqlAuthAccessGuard)

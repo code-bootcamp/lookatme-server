@@ -7,10 +7,10 @@ import { JwtRefreshStrategy } from 'src/commons/auth/jwt-refresh.strategy';
 import { JwtGoogleStrategy } from 'src/commons/auth/jwt-social-google.strategy';
 import { JwtKakaoStrategy } from 'src/commons/auth/jwt-social-kakao.strategy';
 import { JwtNaverStrategy } from 'src/commons/auth/jwt-social-naver.strategy';
+import { JwtSpecialistAccessStrategy } from 'src/commons/auth/jwt-specialist-access.strategy';
 import { AdminsService } from '../admin/admins.service';
 import { Admin } from '../admin/entities/admin.entity';
 import { Specialist } from '../specialist/entities/specialist.entity';
-import { SpecialistService } from '../specialist/specialists.service';
 import { User } from '../user/entities/user.entity';
 import { UsersService } from '../user/users.service';
 import { AuthsController } from './auths.controller';
@@ -27,6 +27,7 @@ import { AuthsService } from './auths.service';
     ]),
   ],
   providers: [
+    JwtSpecialistAccessStrategy,
     JwtAdminAccessStrategy, // declare location of provider doesn't matter
     JwtAccessStrategy,
     JwtRefreshStrategy,

@@ -108,6 +108,10 @@ export class StoryService {
     });
   }
 
+  async findReportedStories() {
+    return await this.storyRepository.find({ where: { isReported: true } });
+  }
+
   async create({ createStoryInput, userId }) {
     const { title, text, imgUrl, categoryName } = createStoryInput;
     const category = { id: '', name: '' };

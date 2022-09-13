@@ -56,6 +56,12 @@ export class StoryResolver {
     return await this.storyService.findAllByComment({ categoryName, page });
   }
 
+  @UseGuards(GqlAuthAdminAccessGuard)
+  @Query(() => [Story], { description: '신고 사연 전체 조회' })
+  async fetchReportedStories() {
+    return this.storyService.findReportedStories();
+  }
+
   @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => Story, { description: '사연 등록' })
   async createStory(

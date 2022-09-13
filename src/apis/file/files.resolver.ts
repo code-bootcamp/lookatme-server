@@ -8,10 +8,10 @@ export class FileResolver {
     private readonly fileService: FileService, //
   ) {}
 
-  @Mutation(() => [String], { description: '이미지 업로드 API' })
+  @Mutation(() => String, { description: '이미지 업로드 API' })
   uploadFile(
-    @Args({ name: 'files', type: () => [GraphQLUpload] }) files: FileUpload[],
+    @Args({ name: 'file', type: () => [GraphQLUpload] }) file: FileUpload[],
   ) {
-    return this.fileService.uploadImage({ files });
+    return this.fileService.uploadImage({ file });
   }
 }

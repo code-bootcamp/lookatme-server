@@ -4,6 +4,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { Specialist } from 'src/apis/specialist/entities/specialist.entity';
 import { Repository } from 'typeorm';
 import { Cache } from 'cache-manager';
+import { InjectRepository } from '@nestjs/typeorm';
 
 export class JwtSpecialistAccessStrategy extends PassportStrategy(
   Strategy,
@@ -12,6 +13,8 @@ export class JwtSpecialistAccessStrategy extends PassportStrategy(
   constructor(
     @Inject(CACHE_MANAGER)
     private readonly cacheManager: Cache, //
+
+    @InjectRepository(Specialist)
     private readonly specialistRepository: Repository<Specialist>,
   ) {
     super({
