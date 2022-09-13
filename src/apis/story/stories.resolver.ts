@@ -1,5 +1,5 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Context, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import {
   GqlAuthAccessGuard,
   GqlAuthAdminAccessGuard,
@@ -19,7 +19,7 @@ export class StoryResolver {
 
   @Query(() => [Story], { description: '사연 전체 목록 조회' })
   async fetchStories(
-    @Args({ name: 'page', nullable: true }) page?: number, //
+    @Args({ name: 'page', type: () => Int, nullable: true }) page?: number, //
   ) {
     return this.storyService.findAll({ page });
   }
@@ -32,7 +32,7 @@ export class StoryResolver {
   @Query(() => [Story], { description: '시간순으로 사연 조회' })
   async fetchStoriesByTime(
     @Args('categoryName') categoryName: CATEGORY_NAME, //
-    @Args({ name: 'page', nullable: true }) page?: number,
+    @Args({ name: 'page', type: () => Int, nullable: true }) page?: number, //
   ) {
     return await this.storyService.findAllByTime({ categoryName, page });
   }
@@ -40,7 +40,7 @@ export class StoryResolver {
   @Query(() => [Story], { description: '좋아요순으로 사연 조회' })
   async fetchStoriesByLike(
     @Args('categoryName') categoryName: CATEGORY_NAME, //
-    @Args({ name: 'page', nullable: true }) page?: number,
+    @Args({ name: 'page', type: () => Int, nullable: true }) page?: number, //
   ) {
     return await this.storyService.findAllByLike({ categoryName, page });
   }
@@ -48,7 +48,7 @@ export class StoryResolver {
   @Query(() => [Story], { description: '댓글순으로 사연 조회' })
   async fetchStoriesByComment(
     @Args('categoryName') categoryName: CATEGORY_NAME, //
-    @Args({ name: 'page', nullable: true }) page?: number,
+    @Args({ name: 'page', type: () => Int, nullable: true }) page?: number, //
   ) {
     return await this.storyService.findAllByComment({ categoryName, page });
   }
