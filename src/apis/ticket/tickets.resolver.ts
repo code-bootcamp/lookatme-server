@@ -10,12 +10,12 @@ export class TicketsResolver {
     private readonly ticketsService: TicketsService, //
   ) {}
 
-  // @UseGuards(GqlAuthAccessGuard)
-  // @Query(() => [Ticket])
-  // async fetchOwnTickets(@Context() context: any) {
-  //   const userId = context.
-  //   return this.ticketsService.findOwnTickets();
-  // }
+  @UseGuards(GqlAuthAccessGuard)
+  @Query(() => [Ticket])
+  async fetchOwnTickets(@Context() context: any) {
+    const userId = context.req.user.id;
+    return this.ticketsService.findOwnTickets({ userId });
+  }
 
   @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => Ticket)
