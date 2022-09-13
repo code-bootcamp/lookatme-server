@@ -13,5 +13,5 @@ export interface IContext {
 }
 
 export interface IUpload {
-  files: FileUpload[];
+  file: FileUpload[];
 } //

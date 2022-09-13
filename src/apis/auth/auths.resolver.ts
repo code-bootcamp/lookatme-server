@@ -24,6 +24,7 @@ export class AuthsResolver {
   constructor(
     @InjectRepository(Specialist)
     private readonly specialistRepository: Repository<Specialist>,
+
     private readonly authsService: AuthsService, //
 
     private readonly usersService: UsersService,

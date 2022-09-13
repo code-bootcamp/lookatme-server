@@ -19,6 +19,7 @@ import { BatchesModule } from './apis/batch/batches.module';
 import { StroyModule } from './apis/story/stories.module';
 import { CommentsModule } from './apis/comment/comments.module';
 import { TicketsModule } from './apis/ticket/tickets.module';
+import { SpcialistCommentsModule } from './apis/specialistComment/specialistComments.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { TicketsModule } from './apis/ticket/tickets.module';
     UsersModule,
     SpecialistModule,
     StroyModule,
+    SpcialistCommentsModule,
     TicketsModule,
     QuoteModule,
     ConfigModule.forRoot({
