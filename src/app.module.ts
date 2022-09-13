@@ -18,6 +18,7 @@ import { QuoteModule } from './apis/quote/quotes.module';
 import { BatchesModule } from './apis/batch/batches.module';
 import { StroyModule } from './apis/story/stories.module';
 import { CommentsModule } from './apis/comment/comments.module';
+import { TicketsModule } from './apis/ticket/tickets.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { CommentsModule } from './apis/comment/comments.module';
     UsersModule,
     SpecialistModule,
     StroyModule,
+    TicketsModule,
     QuoteModule,
     ConfigModule.forRoot({
       // to read .env files
