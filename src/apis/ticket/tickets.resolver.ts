@@ -1,5 +1,5 @@
 import { UseGuards } from '@nestjs/common';
-import { Context, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { Ticket } from './entities/ticket.entity';
 import { TicketsService } from './tickets.service';
@@ -10,14 +10,20 @@ export class TicketsResolver {
     private readonly ticketsService: TicketsService, //
   ) {}
 
-  //   @UseGuards(GqlAuthAccessGuard)
-  //   @Query(() => [Ticket])
-  //   async fetchOwnTickets(@Context() context: any) {
-  //     return this.ticketsService.findOwnTickets();
-  //   }
+  // @UseGuards(GqlAuthAccessGuard)
+  // @Query(() => [Ticket])
+  // async fetchOwnTickets(@Context() context: any) {
+  //   const userId = context.
+  //   return this.ticketsService.findOwnTickets();
+  // }
 
+  @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => Ticket)
-  async createTicket() {
-    return await this.ticketsService.create();
+  async createTicket(
+    @Context() context: any, //
+    @Args('specialistId') specialistId: string,
+  ) {
+    const userId = context.req.user.id;
+    return await this.ticketsService.create({ userId, specialistId });
   }
 }
