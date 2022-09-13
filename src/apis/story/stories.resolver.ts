@@ -17,11 +17,11 @@ export class StoryResolver {
     private readonly storyService: StoryService, //
   ) {}
 
-  @Query(() => [Story], { description: '사연 전체 목록 조회' })
-  async fetchStories(
-    @Args({ name: 'page', type: () => Int, nullable: true }) page?: number, //
+  @Query(() => Story, { description: 'ID로 사연 조회' })
+  async fetchStory(
+    @Args('storyId') storyId: string, //
   ) {
-    return this.storyService.findAll({ page });
+    return await this.storyService.find({ storyId });
   }
 
   @Query(() => [Story], { description: '베스트 사연 5개 조회' })
@@ -31,24 +31,27 @@ export class StoryResolver {
 
   @Query(() => [Story], { description: '시간순으로 사연 조회' })
   async fetchStoriesByTime(
-    @Args('categoryName') categoryName: CATEGORY_NAME, //
-    @Args({ name: 'page', type: () => Int, nullable: true }) page?: number, //
+    @Args({ name: 'categoryName', nullable: true })
+    categoryName?: CATEGORY_NAME, //
+    @Args({ name: 'page', type: () => Int, nullable: true }) page?: number,
   ) {
     return await this.storyService.findAllByTime({ categoryName, page });
   }
 
   @Query(() => [Story], { description: '좋아요순으로 사연 조회' })
   async fetchStoriesByLike(
-    @Args('categoryName') categoryName: CATEGORY_NAME, //
-    @Args({ name: 'page', type: () => Int, nullable: true }) page?: number, //
+    @Args({ name: 'categoryName', nullable: true })
+    categoryName?: CATEGORY_NAME, //
+    @Args({ name: 'page', type: () => Int, nullable: true }) page?: number,
   ) {
     return await this.storyService.findAllByLike({ categoryName, page });
   }
 
   @Query(() => [Story], { description: '댓글순으로 사연 조회' })
   async fetchStoriesByComment(
-    @Args('categoryName') categoryName: CATEGORY_NAME, //
-    @Args({ name: 'page', type: () => Int, nullable: true }) page?: number, //
+    @Args({ name: 'categoryName', nullable: true })
+    categoryName?: CATEGORY_NAME, //
+    @Args({ name: 'page', type: () => Int, nullable: true }) page?: number,
   ) {
     return await this.storyService.findAllByComment({ categoryName, page });
   }

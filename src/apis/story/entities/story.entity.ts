@@ -45,6 +45,7 @@ export class Story {
   isReported: boolean;
 
   @CreateDateColumn()
+  @Field(() => Date)
   createAt: Date;
 
   @UpdateDateColumn()

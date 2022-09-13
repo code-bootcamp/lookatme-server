@@ -23,11 +23,10 @@ export class StoryService {
     private readonly usersService: UsersService,
   ) {}
 
-  async findAll({ page }) {
-    return await this.storyRepository.find({
-      relations: ['user', 'category'],
-      take: 10,
-      skip: page ? (page - 1) * 10 : 0,
+  async find({ storyId }) {
+    return await this.storyRepository.findOne({
+      where: { id: storyId },
+      relations: ['user', 'category', 'comment'],
     });
   }
 
@@ -41,12 +40,21 @@ export class StoryService {
   }
 
   async findAllByTime({ categoryName, page }) {
-    const category = await this.categoryRepository.findOne({
-      where: { name: categoryName },
-    });
+    if (categoryName) {
+      const category = await this.categoryRepository.findOne({
+        where: { name: categoryName },
+      });
+
+      return await this.storyRepository.find({
+        where: { category: category },
+        relations: ['user', 'category'],
+        order: { createAt: 'DESC' },
+        take: 10,
+        skip: page ? (page - 1) * 10 : 0,
+      });
+    }
 
     return await this.storyRepository.find({
-      where: { category: category },
       relations: ['user', 'category'],
       order: { createAt: 'DESC' },
       take: 10,
@@ -55,12 +63,21 @@ export class StoryService {
   }
 
   async findAllByLike({ categoryName, page }) {
-    const category = await this.categoryRepository.findOne({
-      where: { name: categoryName },
-    });
+    if (categoryName) {
+      const category = await this.categoryRepository.findOne({
+        where: { name: categoryName },
+      });
+
+      return await this.storyRepository.find({
+        where: { category: category },
+        relations: ['user', 'category'],
+        order: { likes: 'DESC' },
+        take: 10,
+        skip: page ? (page - 1) * 10 : 0,
+      });
+    }
 
     return await this.storyRepository.find({
-      where: { category: category },
       relations: ['user', 'category'],
       order: { likes: 'DESC' },
       take: 10,
@@ -69,12 +86,21 @@ export class StoryService {
   }
 
   async findAllByComment({ categoryName, page }) {
-    const category = await this.categoryRepository.findOne({
-      where: { name: categoryName },
-    });
+    if (categoryName) {
+      const category = await this.categoryRepository.findOne({
+        where: { name: categoryName },
+      });
+
+      return await this.storyRepository.find({
+        where: { category: category },
+        relations: ['user', 'category'],
+        order: { commentCounts: 'DESC' },
+        take: 10,
+        skip: page ? (page - 1) * 10 : 0,
+      });
+    }
 
     return await this.storyRepository.find({
-      where: { category: category },
       relations: ['user', 'category'],
       order: { commentCounts: 'DESC' },
       take: 10,
