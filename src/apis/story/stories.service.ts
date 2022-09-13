@@ -26,7 +26,7 @@ export class StoryService {
   async find({ storyId }) {
     return await this.storyRepository.findOne({
       where: { id: storyId },
-      relations: ['user', 'category', 'comment'],
+      relations: ['user', 'category', 'comments'],
     });
   }
 
