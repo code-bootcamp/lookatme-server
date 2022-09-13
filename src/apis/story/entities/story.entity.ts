@@ -54,6 +54,7 @@ export class Story {
   @Field(() => User)
   user: User;
 
+  @JoinTable()
   @ManyToMany(() => User, (likedusers) => likedusers.likedStories)
   @Field(() => [User])
   likedusers: User[];

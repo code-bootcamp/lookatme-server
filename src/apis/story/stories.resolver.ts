@@ -1,10 +1,10 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { timeStamp } from 'console';
 import {
   GqlAuthAccessGuard,
   GqlAuthAdminAccessGuard,
 } from 'src/commons/auth/gql-auth.guard';
+import { IContext } from 'src/commons/type/context';
 import { CreateStoryInput } from './dto/createStory.input';
 import { UpdateStoryInput } from './dto/updateStory.input';
 import { Story } from './entities/story.entity';
@@ -19,6 +19,11 @@ export class StoryResolver {
   @Query(() => [Story], { description: '사연 전체 목록 조회' })
   async fetchStories() {
     return this.storyService.findAll();
+  }
+
+  @Query(() => [Story], { description: '베스트 사연 5개 조회' })
+  async fetchBestStories() {
+    return await this.storyService.findBestStories();
   }
 
   @UseGuards(GqlAuthAccessGuard)
@@ -58,5 +63,29 @@ export class StoryResolver {
     @Args('id') id: string, //
   ) {
     return this.storyService.deleteReported({ id });
+  }
+
+  @UseGuards(GqlAuthAccessGuard)
+  @Mutation(() => Story)
+  likeStory(
+    @Args('storyId') storyId: string, //
+    @Context() context: IContext,
+  ) {
+    return this.storyService.userLikeStory({
+      userId: context.req.user.id,
+      storyId,
+    });
+  }
+
+  @UseGuards(GqlAuthAccessGuard)
+  @Mutation(() => Story)
+  deleteLikeStory(
+    @Args('storyId') storyId: string, //
+    @Context() context: IContext,
+  ) {
+    return this.storyService.userUndoLikeStory({
+      userId: context.req.user.id,
+      storyId,
+    });
   }
 }

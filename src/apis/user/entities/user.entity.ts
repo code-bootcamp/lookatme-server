@@ -7,7 +7,6 @@ import {
   Column,
   DeleteDateColumn,
   Entity,
-  JoinTable,
   ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -42,7 +41,6 @@ export class User {
   @DeleteDateColumn()
   deletedAt: Date;
 
-  @JoinTable()
   @ManyToMany(() => Story, (likedStories) => likedStories.user)
   @Field(() => [Story])
   likedStories: Story[];
