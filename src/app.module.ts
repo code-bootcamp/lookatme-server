@@ -72,7 +72,7 @@ import { SpcialistCommentsModule } from './apis/specialistComment/specialistComm
     CacheModule.register<RedisClientOptions>({
       store: redisStore, // type of storage
       url: 'redis://my-redis:6379', // access to redis of docker using name resolution
-      isGlobal: true, // able to use on every modules
+      isGlobal: true,
     }),
   ],
   controllers: [AppController], // health cheacking
