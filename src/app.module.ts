@@ -71,7 +71,7 @@ import { SpcialistCommentsModule } from './apis/specialistComment/specialistComm
     }),
     CacheModule.register<RedisClientOptions>({
       store: redisStore, // type of storage
-      url: process.env.REDIS_IP, // access to redis of docker using name resolution
+      url: `redis://${process.env.REDIS_IP}:6379`, // access to redis of docker using name resolution
       isGlobal: true,
     }),
   ],
