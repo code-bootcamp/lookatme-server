@@ -19,8 +19,8 @@ steps:
       - set
       - image
       - deployment/lookatme-backend
-      - my-backend-sha256-1=asia.gcr.io/lookatme-server-362412/my-backend:0.3
+      - my-backend-sha256-1=asia.gcr.io/lookatme-server-362412/my-backend:0.31
 
     env:
       - CLOUDSDK_COMPUTE_ZONE=asia-northeast3
-      - CLOUDSDK_CONTAINER_CLUSTER=mybackend04-cluster-1
+      - CLOUDSDK_CONTAINER_CLUSTER=autopilot-cluster-1
