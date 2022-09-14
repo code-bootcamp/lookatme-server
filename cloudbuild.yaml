@@ -3,14 +3,14 @@ steps:
   - name: docker/compose:1.29.0
     args:
       - -f
-      - class/deploy-with-docker/backend/docker-compose.prod.yaml
+      - /docker-compose.prod.yaml
       - build
 
   # 2단계 => docker-compose -f docker-compose.prod.yaml push
   - name: docker/compose:1.29.0
     args:
       - -f
-      - class/deploy-with-docker/backend/docker-compose.prod.yaml
+      - /docker-compose.prod.yaml
       - push
 
   # 3단계 => kubectl set image deployment/mybackend04-nestjs my-backend-sha256-1=asia.gcr.io/iconic-glass-358105/my-backend:버전
@@ -18,8 +18,8 @@ steps:
     args:
       - set
       - image
-      - deployment/mybackend04-nestjs
-      - my-backend-sha256-1=asia.gcr.io/iconic-glass-358105/my-backend:1.0
+      - deployment/lookatme-backend
+      - my-backend-sha256-1=asia.gcr.io/lookatme-server-362412/my-backend:0.3
 
     env:
       - CLOUDSDK_COMPUTE_ZONE=asia-northeast3
