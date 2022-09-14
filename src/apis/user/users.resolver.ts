@@ -1,0 +1,243 @@
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { CreateUserInput } from './dto/createUser.input';
+import { User } from './entities/user.entity';
+import { UsersService } from './users.service';
+import * as bcrypt from 'bcrypt';
+import {
+  CACHE_MANAGER,
+  // ConflictException,
+  // HttpException,
+  Inject,
+  UnprocessableEntityException,
+  UseGuards,
+} from '@nestjs/common';
+import {
+  GqlAuthAccessGuard,
+  GqlAuthAdminAccessGuard,
+} from 'src/commons/auth/gql-auth.guard';
+import { Cache } from 'cache-manager';
+import {
+  UpdateUserInput,
+  UpdateUserWithAdminAccessInput,
+} from './dto/updateUser.Input';
+
+@Resolver()
+export class UsersResolver {
+  constructor(
+    private readonly usersService: UsersService, //
+
+    @Inject(CACHE_MANAGER)
+    private readonly cacheManager: Cache,
+  ) {}
+
+  ////////////////////Query/////////////////////////
+
+  @UseGuards(GqlAuthAdminAccessGuard)
+  @Query(() => [User], { description: '모든 회원 조회' })
+  fetchUsers() {
+    return this.usersService.findAll();
+  }
+
+  @Query(() => User, { description: '이메일로 회원 조회' })
+  fetchUserWithEmail(
+    @Args('email') email: string, //
+  ) {
+    return this.usersService.findOneWithEmail({ email });
+  }
+
+  @Query(() => User, { description: '전화번호로 회원 조회' })
+  fetchUserWithPhoneNumber(
+    @Args('phoneNumber') phoneNumber: string, //
+  ) {
+    return this.usersService.findOneWithPhoneNumber({
+      phone_number: phoneNumber,
+    });
+  }
+
+  @UseGuards(GqlAuthAccessGuard)
+  @Query(() => User, { description: '로그인한 회원 정보 조회' })
+  fetchLoginUser(
+    @Context() context: any, //
+  ) {
+    const email = context.req.user.email;
+    return this.usersService.findOneWithEmail({ email });
+  }
+
+  @UseGuards(GqlAuthAdminAccessGuard)
+  @Query(() => [User], { description: '삭제된 회원도 같이 조회' })
+  fetchUsersWithDeleted() {
+    return this.usersService.findWithDeleted();
+  }
+
+  ////////////////////Mutation/////////////////////////
+
+  @Mutation(() => User, { description: '회원 가입 및 환영 이메일 전송' })
+  async createUser(
+    @Args('createUserInput') createUserInput: CreateUserInput, //
+  ) {
+    // 1. 비밀번호 암호화
+    const hashedPassword = await bcrypt.hash(
+      createUserInput.password,
+      Number(process.env.HASH_SALT),
+    );
+
+    // 배포환경
+    // 2. 가입환영 템플릿 만들기
+    // const template = this.usersService.getWelcomeTemplate({
+    //   nickname: createUserInput.nickname,
+    // });
+
+    // 3. 이메일에 가입환영 템플릿 전송하기
+    // try {
+    //   await this.usersService.sendTemplate({
+    //     email: createUserInput.email,
+    //     template,
+    //   });
+    // } catch (error) {
+    //   throw new HttpException(
+    //     error.response.message, //
+    //     error.status,
+    //   );
+    // }
+
+    // 4. 회원 생성
+    return this.usersService.create({
+      hashedPassword,
+      ...createUserInput,
+    });
+  }
+
+  @UseGuards(GqlAuthAdminAccessGuard)
+  @Mutation(() => User, { description: '관리자 권한으로 모든 회원정보 수정' })
+  updateUserWithAdminAccess(
+    @Args('userId') userId: string,
+    @Args('updateUserWithAdminAccessInput')
+    updateUserWithAdminAccessInput: UpdateUserWithAdminAccessInput,
+  ) {
+    return this.usersService.updateWithAdminAccess({
+      userId,
+      updateUserWithAdminAccessInput,
+    });
+  }
+
+  @UseGuards(GqlAuthAccessGuard)
+  @Mutation(() => User, { description: '로그인한 회원 비밀번호 변경' })
+  async updateUserPwd(
+    @Context() context: any, //
+    @Args('newPassword') newPassword: string,
+  ) {
+    // 1. 이메일이 일치하는 유저를 DB에서 찾기
+    const user = await this.usersService.findOneWithEmail({
+      email: context.req.user.email,
+    });
+
+    // 2. 비밀번호가 같으면
+    const isAuth = await bcrypt.compare(newPassword, user.password);
+    if (isAuth) throw new UnprocessableEntityException('기존 비밀번호 입니다');
+
+    const password = await bcrypt.hash(
+      newPassword,
+      Number(process.env.HASH_SALT),
+    );
+
+    // 3. 새로운 비밀번호 설정
+    return this.usersService.updatePwd({
+      userId: context.req.user.id,
+      password,
+    });
+  }
+
+  @Mutation(() => User, { description: '이메일로 회원 비밀번호 변경' })
+  async updateUserPwdWithEmail(
+    @Args('email') email: string, //
+    @Args('newPassword') newPassword: string,
+  ) {
+    // 1. 이메일이 일치하는 유저를 DB에서 찾기
+    const user = await this.usersService.findOneWithEmail({
+      email,
+    });
+
+    // 2. 비밀번호가 같으면
+    const isAuth = await bcrypt.compare(newPassword, user.password);
+    if (isAuth) throw new UnprocessableEntityException('기존 비밀번호 입니다');
+
+    const password = await bcrypt.hash(
+      newPassword,
+      Number(process.env.HASH_SALT),
+    );
+
+    // 3. 새로운 비밀번호 설정
+    return this.usersService.updatePwd({ userId: user.id, password });
+  }
+
+  @UseGuards(GqlAuthAccessGuard)
+  @Mutation(() => User, { description: '로그인한 회원 정보 변경' })
+  updateUser(
+    @Context() context: any, //
+    @Args('updateUserInput') updateUserInput: UpdateUserInput,
+  ) {
+    return this.usersService.update({
+      user: context.req.user,
+      updateUserInput,
+    });
+  }
+
+  @UseGuards(GqlAuthAdminAccessGuard)
+  @Mutation(() => Boolean, { description: '관리자 권한으로 회원 삭제' })
+  deleteUser(
+    @Args('userId') userId: string, //
+  ) {
+    return this.usersService.delete({ userId });
+  }
+
+  @UseGuards(GqlAuthAccessGuard)
+  @Mutation(() => Boolean, { description: '로그인한 회원 탈퇴' })
+  deleteLoginUser(
+    @Context() context: any, //
+  ) {
+    const userId = context.req.user.id;
+    return this.usersService.delete({ userId });
+  }
+
+  @UseGuards(GqlAuthAdminAccessGuard)
+  @Mutation(() => Boolean, { description: '관리자 권한으로 삭제된 회원 복구' })
+  restoreUser(@Args('userId') userId: string) {
+    return this.usersService.undoDelete({ userId });
+  }
+
+  @Mutation(() => String, { description: '토큰 보내기' })
+  async sendTokenToSMS(
+    @Args('phoneNumber') phoneNumber: string, //
+  ) {
+    const token = this.usersService.getToken();
+    // 배포환경
+    // const result = await this.usersService.sendToken({
+    //   phone_number: phoneNumber,
+    //   token,
+    // });
+
+    // in 3mins
+    await this.cacheManager.set(token, phoneNumber, {
+      ttl: 180,
+    });
+
+    // 개발환경
+    return `phone:${phoneNumber} token:${token}`;
+
+    // 배포환경
+    // if (result.statusCode === '2000')
+    //   // succeed
+    //   return `phone:${phoneNumber} token:${token}`;
+    // else return `${result.statusCode}: ${result.statusMessage}`;
+  }
+
+  @Mutation(() => Boolean, { description: '토큰 확인' })
+  async checkToken(
+    @Args('token') token: string, //
+    @Args('phoneNumber') phoneNumber: string,
+  ) {
+    const tokenCache = await this.cacheManager.get(token);
+
+    return tokenCache ? tokenCache === phoneNumber : false;
+  }
+}
