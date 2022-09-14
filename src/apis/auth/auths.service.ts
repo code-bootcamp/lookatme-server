@@ -58,7 +58,9 @@ export class AuthsService {
 
       res.setHeader(
         'Set-Cookie',
-        `refreshToken=${refreshToken}; path=/; domain=.${process.env.SERVER_DOMAIN}; SameSite=None; Secure; httpOnly;`,
+        `refreshToken=${refreshToken}; path=/; domain=.${String(
+          process.env.SERVER_DOMAIN,
+        )}; SameSite=None; Secure; httpOnly;`,
       );
 
       return true;
