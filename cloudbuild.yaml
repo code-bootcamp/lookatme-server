@@ -19,7 +19,7 @@ steps:
       - set
       - image
       - deployment/lookatme-backend
-      - my-backend-sha256-1=asia.gcr.io/lookatme-server-362412/my-backend:0.36
+      - my-backend-sha256-1=asia.gcr.io/lookatme-server-362412/my-backend:0.37
 
     env:
       - CLOUDSDK_COMPUTE_ZONE=asia-northeast3
