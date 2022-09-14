@@ -19,7 +19,10 @@ export class SpecialistService {
   }
 
   async findOneWithId({ id }) {
-    const result = await this.specialistRepository.findOne({ where: { id } });
+    const result = await this.specialistRepository.findOne({
+      where: { id },
+      relations: ['specialistReviews'],
+    });
 
     if (!result)
       throw new UnprocessableEntityException(
