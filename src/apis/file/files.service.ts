@@ -9,8 +9,8 @@ const { PROJECT_ID, KEY_FILENAME, BUCKET_NAME } = process.env;
 @Injectable()
 export class FileService {
   async uploadImage({ file }: IUpload) {
-    const image = file[0];
-    const fname = `${getToday()}/${uuidv4()}/origin/${image.filename}`;
+    const myfile = await file[0];
+    const fname = `${getToday()}/${uuidv4()}/origin/${myfile.filename}`;
 
     const storage = new Storage({
       projectId: PROJECT_ID,
@@ -19,14 +19,14 @@ export class FileService {
       .bucket(BUCKET_NAME)
       .file(fname);
 
-    const imgUrl = await new Promise((resolve, reject) => {
-      image
+    const result = await new Promise((resolve, reject) => {
+      myfile
         .createReadStream()
         .pipe(storage.createWriteStream())
         .on('finish', () => resolve(fname))
-        .on('error', () => reject('파일 업로드에 실패했습니다'));
+        .on('error', () => reject('이미지 업로드에 실패했습니다'));
     });
-    console.log(imgUrl);
-    return imgUrl;
+
+    return result;
   }
 }
