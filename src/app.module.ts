@@ -74,7 +74,7 @@ import { SpecialistReviewsModule } from './apis/specialistReview/specialistRevie
     }),
     CacheModule.register<RedisClientOptions>({
       store: redisStore, // type of storage
-      url: `redis://${process.env.REDIS_IP}:${process.env.REDIS_PORT}`,
+      url: String(process.env.REDIS_IP),
       isGlobal: true,
     }),
   ],
