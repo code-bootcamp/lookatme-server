@@ -21,6 +21,7 @@ import { CommentsModule } from './apis/comment/comments.module';
 import { TicketsModule } from './apis/ticket/tickets.module';
 import { SpcialistCommentsModule } from './apis/specialistComment/specialistComments.module';
 import 'dotenv/config';
+import { SpecialistReviewsModule } from './apis/specialistReview/specialistReview.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import 'dotenv/config';
     SpecialistModule,
     StroyModule,
     SpcialistCommentsModule,
+    SpecialistReviewsModule,
     TicketsModule,
     QuoteModule,
     ConfigModule.forRoot({
@@ -72,7 +74,7 @@ import 'dotenv/config';
     }),
     CacheModule.register<RedisClientOptions>({
       store: redisStore, // type of storage
-      url: `redis://${process.env.REDIS_IP}:${process.env.REDIS_PORT}`,
+      url: String(process.env.REDIS_IP),
       isGlobal: true,
     }),
   ],
