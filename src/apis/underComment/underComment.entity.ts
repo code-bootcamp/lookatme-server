@@ -13,7 +13,7 @@ import { SpecialistComment } from '../specialistComment/entities/specialistComme
 import { User } from '../user/entities/user.entity';
 
 @Entity()
-export class UnderSpecialistComment {
+export class UnderComment {
   @PrimaryGeneratedColumn('uuid')
   @Field(() => String)
   id: string;

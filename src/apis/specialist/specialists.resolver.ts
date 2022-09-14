@@ -1,4 +1,4 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CreateSpecialistInput } from './dto/createSpecialist.input';
 import { Specialist } from './entities/specialist.entity';
 import { SpecialistService } from './specialists.service';
@@ -22,6 +22,20 @@ export class SpecialistResolver {
   @Query(() => Specialist, { description: '전문가 조회' })
   async fetchSpecialist(@Args('id') id: string) {
     return this.specialistService.findOneWithId({ id });
+  }
+
+  @Query(() => [Specialist], { description: '높은가격순 전문가 조회' })
+  async fetchSpecialistByPrice(
+    @Args({ name: 'page', type: () => Int, nullable: true }) page?: number,
+  ) {
+    return await this.specialistService.findAllByPrice({ page });
+  }
+
+  @Query(() => [Specialist], { description: '별점순 전문가 조회' })
+  async fetchSpecialsitByRate(
+    @Args({ name: 'page', type: () => Int, nullable: true }) page?: number,
+  ) {
+    return await this.specialistService.findAllByRate({ page });
   }
 
   @UseGuards(GqlAuthAdminAccessGuard)

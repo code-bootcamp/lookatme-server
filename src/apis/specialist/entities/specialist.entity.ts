@@ -1,4 +1,4 @@
-import { Field, ObjectType, Int } from '@nestjs/graphql';
+import { Field, ObjectType, Int, Float } from '@nestjs/graphql';
 import { SpecialistComment } from 'src/apis/specialistComment/entities/specialistComment.entity';
 import { SpecialistReview } from 'src/apis/specialistReview/entities/specialistReview.entity';
 import { Ticket } from 'src/apis/ticket/entities/ticket.entity';
@@ -47,6 +47,10 @@ export class Specialist {
   @Column({ type: 'int', unsigned: true, nullable: false })
   @Field(() => Int)
   price: number;
+
+  @Column({ type: 'float', nullable: true })
+  @Field(() => Float)
+  averageRate: number;
 
   @DeleteDateColumn()
   deletedAt: Date;

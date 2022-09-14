@@ -29,6 +29,26 @@ export class SpecialistService {
     return result;
   }
 
+  async findAllByPrice({ page }) {
+    const result = await this.specialistRepository.find({
+      order: { price: 'DESC' },
+      take: 10,
+      skip: page ? (page - 1) * 10 : 0,
+    });
+
+    return result;
+  }
+
+  async findAllByRate({ page }) {
+    const result = await this.specialistRepository.find({
+      order: { averageRate: 'DESC' },
+      take: 10,
+      skip: page ? (page - 1) * 10 : 0,
+    });
+
+    return result;
+  }
+
   async create({ hashedPassword, ...createSpecialistInput }) {
     const existAccount = await this.specialistRepository.findOne({
       where: { account: createSpecialistInput.account },
