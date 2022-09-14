@@ -38,6 +38,7 @@ export class AuthsService {
       const allowedOrigins = [
         process.env.CLIENT_DOMAIN,
         process.env.LOCALHOST_DOMAIN,
+        `https://${process.env.SERVER_DOMAIN}`,
       ];
       const origin = req.headers.origin;
 
