@@ -48,7 +48,7 @@ export class Specialist {
   @Field(() => Int)
   price: number;
 
-  @Column({ type: 'float', nullable: true })
+  @Column({ type: 'float', nullable: false, default: 0 })
   @Field(() => Float)
   averageRate: number;
 

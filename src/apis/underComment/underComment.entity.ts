@@ -9,7 +9,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { SpecialistComment } from '../specialistComment/entities/specialistComment.entity';
+import { Comment } from '../comment/entities/comment.entity';
 import { User } from '../user/entities/user.entity';
 
 @Entity()
@@ -35,9 +35,9 @@ export class UnderComment {
   deletedAt: Date;
 
   @JoinColumn()
-  @ManyToOne(() => SpecialistComment)
-  @Field(() => SpecialistComment)
-  specialistComment: SpecialistComment;
+  @ManyToOne(() => Comment)
+  @Field(() => Comment)
+  Comment: Comment;
 
   @JoinColumn()
   @ManyToOne(() => User)
