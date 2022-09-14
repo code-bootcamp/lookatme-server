@@ -36,7 +36,6 @@ import { SpecialistReviewsModule } from './apis/specialistReview/specialistRevie
     SpecialistModule,
     StroyModule,
     SpcialistCommentsModule,
-    SpecialistReviewsModule,
     TicketsModule,
     QuoteModule,
     ConfigModule.forRoot({
