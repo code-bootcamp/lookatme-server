@@ -20,6 +20,7 @@ import { StroyModule } from './apis/story/stories.module';
 import { CommentsModule } from './apis/comment/comments.module';
 import { TicketsModule } from './apis/ticket/tickets.module';
 import { SpcialistCommentsModule } from './apis/specialistComment/specialistComments.module';
+import { SpecialistReviewsModule } from './apis/specialistReview/specialistReview.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { SpcialistCommentsModule } from './apis/specialistComment/specialistComm
     SpecialistModule,
     StroyModule,
     SpcialistCommentsModule,
+    SpecialistReviewsModule,
     TicketsModule,
     QuoteModule,
     ConfigModule.forRoot({
