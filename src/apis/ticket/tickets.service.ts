@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Specialist } from '../specialist/entities/specialist.entity';
@@ -37,6 +37,20 @@ export class TicketsService {
 
     const specialist = await this.specialistRepository.findOne({
       where: { id: specialistId },
+    });
+
+    const userPoint = user.point;
+    const specialistPrice = specialist.price;
+
+    if (userPoint < specialistPrice)
+      throw new ConflictException('포인트가 부족합니다.');
+
+    const restPoint = userPoint - specialistPrice;
+
+    await this.usersRepository.save({
+      ...user,
+      id: userId,
+      point: restPoint,
     });
 
     const result = await this.ticketsRepository.save({
