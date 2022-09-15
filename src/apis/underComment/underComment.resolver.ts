@@ -15,19 +15,21 @@ export class UnderCommentsResolver {
     private readonly underCommentsService: UnderCommentsService, //
   ) {}
 
-  @Query(() => [UnderComment])
-  async fetchUnderCommentsWithCommentId(@Args('commentId') commentId: string) {
+  @Query(() => [UnderComment], { description: '댓글에 달린 대댓글 조회' })
+  async fetchUnderCommentsWithCommentId(
+    @Args('commentId') commentId: string, //
+  ) {
     return await this.underCommentsService.findAllWithCommentId({ commentId });
   }
 
   @UseGuards(GqlAuthAdminAccessGuard)
-  @Query(() => [UnderComment])
+  @Query(() => [UnderComment], { description: '신고 대댓글 조회' })
   async fetchReportedUnderComments() {
     return this.underCommentsService.findAllReported();
   }
 
   @UseGuards(GqlAuthAccessGuard)
-  @Mutation(() => UnderComment)
+  @Mutation(() => UnderComment, { description: '대댓글 등록' })
   async createUnderComment(
     @Context() context: any, //
     @Args('createUnderCommentInput')
@@ -41,7 +43,7 @@ export class UnderCommentsResolver {
   }
 
   @UseGuards(GqlAuthAccessGuard)
-  @Mutation(() => UnderComment)
+  @Mutation(() => UnderComment, { description: '자신의 대댓글 수정' })
   async updateOwnUnderComment(
     @Context() context: any, //
     @Args('updateUnderCommentInput')
@@ -55,7 +57,7 @@ export class UnderCommentsResolver {
   }
 
   @UseGuards(GqlAuthAccessGuard)
-  @Mutation(() => Boolean)
+  @Mutation(() => Boolean, { description: '자신의 대댓글 삭제' })
   deleteOwnUnderComment(
     @Context() context: any, //
     @Args('underCommentId') id: string,
@@ -65,7 +67,7 @@ export class UnderCommentsResolver {
   }
 
   @UseGuards(GqlAuthAdminAccessGuard)
-  @Mutation(() => Boolean)
+  @Mutation(() => Boolean, { description: '신고 대댓글 삭제' })
   deleteReportedUnderComment(@Args('underCommentId') id: string) {
     return this.underCommentsService.deleteReported({ id });
   }

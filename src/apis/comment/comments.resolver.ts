@@ -15,6 +15,13 @@ export class CommentsResolver {
     private readonly commentsService: CommentsService, //
   ) {}
 
+  @Query(() => [Comment], { description: '사연에 달린 댓글들 조회' })
+  async fetchCommentsWithStoryId(
+    @Args('storyId') storyId: string, //
+  ) {
+    return await this.commentsService.findAllWithStoryId({ storyId });
+  }
+
   @UseGuards(GqlAuthAccessGuard)
   @Query(() => [Comment], { description: '자신의 댓글 목록 조회' })
   async fetchOwnComments(

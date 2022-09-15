@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { find } from 'rxjs';
 import { Repository } from 'typeorm';
 import { Story } from '../story/entities/story.entity';
 import { User } from '../user/entities/user.entity';
@@ -16,6 +15,14 @@ export class CommentsService {
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
   ) {}
+
+  async findAllWithStoryId({ storyId }) {
+    const result = await this.commentsRepository.find({
+      where: { story: { id: storyId } },
+    });
+
+    return result;
+  }
 
   async findOwnComments({ userId }) {
     return await this.commentsRepository.find({ where: { id: userId } });
