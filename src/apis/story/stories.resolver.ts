@@ -63,6 +63,14 @@ export class StoryResolver {
   }
 
   @UseGuards(GqlAuthAccessGuard)
+  @Query(() => [Story], { description: '회원의 사연 조회' })
+  fetchOwnStories(
+    @Context() context: IContext, //
+  ) {
+    return this.storyService.findOwnStories({ userId: context.req.user.id });
+  }
+
+  @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => Story, { description: '사연 등록' })
   async createStory(
     @Context() context: any, //
@@ -125,7 +133,9 @@ export class StoryResolver {
     });
   }
 
-  // @UseGuards(GqlAuthAccessGuard)
-  // @Mutation(() => Boolean, {description: '사연 글 신고'})
-  // report
+  @UseGuards(GqlAuthAccessGuard)
+  @Mutation(() => Boolean, { description: '사연 글 신고' })
+  reportStory(@Args('storyId') storyId: string) {
+    return this.storyService.report({ storyId });
+  }
 }

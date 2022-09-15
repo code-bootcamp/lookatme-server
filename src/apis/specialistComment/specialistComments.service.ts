@@ -72,4 +72,19 @@ export class SpecialistCommentsService {
     const result = await this.specialistCommentsRepository.softDelete({ id });
     return result.affected ? true : false;
   }
+
+  async report({ specialistCommentId }) {
+    const specialistCommentToReport =
+      await this.specialistCommentsRepository.findOne({
+        where: { id: specialistCommentId },
+      });
+
+    const result = await this.specialistCommentsRepository.save({
+      ...specialistCommentToReport,
+      id: specialistCommentId,
+      isReported: true,
+    });
+
+    return result.isReported ? true : false;
+  }
 }

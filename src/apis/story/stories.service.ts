@@ -1,4 +1,8 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CategoryService } from '../categories/category.service';
@@ -110,6 +114,19 @@ export class StoryService {
 
   async findReportedStories() {
     return await this.storyRepository.find({ where: { isReported: true } });
+  }
+
+  async findOwnStories({ userId }) {
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+    });
+
+    if (!user)
+      throw new UnprocessableEntityException('존재하지 않는 계정입니다.');
+
+    return this.storyRepository.find({
+      where: { user: user },
+    });
   }
 
   async create({ createStoryInput, userId }) {
@@ -241,5 +258,19 @@ export class StoryService {
       likedusers: usersArray,
       likes: usersArray.length,
     });
+  }
+
+  async report({ storyId }) {
+    const storyToReport = await this.storyRepository.findOne({
+      where: { id: storyId },
+    });
+
+    const result = await this.storyRepository.save({
+      ...storyToReport,
+      id: storyId,
+      isReported: true,
+    });
+
+    return result.isReported ? true : false;
   }
 }

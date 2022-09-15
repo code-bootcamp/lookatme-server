@@ -34,13 +34,11 @@ export class SpecialistReviewsService {
     const reviews = await this.specialistReviewsRepository.find({
       where: { specialist },
     });
-    console.log('reviews : ', reviews);
     const countReview = reviews.length;
 
     // 리뷰에 매겨진 점수의 총합
     let sumOfRate = 0;
     for (const el of reviews) {
-      console.log('rate : ', el.rate);
       sumOfRate += el.rate;
     }
 

@@ -78,4 +78,18 @@ export class UnderCommentsService {
 
     return result.affected ? true : false;
   }
+
+  async report({ underCommentId }) {
+    const underCommentToReport = await this.underCommentsRepository.findOne({
+      where: { id: underCommentId },
+    });
+
+    const result = await this.underCommentsRepository.save({
+      ...underCommentToReport,
+      id: underCommentId,
+      isReported: true,
+    });
+
+    return result.isReported ? true : false;
+  }
 }

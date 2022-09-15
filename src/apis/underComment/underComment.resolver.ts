@@ -71,4 +71,12 @@ export class UnderCommentsResolver {
   deleteReportedUnderComment(@Args('underCommentId') id: string) {
     return this.underCommentsService.deleteReported({ id });
   }
+
+  @UseGuards(GqlAuthAccessGuard)
+  @Mutation(() => Boolean, { description: '대댓글 신고' })
+  reportUnderComment(
+    @Args('underCommentId') underCommentId: string, //
+  ) {
+    return this.underCommentsService.report({ underCommentId });
+  }
 }
