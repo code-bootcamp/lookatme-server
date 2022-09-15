@@ -1,6 +1,7 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import {
+  GqlAuthAccessGuard,
   GqlAuthAdminAccessGuard,
   GqlAuthSpecialistAccessGuard,
 } from 'src/commons/auth/gql-auth.guard';
@@ -66,5 +67,13 @@ export class SpecialistCommentsResolver {
   @Mutation(() => Boolean, { description: '신고 전문가 답변 삭제' })
   deleteReportedSpecialistComment(@Args('specialistCommentId') id: string) {
     return this.specialistCommentsService.deleteReported({ id });
+  }
+
+  @UseGuards(GqlAuthAccessGuard)
+  @Mutation(() => Boolean, { description: '전문가 답변 신고' })
+  reportSpecialistComment(
+    @Args('specialistCommentId') specialistCommentId: string,
+  ) {
+    return this.specialistCommentsService.report({ specialistCommentId });
   }
 }

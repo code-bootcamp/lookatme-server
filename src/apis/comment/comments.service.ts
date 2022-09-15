@@ -77,4 +77,18 @@ export class CommentsService {
 
     return result.affected ? true : false;
   }
+
+  async report({ commentId }) {
+    const commentToReport = await this.commentsRepository.findOne({
+      where: { id: commentId },
+    });
+
+    const result = await this.commentsRepository.save({
+      ...commentToReport,
+      id: commentId,
+      isReported: true,
+    });
+
+    return result.isReported ? true : false;
+  }
 }
