@@ -22,6 +22,7 @@ import { TicketsModule } from './apis/ticket/tickets.module';
 import { SpcialistCommentsModule } from './apis/specialistComment/specialistComments.module';
 import 'dotenv/config';
 import { SpecialistReviewsModule } from './apis/specialistReview/specialistReview.module';
+import { UnderCommentsModule } from './apis/underComment/underComment.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { SpecialistReviewsModule } from './apis/specialistReview/specialistRevie
     IamportsModule,
     PaymentsModule,
     UsersModule,
+    UnderCommentsModule,
     SpecialistModule,
     StroyModule,
     SpcialistCommentsModule,
