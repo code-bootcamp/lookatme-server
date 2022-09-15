@@ -20,6 +20,7 @@ import {
   UpdateUserInput,
   UpdateUserWithAdminAccessInput,
 } from './dto/updateUser.Input';
+import { IContext } from 'src/commons/type/context';
 
 @Resolver()
 export class UsersResolver {
@@ -67,6 +68,14 @@ export class UsersResolver {
   @Query(() => [User], { description: '삭제된 회원도 같이 조회' })
   fetchUsersWithDeleted() {
     return this.usersService.findWithDeleted();
+  }
+
+  @UseGuards(GqlAuthAccessGuard)
+  @Query(() => Boolean, { description: '회원 로그인 확인' })
+  isUser(
+    @Context() context: IContext, //
+  ) {
+    return this.usersService.isUser({ user: context.req.user });
   }
 
   ////////////////////Mutation/////////////////////////

@@ -82,6 +82,19 @@ export class AuthsService {
     );
   }
 
+  getSpecialistAccessToken({ specialist }) {
+    return this.jwtServices.sign(
+      {
+        email: specialist.account, //
+        sub: specialist.id,
+      },
+      {
+        secret: process.env.JWT_ACCESS_SECRET, // secret code
+        expiresIn: '1h', // expiration period
+      },
+    );
+  }
+
   async socialLogin({ req, res }) {
     // 1. verify if valid user
     let user = await this.usersService.findOneWithEmail({

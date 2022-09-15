@@ -55,6 +55,14 @@ export class SpecialistService {
     return result;
   }
 
+  async isSpecialsit({ specialist }) {
+    const result = await this.specialistRepository.findOne({
+      where: { id: specialist.id, account: specialist.email },
+    });
+
+    return result ? true : false;
+  }
+
   async create({ hashedPassword, ...createSpecialistInput }) {
     const existAccount = await this.specialistRepository.findOne({
       where: { account: createSpecialistInput.account },
