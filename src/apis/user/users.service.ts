@@ -64,6 +64,14 @@ export class UsersService {
     });
   }
 
+  async isUser({ user }) {
+    const result = await this.userRepository.findOne({
+      where: { id: user.id, email: user.email },
+    });
+
+    return result ? true : false;
+  }
+
   async create({ hashedPassword: password, ...createUserInput }) {
     const { ...user } = createUserInput;
 

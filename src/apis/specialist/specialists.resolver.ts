@@ -1,4 +1,4 @@
-import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Context, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CreateSpecialistInput } from './dto/createSpecialist.input';
 import { Specialist } from './entities/specialist.entity';
 import { SpecialistService } from './specialists.service';
@@ -6,7 +6,11 @@ import * as bcrypt from 'bcrypt';
 import 'dotenv/config';
 import { UpdateSpecialistInput } from './dto/updateSpecialist.input';
 import { UseGuards } from '@nestjs/common';
-import { GqlAuthAdminAccessGuard } from 'src/commons/auth/gql-auth.guard';
+import {
+  GqlAuthAccessGuard,
+  GqlAuthAdminAccessGuard,
+} from 'src/commons/auth/gql-auth.guard';
+import { IContext } from 'src/commons/type/context';
 
 @Resolver()
 export class SpecialistResolver {
@@ -38,6 +42,16 @@ export class SpecialistResolver {
     @Args({ name: 'page', type: () => Int, nullable: true }) page?: number,
   ) {
     return await this.specialistService.findAllByRate({ page });
+  }
+
+  @UseGuards(GqlAuthAccessGuard)
+  @Query(() => Boolean, { description: '전문가 로그인 확인' })
+  isSpecialist(
+    @Context() context: IContext, //
+  ) {
+    return this.specialistService.isSpecialsit({
+      specialist: context.req.user,
+    });
   }
 
   @UseGuards(GqlAuthAdminAccessGuard)
