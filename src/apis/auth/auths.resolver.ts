@@ -126,7 +126,7 @@ export class AuthsResolver {
     )
       throw new ConflictException('쿠키에 refreshToken 세팅을 실패하였습니다.');
 
-    return this.authsService.getAccessToken({ user: specialist });
+    return this.authsService.getSpecialistAccessToken({ specialist });
   }
 
   @UseGuards(GqlAuthAccessGuard)

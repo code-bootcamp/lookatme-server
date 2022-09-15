@@ -16,6 +16,14 @@ export class AdminsService {
     });
   }
 
+  async isAdmin({ admin }) {
+    const result = await this.adminRepository.findOne({
+      where: { id: admin.id, email: admin.email },
+    });
+
+    return result ? true : false;
+  }
+
   async create({ hashedPassword: password, ...createAdminInput }) {
     // 1. check if user email exist on User table
     const uniqueEmail = await this.adminRepository.findOne({
