@@ -1,4 +1,4 @@
-import { Field } from '@nestjs/graphql';
+import { Field, ObjectType } from '@nestjs/graphql';
 import {
   Column,
   CreateDateColumn,
@@ -9,10 +9,11 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Comment } from '../comment/entities/comment.entity';
-import { User } from '../user/entities/user.entity';
+import { Comment } from '../../comment/entities/comment.entity';
+import { User } from '../../user/entities/user.entity';
 
 @Entity()
+@ObjectType()
 export class UnderComment {
   @PrimaryGeneratedColumn('uuid')
   @Field(() => String)
@@ -21,6 +22,10 @@ export class UnderComment {
   @Column({ type: 'varchar', length: 500, nullable: false })
   @Field(() => String)
   contents: string;
+
+  @Column({ type: 'boolean', default: false, nullable: false })
+  @Field(() => Boolean)
+  isReported: boolean;
 
   @CreateDateColumn()
   @Field(() => Date)
@@ -37,7 +42,7 @@ export class UnderComment {
   @JoinColumn()
   @ManyToOne(() => Comment)
   @Field(() => Comment)
-  Comment: Comment;
+  comment: Comment;
 
   @JoinColumn()
   @ManyToOne(() => User)
