@@ -16,6 +16,12 @@ export class UnderCommentsService {
     private readonly usersRepository: Repository<User>,
   ) {}
 
+  async findAllWithCommentId({ commentId }) {
+    return await this.underCommentsRepository.find({
+      where: { comment: { id: commentId } },
+    });
+  }
+
   async findAllReported() {
     const result = await this.underCommentsRepository.find({
       where: { isReported: true },

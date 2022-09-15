@@ -15,8 +15,10 @@ export class SpecialistResolver {
   ) {}
 
   @Query(() => [Specialist], { description: '전문가 전체 목록 조회' })
-  async fetchSpecialists() {
-    return this.specialistService.findAll();
+  async fetchSpecialists(
+    @Args({ name: 'page', type: () => Int, nullable: true }) page?: number,
+  ) {
+    return this.specialistService.findAll({ page });
   }
 
   @Query(() => Specialist, { description: '전문가 조회' })

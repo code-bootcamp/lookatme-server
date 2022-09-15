@@ -14,8 +14,11 @@ export class SpecialistService {
     private readonly specialistRepository: Repository<Specialist>,
   ) {}
 
-  async findAll() {
-    return await this.specialistRepository.find();
+  async findAll({ page }) {
+    return await this.specialistRepository.find({
+      take: 10,
+      skip: page ? (page - 1) * 10 : 0,
+    });
   }
 
   async findOneWithId({ id }) {
