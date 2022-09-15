@@ -133,7 +133,9 @@ export class StoryResolver {
     });
   }
 
-  // @UseGuards(GqlAuthAccessGuard)
-  // @Mutation(() => Boolean, {description: '사연 글 신고'})
-  // report
+  @UseGuards(GqlAuthAccessGuard)
+  @Mutation(() => Boolean, { description: '사연 글 신고' })
+  reportStory(@Args('storyId') storyId: string) {
+    return this.storyService.report({ storyId });
+  }
 }

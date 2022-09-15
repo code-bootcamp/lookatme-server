@@ -259,4 +259,18 @@ export class StoryService {
       likes: usersArray.length,
     });
   }
+
+  async report({ storyId }) {
+    const storyToReport = await this.storyRepository.findOne({
+      where: { id: storyId },
+    });
+
+    const result = await this.storyRepository.save({
+      ...storyToReport,
+      id: storyId,
+      isReported: true,
+    });
+
+    return result.isReported ? true : false;
+  }
 }

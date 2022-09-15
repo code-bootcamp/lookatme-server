@@ -72,4 +72,12 @@ export class CommentsResolver {
   deleteReportedComment(@Args('id') id: string) {
     return this.commentsService.deleteReported({ id });
   }
+
+  @UseGuards(GqlAuthAccessGuard)
+  @Mutation(() => Boolean, { description: '댓글 신고' })
+  reportComment(
+    @Args('commentId') commentId: string, //
+  ) {
+    return this.commentsService.report({ commentId });
+  }
 }
