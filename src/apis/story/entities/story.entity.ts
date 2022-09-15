@@ -2,6 +2,7 @@ import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { Category } from 'src/apis/categories/entities/category.entity';
 import { Comment } from 'src/apis/comment/entities/comment.entity';
 import { SpecialistComment } from 'src/apis/specialistComment/entities/specialistComment.entity';
+import { StoryImage } from 'src/apis/storyImage/entities/storyImage.entity';
 import { User } from 'src/apis/user/entities/user.entity';
 import {
   Column,
@@ -67,6 +68,10 @@ export class Story {
   @OneToMany(() => Comment, (comments) => comments.story)
   @Field(() => [Comment])
   comments: Comment[];
+
+  @OneToMany(() => StoryImage, (storyImage) => storyImage.story)
+  @Field(() => [StoryImage])
+  storyImage: StoryImage[];
 
   @OneToMany(
     () => SpecialistComment,
