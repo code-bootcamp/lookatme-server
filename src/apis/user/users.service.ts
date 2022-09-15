@@ -72,6 +72,18 @@ export class UsersService {
     return result ? true : false;
   }
 
+  async findOwnLikedStories({ user }) {
+    const result = await this.userRepository.findOne({
+      where: { id: user.id },
+      relations: ['likedStories'],
+    });
+
+    if (!result)
+      throw new UnprocessableEntityException('존재하지 않는 계정입니다.');
+
+    return result.likedStories;
+  }
+
   async create({ hashedPassword: password, ...createUserInput }) {
     const { ...user } = createUserInput;
 

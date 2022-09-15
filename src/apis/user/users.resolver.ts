@@ -21,6 +21,7 @@ import {
   UpdateUserWithAdminAccessInput,
 } from './dto/updateUser.Input';
 import { IContext } from 'src/commons/type/context';
+import { Story } from '../story/entities/story.entity';
 
 @Resolver()
 export class UsersResolver {
@@ -76,6 +77,14 @@ export class UsersResolver {
     @Context() context: IContext, //
   ) {
     return this.usersService.isUser({ user: context.req.user });
+  }
+
+  @UseGuards(GqlAuthAccessGuard)
+  @Query(() => [Story], { description: '회원이 좋아요 누른 사연 조회' })
+  fetchOwnLikedStories(
+    @Context() context: IContext, //
+  ) {
+    return this.usersService.findOwnLikedStories({ user: context.req.user });
   }
 
   ////////////////////Mutation/////////////////////////

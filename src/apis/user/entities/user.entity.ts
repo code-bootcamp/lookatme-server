@@ -41,7 +41,7 @@ export class User {
   @DeleteDateColumn()
   deletedAt: Date;
 
-  @ManyToMany(() => Story, (likedStories) => likedStories.user)
+  @ManyToMany(() => Story, (likedStories) => likedStories.likedusers)
   @Field(() => [Story])
   likedStories: Story[];
 
