@@ -1,9 +1,9 @@
-import { ObjectType } from '@nestjs/graphql';
+import { Field, ObjectType } from '@nestjs/graphql';
 import { Story } from 'src/apis/story/entities/story.entity';
 import {
   Column,
   Entity,
-  JoinTable,
+  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -15,9 +15,11 @@ export class StoryImage {
   id: string;
 
   @Column({ type: 'varchar', length: 300, nullable: false })
+  @Field(() => String)
   url: string;
 
-  @JoinTable()
+  @JoinColumn()
   @ManyToOne(() => Story)
+  @Field(() => Story)
   story: Story;
 }

@@ -24,7 +24,7 @@ export class Ticket {
   createdAt: Date;
 
   @Column({ type: 'date', nullable: true })
-  @Field(() => Date)
+  @Field(() => String)
   expired: Date;
 
   @Column({ type: 'boolean', default: false, nullable: false })

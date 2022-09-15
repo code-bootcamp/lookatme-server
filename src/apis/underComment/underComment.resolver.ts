@@ -14,6 +14,12 @@ export class UnderCommentsResolver {
   constructor(
     private readonly underCommentsService: UnderCommentsService, //
   ) {}
+
+  @Query(() => [UnderComment])
+  async fetchUnderCommentsWithCommentId(@Args('commentId') commentId: string) {
+    return await this.underCommentsService.findAllWithCommentId({ commentId });
+  }
+
   @UseGuards(GqlAuthAdminAccessGuard)
   @Query(() => [UnderComment])
   async fetchReportedUnderComments() {
