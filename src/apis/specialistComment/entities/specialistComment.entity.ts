@@ -18,10 +18,6 @@ export class SpecialistComment {
   @Field(() => String)
   id: string;
 
-  @Field(() => String)
-  @Column({ type: 'varchar', length: 100, nullable: false })
-  title: string;
-
   @Column({ type: 'varchar', length: 300, nullable: false })
   @Field(() => String)
   text: string;

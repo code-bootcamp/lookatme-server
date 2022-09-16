@@ -78,9 +78,9 @@ export class SpecialistService {
     return result;
   }
 
-  async update({ id, updateSpecialistInput }) {
+  async update({ specialistId, updateSpecialistInput }) {
     const specialistToUpdate = await this.specialistRepository.findOne({
-      where: { id },
+      where: { id: specialistId },
     });
 
     if (!specialistToUpdate)
@@ -88,7 +88,7 @@ export class SpecialistService {
 
     const result = await this.specialistRepository.save({
       ...specialistToUpdate,
-      id,
+      id: specialistId,
       ...updateSpecialistInput,
     });
 

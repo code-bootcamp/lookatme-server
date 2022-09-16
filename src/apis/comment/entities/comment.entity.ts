@@ -4,11 +4,13 @@ import {
   DeleteDateColumn,
   Entity,
   JoinColumn,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { User } from 'src/apis/user/entities/user.entity';
 import { Story } from 'src/apis/story/entities/story.entity';
 
@@ -22,6 +24,10 @@ export class Comment {
   @Column({ type: 'varchar', length: 300, nullable: false })
   @Field(() => String)
   text: string;
+
+  @Column({ type: 'int', unsigned: true, default: 0, nullable: false })
+  @Field(() => Int)
+  likes: number;
 
   @Column({ type: 'boolean', default: false, nullable: false })
   @Field(() => Boolean)
@@ -47,4 +53,9 @@ export class Comment {
   @ManyToOne(() => Story)
   @Field(() => Story)
   story: Story;
+
+  @JoinTable()
+  @ManyToMany(() => User, (likedUsers) => likedUsers.likedComments)
+  @Field(() => [User])
+  likedUsers: User[];
 }
