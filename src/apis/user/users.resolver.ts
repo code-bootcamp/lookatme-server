@@ -1,4 +1,4 @@
-import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Context, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CreateUserInput } from './dto/createUser.input';
 import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
@@ -257,5 +257,15 @@ export class UsersResolver {
     const tokenCache = await this.cacheManager.get(token);
 
     return tokenCache ? tokenCache === phoneNumber : false;
+  }
+
+  @UseGuards(GqlAuthAdminAccessGuard)
+  @Mutation(() => User, { description: '무료 포인트 지급' })
+  updateUserPoint(
+    @Args('userId') userId: string,
+    @Args({ name: 'amount', type: () => Int }) amount: number,
+    @Args('isSum') isSum: boolean,
+  ) {
+    return this.usersService.updatePoint({ userId, amount, isSum });
   }
 }

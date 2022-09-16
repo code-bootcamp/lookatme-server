@@ -30,9 +30,16 @@ export class ChatsService {
     private readonly ticketRepository: Repository<Ticket>,
   ) {}
 
-  async load({ roomCode }) {
+  async load({ ticketId }) {
+    const ticket = await this.ticketRepository.findOne({
+      where: { id: ticketId },
+    });
+
+    if (!ticket)
+      throw new UnprocessableEntityException('존재하지 않는 ticket입니다');
+
     const room = await this.chatRoomRepository.findOne({
-      where: { room: roomCode },
+      where: { ticket: ticket },
     });
 
     const result = await this.chatMessageRepository.find({
