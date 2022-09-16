@@ -17,11 +17,14 @@ export class TicketsService {
   ) {}
 
   async findOwnTickets({ userId }) {
-    return await this.ticketsRepository.find({
+    const result = await this.ticketsRepository.find({
       where: {
         user: { id: userId },
       },
+      relations: ['specialist'],
     });
+
+    return result;
   }
 
   async findAllOwnCustomer({ specialistId }) {
@@ -35,7 +38,7 @@ export class TicketsService {
 
   async create({ userId, specialistId }) {
     const date = new Date();
-    const expired = new Date(date);
+    const expired = new Date();
     expired.setDate(date.getDate() + 14);
 
     const user = await this.usersRepository.findOne({
@@ -67,6 +70,7 @@ export class TicketsService {
       user,
       specialist,
     });
+
     return result;
   }
 }

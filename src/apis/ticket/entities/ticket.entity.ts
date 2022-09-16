@@ -23,7 +23,10 @@ export class Ticket {
   @Field(() => Date)
   createdAt: Date;
 
-  @Column({ type: 'date', nullable: true })
+  @Column({
+    type: 'timestamp',
+    nullable: false,
+  })
   @Field(() => Date)
   expired: Date;
 

@@ -73,6 +73,7 @@ import { UnderCommentsModule } from './apis/underComment/underComment.module';
       entities: [__dirname + '/apis/**/*.entity.*'],
       synchronize: true,
       logging: true, //SQL query will be displayed on terminal
+      timezone: 'Z',
     }),
     CacheModule.register<RedisClientOptions>({
       store: redisStore, // type of storage

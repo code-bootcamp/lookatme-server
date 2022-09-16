@@ -270,4 +270,14 @@ export class UsersService {
       html: template,
     });
   }
+
+  async updatePoint({ userId, amount, isSum }) {
+    const user = await this.findOneWithId({ userId });
+
+    return this.userRepository.save({
+      ...user,
+      id: user.id,
+      point: isSum ? user.point + amount : user.point - amount,
+    });
+  }
 }
