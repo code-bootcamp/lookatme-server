@@ -17,8 +17,11 @@ export class UsersService {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  findAll() {
-    return this.userRepository.find();
+  findAll({ page }) {
+    return this.userRepository.find({
+      take: 10,
+      skip: page ? (page - 1) * 10 : 0,
+    });
   }
 
   async findOneWithEmail({ email }) {
@@ -58,9 +61,11 @@ export class UsersService {
     return result;
   }
 
-  findWithDeleted() {
+  findWithDeleted({ page }) {
     return this.userRepository.find({
       withDeleted: true,
+      take: 10,
+      skip: page ? (page - 1) * 10 : 0,
     });
   }
 
@@ -72,7 +77,7 @@ export class UsersService {
     return result ? true : false;
   }
 
-  async findOwnLikedStories({ user }) {
+  async findOwnLikedStories({ user, page }) {
     const result = await this.userRepository.findOne({
       where: { id: user.id },
       relations: ['likedStories'],
@@ -81,7 +86,9 @@ export class UsersService {
     if (!result)
       throw new UnprocessableEntityException('존재하지 않는 계정입니다.');
 
-    return result.likedStories;
+    return page
+      ? result.likedStories.slice((page - 1) * 10, page * 10)
+      : result.likedStories;
   }
 
   async create({ hashedPassword: password, ...createUserInput }) {

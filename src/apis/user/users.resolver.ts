@@ -1,4 +1,4 @@
-import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Context, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CreateUserInput } from './dto/createUser.input';
 import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
@@ -36,8 +36,10 @@ export class UsersResolver {
 
   @UseGuards(GqlAuthAdminAccessGuard)
   @Query(() => [User], { description: '모든 회원 조회' })
-  fetchUsers() {
-    return this.usersService.findAll();
+  fetchUsers(
+    @Args({ name: 'page', type: () => Int }) page: number, //
+  ) {
+    return this.usersService.findAll({ page });
   }
 
   @Query(() => User, { description: '이메일로 회원 조회' })
@@ -67,8 +69,10 @@ export class UsersResolver {
 
   @UseGuards(GqlAuthAdminAccessGuard)
   @Query(() => [User], { description: '삭제된 회원도 같이 조회' })
-  fetchUsersWithDeleted() {
-    return this.usersService.findWithDeleted();
+  fetchUsersWithDeleted(
+    @Args({ name: 'page', type: () => Int }) page: number, //
+  ) {
+    return this.usersService.findWithDeleted({ page });
   }
 
   @UseGuards(GqlAuthAccessGuard)
@@ -83,8 +87,12 @@ export class UsersResolver {
   @Query(() => [Story], { description: '회원이 좋아요 누른 사연 조회' })
   fetchOwnLikedStories(
     @Context() context: IContext, //
+    @Args({ name: 'page', type: () => Int }) page: number, //
   ) {
-    return this.usersService.findOwnLikedStories({ user: context.req.user });
+    return this.usersService.findOwnLikedStories({
+      user: context.req.user,
+      page,
+    });
   }
 
   ////////////////////Mutation/////////////////////////

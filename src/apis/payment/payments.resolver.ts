@@ -17,8 +17,9 @@ export class PaymentsResolver {
   @Query(() => [Payment], { description: '결제 목록 조회' })
   fetchPayments(
     @Context() context: IContext, //
+    @Args({ name: 'page', type: () => Int }) page: number, //
   ) {
-    return this.paymentsService.findAll({ userId: context.req.user.id });
+    return this.paymentsService.findAll({ userId: context.req.user.id, page });
   }
 
   @UseGuards(GqlAuthAccessGuard)
