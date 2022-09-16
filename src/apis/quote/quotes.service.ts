@@ -11,8 +11,11 @@ export class QuoteService {
     private readonly quoteRepository: Repository<Quote>,
   ) {}
 
-  async findAll() {
-    return this.quoteRepository.find();
+  async findAll({ page }) {
+    return this.quoteRepository.find({
+      take: 10,
+      skip: page ? (page - 1) * 10 : 0,
+    });
   }
 
   async findOne({ id }) {

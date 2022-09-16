@@ -1,5 +1,5 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Context, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import {
   GqlAuthAccessGuard,
   GqlAuthAdminAccessGuard,
@@ -18,23 +18,27 @@ export class CommentsResolver {
   @Query(() => [Comment], { description: '사연에 달린 댓글들 조회' })
   async fetchCommentsWithStoryId(
     @Args('storyId') storyId: string, //
+    @Args({ name: 'page', type: () => Int }) page: number,
   ) {
-    return await this.commentsService.findAllWithStoryId({ storyId });
+    return await this.commentsService.findAllWithStoryId({ storyId, page });
   }
 
   @UseGuards(GqlAuthAccessGuard)
   @Query(() => [Comment], { description: '자신의 댓글 목록 조회' })
   async fetchOwnComments(
     @Context() context: any, //
+    @Args({ name: 'page', type: () => Int }) page: number,
   ) {
     const userId = context.req.user.id;
-    return await this.commentsService.findOwnComments({ userId });
+    return await this.commentsService.findOwnComments({ userId, page });
   }
 
   @UseGuards(GqlAuthAdminAccessGuard)
   @Query(() => [Comment], { description: '신고 댓글 전체 조회' })
-  async fetchReportedComments() {
-    return await this.commentsService.findReportedComments();
+  async fetchReportedComments(
+    @Args({ name: 'page', type: () => Int }) page: number, //
+  ) {
+    return await this.commentsService.findReportedComments({ page });
   }
 
   @UseGuards(GqlAuthAccessGuard)

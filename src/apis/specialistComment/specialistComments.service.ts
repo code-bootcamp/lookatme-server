@@ -16,18 +16,22 @@ export class SpecialistCommentsService {
     private readonly storyRepository: Repository<Story>,
   ) {}
 
-  async findAllOwnComments({ specialistId }) {
+  async findAllOwnComments({ specialistId, page }) {
     const result = await this.specialistCommentsRepository.find({
       where: { specialist: { id: specialistId } },
       relations: ['story'],
+      take: 10,
+      skip: page ? (page - 1) * 10 : 0,
     });
 
     return result;
   }
 
-  async findReportedSpecialistComments() {
+  async findReportedSpecialistComments({ page }) {
     return this.specialistCommentsRepository.find({
       where: { isReported: true },
+      take: 10,
+      skip: page ? (page - 1) * 10 : 0,
     });
   }
 

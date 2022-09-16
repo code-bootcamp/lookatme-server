@@ -10,7 +10,7 @@ export class ChatsResolver {
 
   @UseGuards(GqlAuthAccessGuard)
   @Query(() => [ChatMessage], { description: '채팅 기록 조회' })
-  fetchChatLogs(@Args('room') roomCode: string) {
-    return this.chatsService.load({ roomCode });
+  fetchChatLogs(@Args('ticketId') ticketId: string) {
+    return this.chatsService.load({ ticketId });
   }
 }

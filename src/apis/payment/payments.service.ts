@@ -24,11 +24,13 @@ export class PaymentsService {
     private readonly usersService: UsersService,
   ) {}
 
-  async findAll({ userId }) {
+  async findAll({ userId, page }) {
     const user = await this.usersService.findOneWithId({ userId });
 
     return this.paymentsRepository.find({
       where: { user: user },
+      take: 10,
+      skip: page ? (page - 1) * 10 : 0,
     });
   }
 
