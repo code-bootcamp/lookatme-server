@@ -16,6 +16,17 @@ export class SpecialistCommentsResolver {
     private readonly specialistCommentsService: SpecialistCommentsService, //
   ) {}
 
+  @UseGuards(GqlAuthSpecialistAccessGuard)
+  @Query(() => [SpecialistComment], {
+    description: '전문가 자신의 답변들 조회',
+  })
+  async fetchSpecialistOwnComments(
+    @Context() context: any, //
+  ) {
+    const specialistId = context.req.user.id;
+    return this.specialistCommentsService.findAllOwnComments({ specialistId });
+  }
+
   @UseGuards(GqlAuthAdminAccessGuard)
   @Query(() => [SpecialistComment], {
     description: '신고 전문가 답변 전체 조회',

@@ -16,6 +16,15 @@ export class SpecialistCommentsService {
     private readonly storyRepository: Repository<Story>,
   ) {}
 
+  async findAllOwnComments({ specialistId }) {
+    const result = await this.specialistCommentsRepository.find({
+      where: { specialist: { id: specialistId } },
+      relations: ['story'],
+    });
+
+    return result;
+  }
+
   async findReportedSpecialistComments() {
     return this.specialistCommentsRepository.find({
       where: { isReported: true },
@@ -23,7 +32,7 @@ export class SpecialistCommentsService {
   }
 
   async create({ specialistId, createSpecialistCommentInput }) {
-    const { title, text, storyId } = createSpecialistCommentInput;
+    const { text, storyId } = createSpecialistCommentInput;
     const specialist = await this.specialistRepository.findOne({
       where: { id: specialistId },
     });
@@ -32,7 +41,6 @@ export class SpecialistCommentsService {
     });
 
     const result = await this.specialistCommentsRepository.save({
-      title,
       text,
       specialist,
       story,
