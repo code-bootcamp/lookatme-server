@@ -1,5 +1,5 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Context, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import {
   GqlAuthAccessGuard,
   GqlAuthAdminAccessGuard,
@@ -22,17 +22,25 @@ export class SpecialistCommentsResolver {
   })
   async fetchSpecialistOwnComments(
     @Context() context: any, //
+    @Args({ name: 'page', type: () => Int }) page: number,
   ) {
     const specialistId = context.req.user.id;
-    return this.specialistCommentsService.findAllOwnComments({ specialistId });
+    return this.specialistCommentsService.findAllOwnComments({
+      specialistId,
+      page,
+    });
   }
 
   @UseGuards(GqlAuthAdminAccessGuard)
   @Query(() => [SpecialistComment], {
     description: '신고 전문가 답변 전체 조회',
   })
-  async fetchReportedSpecialistComments() {
-    return await this.specialistCommentsService.findReportedSpecialistComments();
+  async fetchReportedSpecialistComments(
+    @Args({ name: 'page', type: () => Int }) page: number, //
+  ) {
+    return await this.specialistCommentsService.findReportedSpecialistComments({
+      page,
+    });
   }
 
   @UseGuards(GqlAuthSpecialistAccessGuard)

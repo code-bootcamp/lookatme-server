@@ -1,4 +1,4 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CreateQuoteInput } from './dto/createQuote.input';
 import { UpdateQuoteInput } from './dto/updateQuote.input';
 import { Quote } from './entities/quote.entity';
@@ -11,8 +11,10 @@ export class QuoteResolver {
   ) {}
 
   @Query(() => [Quote], { description: '명언 전체 목록 조회' })
-  async fetchQuotes() {
-    return this.quoteService.findAll();
+  async fetchQuotes(
+    @Args({ name: 'page', type: () => Int }) page: number, //
+  ) {
+    return this.quoteService.findAll({ page });
   }
 
   @Query(() => Quote, { description: '명언 조회' })

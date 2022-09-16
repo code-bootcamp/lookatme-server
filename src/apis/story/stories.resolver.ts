@@ -31,43 +31,49 @@ export class StoryResolver {
 
   @Query(() => [Story], { description: '시간순으로 사연 조회' })
   async fetchStoriesByTime(
+    @Args({ name: 'page', type: () => Int }) page: number,
     @Args({ name: 'categoryName', nullable: true })
     categoryName?: CATEGORY_NAME, //
-    @Args({ name: 'page', type: () => Int, nullable: true }) page?: number,
   ) {
     return await this.storyService.findAllByTime({ categoryName, page });
   }
 
   @Query(() => [Story], { description: '좋아요순으로 사연 조회' })
   async fetchStoriesByLike(
+    @Args({ name: 'page', type: () => Int }) page: number,
     @Args({ name: 'categoryName', nullable: true })
     categoryName?: CATEGORY_NAME, //
-    @Args({ name: 'page', type: () => Int, nullable: true }) page?: number,
   ) {
     return await this.storyService.findAllByLike({ categoryName, page });
   }
 
   @Query(() => [Story], { description: '댓글순으로 사연 조회' })
   async fetchStoriesByComment(
+    @Args({ name: 'page', type: () => Int }) page: number,
     @Args({ name: 'categoryName', nullable: true })
     categoryName?: CATEGORY_NAME, //
-    @Args({ name: 'page', type: () => Int, nullable: true }) page?: number,
   ) {
     return await this.storyService.findAllByComment({ categoryName, page });
   }
 
   @UseGuards(GqlAuthAdminAccessGuard)
   @Query(() => [Story], { description: '신고 사연 전체 조회' })
-  async fetchReportedStories() {
-    return this.storyService.findReportedStories();
+  async fetchReportedStories(
+    @Args({ name: 'page', type: () => Int }) page: number, //
+  ) {
+    return this.storyService.findReportedStories({ page });
   }
 
   @UseGuards(GqlAuthAccessGuard)
   @Query(() => [Story], { description: '회원의 사연 조회' })
   fetchOwnStories(
     @Context() context: IContext, //
+    @Args({ name: 'page', type: () => Int }) page: number,
   ) {
-    return this.storyService.findOwnStories({ userId: context.req.user.id });
+    return this.storyService.findOwnStories({
+      userId: context.req.user.id,
+      page,
+    });
   }
 
   @UseGuards(GqlAuthAccessGuard)

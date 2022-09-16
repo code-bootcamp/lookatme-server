@@ -118,13 +118,19 @@ export class StoryService {
     });
   }
 
-  async findReportedStories() {
-    return await this.storyRepository.find({ where: { isReported: true } });
+  async findReportedStories({ page }) {
+    return await this.storyRepository.find({
+      where: { isReported: true },
+      take: 10,
+      skip: page ? (page - 1) * 10 : 0,
+    });
   }
 
-  async findOwnStories({ userId }) {
-    const user = await this.userRepository.findOne({
+  async findOwnStories({ userId, page }) {
+    const user = await this.userRepository.find({
       where: { id: userId },
+      take: 10,
+      skip: page ? (page - 1) * 10 : 0,
     });
 
     if (!user)

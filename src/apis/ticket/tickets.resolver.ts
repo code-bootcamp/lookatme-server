@@ -1,5 +1,5 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Context, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import {
   GqlAuthAccessGuard,
   GqlAuthSpecialistAccessGuard,
@@ -15,18 +15,22 @@ export class TicketsResolver {
 
   @UseGuards(GqlAuthAccessGuard)
   @Query(() => [Ticket], { description: '유저 자신이 구매한 티켓 조회' })
-  async fetchOwnTickets(@Context() context: any) {
+  async fetchOwnTickets(
+    @Context() context: any, //
+    @Args({ name: 'page', type: () => Int }) page: number,
+  ) {
     const userId = context.req.user.id;
-    return this.ticketsService.findOwnTickets({ userId });
+    return this.ticketsService.findOwnTickets({ userId, page });
   }
 
   @UseGuards(GqlAuthSpecialistAccessGuard)
   @Query(() => [Ticket], { description: '전문가 자신의 고객 조회' })
   async fetchSpecialistOwnCustomer(
     @Context() context: any, //
+    @Args({ name: 'page', type: () => Int }) page: number,
   ) {
     const specialistId = context.req.user.id;
-    return this.ticketsService.findAllOwnCustomer({ specialistId });
+    return this.ticketsService.findAllOwnCustomer({ specialistId, page });
   }
 
   @UseGuards(GqlAuthAccessGuard)

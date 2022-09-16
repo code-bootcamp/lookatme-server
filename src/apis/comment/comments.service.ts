@@ -18,20 +18,30 @@ export class CommentsService {
     private readonly usersService: UsersService,
   ) {}
 
-  async findAllWithStoryId({ storyId }) {
+  async findAllWithStoryId({ storyId, page }) {
     const result = await this.commentsRepository.find({
       where: { story: { id: storyId } },
+      take: 10,
+      skip: page ? (page - 1) * 10 : 0,
     });
 
     return result;
   }
 
-  async findOwnComments({ userId }) {
-    return await this.commentsRepository.find({ where: { id: userId } });
+  async findOwnComments({ userId, page }) {
+    return await this.commentsRepository.find({
+      where: { id: userId },
+      take: 10,
+      skip: page ? (page - 1) * 10 : 0,
+    });
   }
 
-  async findReportedComments() {
-    return await this.commentsRepository.find({ where: { isReported: true } });
+  async findReportedComments({ page }) {
+    return await this.commentsRepository.find({
+      where: { isReported: true },
+      take: 10,
+      skip: page ? (page - 1) * 10 : 0,
+    });
   }
 
   async create({ userId, createCommentInput }) {
