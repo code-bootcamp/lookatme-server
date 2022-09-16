@@ -13,7 +13,7 @@ import { SpecialistService } from '../specialist/specialists.service';
 
 @WebSocketGateway({
   namespace: 'chat',
-  cors: { origin: '*', credentials: true },
+  cors: { origin: true, credentials: true },
 })
 @Injectable()
 export class ChatsGateway {

@@ -9,6 +9,7 @@ import { UseGuards } from '@nestjs/common';
 import {
   GqlAuthAccessGuard,
   GqlAuthAdminAccessGuard,
+  GqlAuthSpecialistAccessGuard,
 } from 'src/commons/auth/gql-auth.guard';
 import { IContext } from 'src/commons/type/context';
 
@@ -69,13 +70,17 @@ export class SpecialistResolver {
     });
   }
 
-  @UseGuards(GqlAuthAdminAccessGuard)
-  @Mutation(() => Specialist, { description: '전문가 정보 수정' })
-  async updateSpecialist(
-    @Args('id') id: string,
+  @UseGuards(GqlAuthSpecialistAccessGuard)
+  @Mutation(() => Specialist, { description: '전문가 자신의 정보 수정' })
+  async updateSpecialistOwnProfile(
+    @Context() context: any, //
     @Args('updateSpecialistInput') updateSpecialistInput: UpdateSpecialistInput,
   ) {
-    return await this.specialistService.update({ id, updateSpecialistInput });
+    const specialistId = context.req.user.id;
+    return await this.specialistService.update({
+      specialistId,
+      updateSpecialistInput,
+    });
   }
 
   @UseGuards(GqlAuthAdminAccessGuard)

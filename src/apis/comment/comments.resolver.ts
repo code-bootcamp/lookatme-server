@@ -80,4 +80,24 @@ export class CommentsResolver {
   ) {
     return this.commentsService.report({ commentId });
   }
+
+  @UseGuards(GqlAuthAccessGuard)
+  @Mutation(() => Comment, { description: '댓글 좋아요' })
+  async likeComment(
+    @Context() context: any, //
+    @Args('commentId') commentId: string,
+  ) {
+    const userId = context.req.user.id;
+    return await this.commentsService.like({ userId, commentId });
+  }
+
+  @UseGuards(GqlAuthAccessGuard)
+  @Mutation(() => Comment, { description: '댓글 좋아요 취소' })
+  async deleteLikeComment(
+    @Context() context: any, //
+    @Args('commentId') commentId: string,
+  ) {
+    const userId = context.req.user.id;
+    return this.commentsService.undoLike({ userId, commentId });
+  }
 }

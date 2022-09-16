@@ -24,6 +24,15 @@ export class TicketsService {
     });
   }
 
+  async findAllOwnCustomer({ specialistId }) {
+    const result = await this.ticketsRepository.find({
+      where: { specialist: { id: specialistId } },
+      relations: ['user'],
+    });
+
+    return result;
+  }
+
   async create({ userId, specialistId }) {
     const date = new Date();
     const expired = new Date(date);
