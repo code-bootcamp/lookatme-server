@@ -16,21 +16,25 @@ export class TicketsService {
     private readonly specialistRepository: Repository<Specialist>,
   ) {}
 
-  async findOwnTickets({ userId }) {
+  async findOwnTickets({ userId, page }) {
     const result = await this.ticketsRepository.find({
       where: {
         user: { id: userId },
       },
       relations: ['specialist'],
+      take: 10,
+      skip: page ? (page - 1) * 10 : 0,
     });
 
     return result;
   }
 
-  async findAllOwnCustomer({ specialistId }) {
+  async findAllOwnCustomer({ specialistId, page }) {
     const result = await this.ticketsRepository.find({
       where: { specialist: { id: specialistId } },
       relations: ['user'],
+      take: 10,
+      skip: page ? (page - 1) * 10 : 0,
     });
 
     return result;
