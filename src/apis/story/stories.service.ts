@@ -127,10 +127,8 @@ export class StoryService {
   }
 
   async findOwnStories({ userId, page }) {
-    const user = await this.userRepository.find({
+    const user = await this.userRepository.findOne({
       where: { id: userId },
-      take: 10,
-      skip: page ? (page - 1) * 10 : 0,
     });
 
     if (!user)
@@ -138,6 +136,8 @@ export class StoryService {
 
     return this.storyRepository.find({
       where: { user: user },
+      take: 10,
+      skip: page ? (page - 1) * 10 : 0,
     });
   }
 
