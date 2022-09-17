@@ -249,7 +249,14 @@ export class UsersService {
     return `
     <html>
         <body>
-            <div style="display: flex; flex-direction: column; align-items: center;">
+            <div style="height="100%" display: flex; flex-direction: column; align-items: center;">
+                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; width:500px; background-color: #73c7a9;">
+                    <img
+                    width="100%"
+                    src="https://storage.googleapis.com/lookatme-storage/2022/9/17/f5131c44-17c6-4f47-9d46-4f6c284d80a4/origin/look_at_me.png"
+                    alt="banner"
+                    />
+                </div>
                 <div style="width:500px;">
                     <h1>${nickname}님 가입을 환영합니다!!!</h1>
                     <hr />
