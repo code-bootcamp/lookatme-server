@@ -19,7 +19,7 @@ import { AuthsService } from './auths.service';
 
 @Module({
   imports: [
-    JwtModule.register({}), //
+    JwtModule.register({}),
     TypeOrmModule.forFeature([
       User, // usersSevice uses Product, User Repository
       Admin,

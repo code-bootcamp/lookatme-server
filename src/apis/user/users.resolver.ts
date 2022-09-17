@@ -6,8 +6,6 @@ import * as bcrypt from 'bcrypt';
 import {
   CACHE_MANAGER,
   HttpException,
-  // ConflictException,
-  // HttpException,
   Inject,
   UnprocessableEntityException,
   UseGuards,
@@ -32,8 +30,6 @@ export class UsersResolver {
     @Inject(CACHE_MANAGER)
     private readonly cacheManager: Cache,
   ) {}
-
-  ////////////////////Query/////////////////////////
 
   @UseGuards(GqlAuthAdminAccessGuard)
   @Query(() => [User], { description: '모든 회원 조회' })
@@ -96,25 +92,19 @@ export class UsersResolver {
     });
   }
 
-  ////////////////////Mutation/////////////////////////
-
   @Mutation(() => User, { description: '회원 가입 및 환영 이메일 전송' })
   async createUser(
     @Args('createUserInput') createUserInput: CreateUserInput, //
   ) {
-    // 1. 비밀번호 암호화
     const hashedPassword = await bcrypt.hash(
       createUserInput.password,
       Number(process.env.HASH_SALT),
     );
 
-    // 배포환경
-    // 2. 가입환영 템플릿 만들기
     const template = this.usersService.getWelcomeTemplate({
       nickname: createUserInput.nickname,
     });
 
-    // 3. 이메일에 가입환영 템플릿 전송하기
     try {
       await this.usersService.sendTemplate({
         email: createUserInput.email,
@@ -127,7 +117,6 @@ export class UsersResolver {
       );
     }
 
-    // 4. 회원 생성
     return this.usersService.create({
       hashedPassword,
       ...createUserInput,
@@ -135,7 +124,7 @@ export class UsersResolver {
   }
 
   @UseGuards(GqlAuthAdminAccessGuard)
-  @Mutation(() => User, { description: '관리자 권한으로 모든 회원정보 수정' })
+  @Mutation(() => User, { description: '관리자 권한으로 회원정보 수정' })
   updateUserWithAdminAccess(
     @Args('userId') userId: string,
     @Args('updateUserWithAdminAccessInput')
@@ -153,12 +142,10 @@ export class UsersResolver {
     @Context() context: any, //
     @Args('newPassword') newPassword: string,
   ) {
-    // 1. 이메일이 일치하는 유저를 DB에서 찾기
     const user = await this.usersService.findOneWithEmail({
       email: context.req.user.email,
     });
 
-    // 2. 비밀번호가 같으면
     const isAuth = await bcrypt.compare(newPassword, user.password);
     if (isAuth) throw new UnprocessableEntityException('기존 비밀번호 입니다');
 
@@ -167,7 +154,6 @@ export class UsersResolver {
       Number(process.env.HASH_SALT),
     );
 
-    // 3. 새로운 비밀번호 설정
     return this.usersService.updatePwd({
       userId: context.req.user.id,
       password,
@@ -179,12 +165,10 @@ export class UsersResolver {
     @Args('email') email: string, //
     @Args('newPassword') newPassword: string,
   ) {
-    // 1. 이메일이 일치하는 유저를 DB에서 찾기
     const user = await this.usersService.findOneWithEmail({
       email,
     });
 
-    // 2. 비밀번호가 같으면
     const isAuth = await bcrypt.compare(newPassword, user.password);
     if (isAuth) throw new UnprocessableEntityException('기존 비밀번호 입니다');
 
@@ -193,7 +177,6 @@ export class UsersResolver {
       Number(process.env.HASH_SALT),
     );
 
-    // 3. 새로운 비밀번호 설정
     return this.usersService.updatePwd({ userId: user.id, password });
   }
 
@@ -243,7 +226,6 @@ export class UsersResolver {
     //   token,
     // });
 
-    // in 3mins
     await this.cacheManager.set(token, phoneNumber, {
       ttl: 180,
     });

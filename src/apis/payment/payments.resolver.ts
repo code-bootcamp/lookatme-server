@@ -26,14 +26,12 @@ export class PaymentsResolver {
   @Mutation(() => Payment, { description: '결제 등록하기' })
   async createPayment(
     @Args('impUid') impUid: string,
-    @Args({ name: 'amount', type: () => Int }) amount: number, // only integer
+    @Args({ name: 'amount', type: () => Int }) amount: number,
     @Context() context: IContext,
   ) {
-    // 1. 아임포트 서버에서 accessToken 요청
     const { access_token } = (await this.importsService.requestAccessToken())
       .data.response;
 
-    // 2. 유효한 impUid인지 검증
     try {
       await this.importsService.verifyImpUid({
         impUid,
@@ -48,7 +46,6 @@ export class PaymentsResolver {
       );
     }
 
-    // 3. payment table에 데이터 저장
     const user = context.req.user;
     return this.paymentsService.create({ impUid, amount, user });
   }
@@ -57,17 +54,15 @@ export class PaymentsResolver {
   @Mutation(() => Payment, { description: '결제 취소하기' })
   async cancelPayment(
     @Args('impUid') impUid: string,
-    @Args({ name: 'amount', type: () => Int }) amount: number, // 정수로만 받기
+    @Args({ name: 'amount', type: () => Int }) amount: number,
     @Args('reason') reason: string,
     @Context() context: IContext,
   ) {
     const user = context.req.user;
 
-    // 1. 아임포트 서버에서 accessToken 요청
     const { access_token } = (await this.importsService.requestAccessToken())
       .data.response;
 
-    // 2. 중복 결제 취소인지 확인 및 결제했던 기록이 있는지 확인 및 결제 가능 금액인지 확인
     try {
       await this.importsService.verifyImpUid({
         impUid,
@@ -83,7 +78,6 @@ export class PaymentsResolver {
       );
     }
 
-    // 3. 아임포트에 환불 요청
     await this.importsService.cancelPay({
       impUid,
       amount,
@@ -91,7 +85,6 @@ export class PaymentsResolver {
       reason,
     });
 
-    // 4. payment table에 결제취소 내역 저장
     return this.paymentsService.cancel({ impUid, amount, user });
   }
 }

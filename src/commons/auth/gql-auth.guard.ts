@@ -26,7 +26,6 @@ export class GqlAuthSpecialistAccessGuard extends AuthGuard(
 }
 
 export class GqlAuthRefreshGuard extends AuthGuard('refresh') {
-  // nestjs가 아니기에 graphql을 위한 설정
   getRequest(context: ExecutionContext) {
     const ctx = GqlExecutionContext.create(context);
     return ctx.getContext().req;
