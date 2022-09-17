@@ -1,9 +1,6 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
-import {
-  GqlAuthAccessGuard,
-  GqlAuthAdminAccessGuard,
-} from 'src/commons/auth/gql-auth.guard';
+import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { CreateSpecialistReviewInput } from './dto/createSpecialistReview.input';
 import { SpecialistReview } from './entities/specialistReview.entity';
 import { SpecialistReviewsService } from './specialistReview.service';

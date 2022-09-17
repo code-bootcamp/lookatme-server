@@ -110,21 +110,15 @@ export class CommentsService {
       relations: ['likedUsers'],
     });
 
-    console.log('1 : ', commentToLike);
-
     const likedUsers = commentToLike.likedUsers;
 
     if (likedUsers.some((el) => el.id === userId)) {
       throw new ConflictException('이미 좋아요를 누른 댓글입니다.');
     }
 
-    // const user = await this.usersRepository.findOne({ where: { id: userId } });
     const user = await this.usersService.findOneWithId({ userId });
 
     likedUsers.push(user);
-    console.log(user, '======================');
-    console.log('2 : ', likedUsers);
-    console.log(likedUsers.length);
 
     const result = await this.commentsRepository.save({
       ...commentToLike,
@@ -132,7 +126,6 @@ export class CommentsService {
       likedUsers,
       likes: likedUsers.length,
     });
-    console.log('------------------------------');
 
     return result;
   }

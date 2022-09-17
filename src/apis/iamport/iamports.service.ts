@@ -16,7 +16,6 @@ export class IamportsService {
   }
 
   async verifyImpUid({ impUid, amount, accessToken }) {
-    // imp_uid로 아임포트 서버에서 결제 정보 조회
     let importData: any;
     try {
       importData = await axios({
@@ -31,7 +30,6 @@ export class IamportsService {
       throw new UnprocessableEntityException('존재하지 않는 결제정보입니다.');
     }
 
-    // 결제 금액을 제대로 입력했는지 검증
     if (importData.data.response.amount !== amount)
       throw new UnprocessableEntityException('금액이 잘못 입력되었습니다.');
   }

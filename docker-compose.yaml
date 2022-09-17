@@ -1,4 +1,3 @@
-# test with docker within localhost
 version: '3.7'
 
 services:

@@ -38,51 +38,35 @@ export class PaymentsService {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
 
-    // ================================ transaction 시작!!! ==================================
     await queryRunner.startTransaction('SERIALIZABLE');
-    // ======================================================================================
 
     try {
-      // 1. Payment 테이블에 거래기록 1줄 생성
       const payment = this.paymentsRepository.create({
-        // 객체 생성
         impUid,
         amount,
         user: _user,
         status: PAYMENT_ENUM.PAYMENT,
       });
-      await queryRunner.manager.save(payment); // 객체 저장
+      await queryRunner.manager.save(payment);
 
-      // 2. 유저의 돈 찾아오기
-      const user = await queryRunner.manager.findOne(
-        User, // user 테이블에서
-        {
-          where: { id: _user.id },
-          lock: { mode: 'pessimistic_write' },
-        },
-      );
+      const user = await queryRunner.manager.findOne(User, {
+        where: { id: _user.id },
+        lock: { mode: 'pessimistic_write' },
+      });
 
-      // 3. 유저의 돈 업데이트
       const updatedUser = this.usersRepository.create({
         ...user,
         point: user.point + amount,
       });
       await queryRunner.manager.save(updatedUser);
 
-      // ================================ commit 성공 확정!!! ==================================
       await queryRunner.commitTransaction();
-      // =====================================================================================
 
-      // 4. 최종결과 프론트엔드에 돌려주기
       return payment;
     } catch {
-      // ================================ rollback 되돌리기!!! ==================================
       await queryRunner.rollbackTransaction();
-      // ======================================================================================
     } finally {
-      // ==================================== 연결 해제!!! ======================================
       await queryRunner.release();
-      // ======================================================================================
     }
   }
 
@@ -90,14 +74,10 @@ export class PaymentsService {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
 
-    // ================================ transaction 시작!!! ==================================
     await queryRunner.startTransaction('SERIALIZABLE');
-    // ======================================================================================
 
     try {
-      // 1. Payment 테이블에 취소기록 1줄 생성
       const cancel = this.paymentsRepository.create({
-        // 객체 생성
         impUid,
         amount: -amount,
         user: _user,
@@ -105,41 +85,28 @@ export class PaymentsService {
       });
       await queryRunner.manager.save(cancel);
 
-      // 2. 유저의 돈 찾아오기
-      const user = await queryRunner.manager.findOne(
-        User, // user 테이블에서
-        {
-          where: { id: _user.id },
-          lock: { mode: 'pessimistic_write' },
-        },
-      );
+      const user = await queryRunner.manager.findOne(User, {
+        where: { id: _user.id },
+        lock: { mode: 'pessimistic_write' },
+      });
 
-      // 3. 유저의 돈 업데이트
       const updatedUser = this.usersRepository.create({
         ...user,
         point: user.point - amount,
       });
       await queryRunner.manager.save(updatedUser);
 
-      // ================================ commit 성공 확정!!! ==================================
       await queryRunner.commitTransaction();
-      // =====================================================================================
 
-      // 4. 최종결과 프론트엔드에 돌려주기
       return cancel;
     } catch {
-      // ================================ rollback 되돌리기!!! ==================================
       await queryRunner.rollbackTransaction();
-      // ======================================================================================
     } finally {
-      // ==================================== 연결 해제!!! ======================================
       await queryRunner.release();
-      // ======================================================================================
     }
   }
 
   async hasPayment({ impUid }) {
-    // 이미 payment table에 저장된 결제 정보 인지 검증
     const result = await this.paymentsRepository.findOne({
       where: { impUid: impUid, status: PAYMENT_ENUM.PAYMENT },
     });
@@ -148,7 +115,6 @@ export class PaymentsService {
   }
 
   async hasCancel({ impUid }) {
-    // 이미 payment table에 저장된 결제취소 정보 인지 검증
     const result = await this.paymentsRepository.findOne({
       where: { impUid: impUid, status: PAYMENT_ENUM.CANCEL },
     });
@@ -158,7 +124,6 @@ export class PaymentsService {
   }
 
   async cancelalbePoint({ user, amount }) {
-    // 포인트가 취소하려는 금액보다 많은지 검증
     const result = await this.usersRepository.findOne({
       where: { id: user.id },
     });

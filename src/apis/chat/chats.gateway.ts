@@ -52,10 +52,8 @@ export class ChatsGateway {
     @MessageBody() data: string, //
     @ConnectedSocket() client,
   ) {
-    // 채팅방 입장!
     const [ticketId, specialistId] = data;
 
-    // 전문가 이름 찾아오기
     const specialist = await this.specialistsService.findOneWithId({
       id: specialistId,
     });
@@ -66,7 +64,6 @@ export class ChatsGateway {
     this.wsClients.push(client);
   }
 
-  // 다른사람한테 메시지 뿌리기
   private broadcast(event, client, message: any) {
     for (const c of this.wsClients) {
       if (client.id == c.id) continue;
@@ -81,7 +78,6 @@ export class ChatsGateway {
   ) {
     const [ticketId, message, userId] = data;
 
-    // 채팅 기록 저장 및 유저 닉네임 불러오기
     const nickname = await this.chatsService.userSend({
       userId,
       ticketId,
@@ -98,7 +94,6 @@ export class ChatsGateway {
   ) {
     const [ticketId, message, specialistId] = data;
 
-    // 채팅 기록 저장 및 전문가 이름 불러오기
     const nickname = await this.chatsService.specialistSend({
       specialistId,
       ticketId,

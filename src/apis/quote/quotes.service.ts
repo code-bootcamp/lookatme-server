@@ -43,7 +43,6 @@ export class QuoteService {
   }
 
   async createList() {
-    // 1. 존재하는 중복 명언 지우기
     await Promise.all(
       DEFAULT_QUOTE_LIST.map((el) =>
         this.quoteRepository.delete({
@@ -53,7 +52,6 @@ export class QuoteService {
       ),
     );
 
-    // 2. 새로운 명언 리스트 등록하기
     return await Promise.all(
       DEFAULT_QUOTE_LIST.map((el) => this.quoteRepository.save({ ...el })),
     );
@@ -87,7 +85,6 @@ export class QuoteService {
   }
 
   async selectRandomQuote() {
-    // 1. 기존 selected quote 취소하기
     const oldQuote = await this.quoteRepository.findOne({
       where: { isSelected: true },
     });
@@ -98,7 +95,6 @@ export class QuoteService {
         { isSelected: false },
       );
 
-    // 2. 랜덤한 quote 선정하기
     const randomQuote = await this.quoteRepository
       .createQueryBuilder()
       .orderBy('RAND()')

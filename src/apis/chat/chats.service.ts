@@ -52,29 +52,24 @@ export class ChatsService {
   }
 
   async userSend({ userId, ticketId, message }) {
-    // 1. 유저 찾아오기
     const user = await this.userRepository.findOne({
       where: { id: userId },
     });
 
-    // 2. 채팅방 찾아오기
     let chatRoom = await this.chatRoomRepository.findOne({
       where: { room: ticketId },
     });
 
-    // 3. 채팅방 없으면 생성해주기
     if (!chatRoom)
       chatRoom = await this.chatRoomRepository.save({
         room: ticketId,
       });
 
-    // 4. ticket과 채팅방 연결하기
     await this.ticketRepository.update(
       { id: ticketId },
       { chatRoom: chatRoom },
     );
 
-    // 5. 채팅내용 저장하기
     await this.chatMessageRepository.save({
       user: user,
       room: chatRoom,
@@ -85,36 +80,29 @@ export class ChatsService {
   }
 
   async specialistSend({ specialistId, ticketId, message }) {
-    // 1. 전문가 찾아오기
     const specialist = await this.specialistRepository.findOne({
       where: { id: specialistId },
     });
-
-    console.log('___________________');
 
     if (!specialist)
       throw new UnprocessableEntityException(
         '존재하지 않는 specialist_id 입니다.',
       );
 
-    // 2. 채팅방 찾아오기
     let chatRoom = await this.chatRoomRepository.findOne({
       where: { room: ticketId },
     });
 
-    // 3. 채팅방 없으면 생성해주기
     if (!chatRoom)
       chatRoom = await this.chatRoomRepository.save({
         room: ticketId,
       });
 
-    // 4. ticket과 채팅방 연결하기
     await this.ticketRepository.update(
       { id: ticketId },
       { chatRoom: chatRoom },
     );
 
-    // 5. 채팅 저장하기
     await this.specialistChatMessageRepository.save({
       specialist: specialist,
       room: chatRoom,
