@@ -225,7 +225,13 @@ export class StoryService {
   }
 
   async deleteReported({ id }) {
-    await this.storyImageRepository.softDelete({ story: { id } });
+    const storyImages = await this.storyImageRepository.find({
+      where: { story: { id } },
+    });
+
+    if (storyImages) {
+      await this.storyImageRepository.softDelete({ story: { id } });
+    }
 
     const result = await this.storyRepository.softDelete({ id });
     return result.affected ? true : false;

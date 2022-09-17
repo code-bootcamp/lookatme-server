@@ -35,6 +35,12 @@ export class SpecialistService {
     return result;
   }
 
+  async findLoginSpecialist({ specialistId }) {
+    return await this.specialistRepository.findOne({
+      where: { id: specialistId },
+    });
+  }
+
   async findAllByPrice({ page }) {
     const result = await this.specialistRepository.find({
       order: { price: 'DESC' },
