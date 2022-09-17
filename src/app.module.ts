@@ -23,6 +23,7 @@ import { SpcialistCommentsModule } from './apis/specialistComment/specialistComm
 import 'dotenv/config';
 import { SpecialistReviewsModule } from './apis/specialistReview/specialistReview.module';
 import { UnderCommentsModule } from './apis/underComment/underComment.module';
+import { UnderSpecialistCommentsModule } from './apis/underSpecialistComment/underSpecialistComment.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { UnderCommentsModule } from './apis/underComment/underComment.module';
     PaymentsModule,
     UsersModule,
     UnderCommentsModule,
+    UnderSpecialistCommentsModule,
     SpecialistModule,
     StroyModule,
     SpcialistCommentsModule,

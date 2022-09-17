@@ -7,9 +7,11 @@ import {
   DeleteDateColumn,
   JoinColumn,
   ManyToOne,
+  OneToMany,
 } from 'typeorm';
 import { Specialist } from 'src/apis/specialist/entities/specialist.entity';
 import { Story } from 'src/apis/story/entities/story.entity';
+import { UnderSpecialistComment } from 'src/apis/underSpecialistComment/entities/underSpecialistComment.entity';
 
 @Entity()
 @ObjectType()
@@ -42,4 +44,11 @@ export class SpecialistComment {
   @ManyToOne(() => Story)
   @Field(() => Story)
   story: Story;
+
+  @OneToMany(
+    () => UnderSpecialistComment,
+    (underSpecialistComments) => underSpecialistComments.specialistComment,
+  )
+  @Field(() => [UnderSpecialistComment])
+  underSpecialistComments: UnderSpecialistComment[];
 }

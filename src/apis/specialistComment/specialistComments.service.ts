@@ -19,6 +19,7 @@ export class SpecialistCommentsService {
   async findAllWithStoryId({ storyId }) {
     const result = await this.specialistCommentsRepository.find({
       where: { story: { id: storyId } },
+      relations: ['underSpecialistComments'],
     });
 
     return result;
