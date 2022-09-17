@@ -16,6 +16,12 @@ export class SpecialistReviewsService {
     private readonly usersRepository: Repository<User>,
   ) {}
 
+  async findAllWithSpecialistId({ specialistId }) {
+    return await this.specialistReviewsRepository.find({
+      where: { specialist: { id: specialistId } },
+    });
+  }
+
   async create({ userId, createSpecialistReviewInput }) {
     const { text, rate, specialistId } = createSpecialistReviewInput;
     const user = await this.usersRepository.findOne({ where: { id: userId } });
@@ -30,22 +36,18 @@ export class SpecialistReviewsService {
       specialist,
     });
 
-    // 전문가에게 달린 리뷰의 개수
     const reviews = await this.specialistReviewsRepository.find({
       where: { specialist },
     });
     const countReview = reviews.length;
 
-    // 리뷰에 매겨진 점수의 총합
     let sumOfRate = 0;
     for (const el of reviews) {
       sumOfRate += el.rate;
     }
 
-    // 평균 점수(총합 / 리뷰 개수)
     const averageRate = sumOfRate / countReview;
 
-    // 구한 평균 점수 전문가 테이블에 저장
     await this.specialistsRepository.save({
       ...specialist,
       id: specialistId,
