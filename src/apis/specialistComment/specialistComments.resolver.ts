@@ -16,6 +16,15 @@ export class SpecialistCommentsResolver {
     private readonly specialistCommentsService: SpecialistCommentsService, //
   ) {}
 
+  @Query(() => [SpecialistComment], {
+    description: '사연에 달린 전문가 답변들 조회',
+  })
+  async fetchSpecialistCommentsWithStoryId(
+    @Args('storyId') storyId: string, //
+  ) {
+    return await this.specialistCommentsService.findAllWithStoryId({ storyId });
+  }
+
   @UseGuards(GqlAuthSpecialistAccessGuard)
   @Query(() => [SpecialistComment], {
     description: '전문가 자신의 답변들 조회',

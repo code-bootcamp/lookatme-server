@@ -16,6 +16,14 @@ export class SpecialistCommentsService {
     private readonly storyRepository: Repository<Story>,
   ) {}
 
+  async findAllWithStoryId({ storyId }) {
+    const result = await this.specialistCommentsRepository.find({
+      where: { story: { id: storyId } },
+    });
+
+    return result;
+  }
+
   async findAllOwnComments({ specialistId, page }) {
     const result = await this.specialistCommentsRepository.find({
       where: { specialist: { id: specialistId } },
