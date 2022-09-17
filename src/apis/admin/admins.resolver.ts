@@ -13,7 +13,6 @@ export class AdminsResolver {
     private readonly adminsService: AdminsService, //
   ) {}
 
-  ///////////////////////// Query ///////////////////////
   @UseGuards(GqlAuthAccessGuard)
   @Query(() => Boolean, { description: '관리자 로그인 확인' })
   isAdmin(
@@ -22,7 +21,6 @@ export class AdminsResolver {
     return this.adminsService.isAdmin({ admin: context.req.user });
   }
 
-  ///////////////////////// Mutation ///////////////////////
   @Mutation(() => Admin, { description: '관리자 회원가입' })
   async createAdmin(
     @Args('createAdminInput') createAdminInput: CreateAdminInput, //

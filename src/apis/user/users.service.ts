@@ -94,14 +94,12 @@ export class UsersService {
   async create({ hashedPassword: password, ...createUserInput }) {
     const { ...user } = createUserInput;
 
-    // 1. check if user email exist on User table
     const uniqueEmail = await this.userRepository.findOne({
       where: { email: user.email },
     });
 
     if (uniqueEmail) throw new ConflictException('이미 등록된 이메일 입니다.');
 
-    // 2. check if user nickname exist on User table
     const uniqueNickname = await this.userRepository.findOne({
       where: { nickname: user.nickname },
     });
@@ -109,7 +107,6 @@ export class UsersService {
     if (uniqueNickname)
       throw new ConflictException('이미 등록된 닉네임 입니다.');
 
-    // 3. check if user phone_number exist on User table
     const uniquePhoneNumber = await this.userRepository.findOne({
       where: { phone_number: user.phone_number },
     });
@@ -117,20 +114,17 @@ export class UsersService {
     if (uniquePhoneNumber)
       throw new ConflictException('이미 등록된 전화번호 입니다.');
 
-    // 4. save user
     const result = await this.userRepository.save({
       ...user,
       password,
     });
 
-    // 5. return user object
     return result;
   }
 
   async updateWithAdminAccess({ userId, updateUserWithAdminAccessInput }) {
     const { ...user } = updateUserWithAdminAccessInput;
 
-    // 1. find user from User table with user_id
     const myuser = await this.userRepository.findOne({
       where: { id: userId },
     });
@@ -138,19 +132,16 @@ export class UsersService {
     if (!myuser)
       throw new UnprocessableEntityException('존재하지 않는 user_id 입니다');
 
-    // 2. save new user
     const result = await this.userRepository.save({
       ...myuser,
       id: userId,
       ...user,
     });
 
-    // 4. return user object
     return result;
   }
 
   async update({ user, updateUserInput }) {
-    // 1. find user from User table with user_id
     const myuser = await this.userRepository.findOne({
       where: { id: user.id },
     });
@@ -158,19 +149,16 @@ export class UsersService {
     if (!myuser)
       throw new UnprocessableEntityException('존재하지 않는 user_id 입니다');
 
-    // 2. save new user
     const result = await this.userRepository.save({
       ...myuser,
       id: user.id,
       ...updateUserInput,
     });
 
-    // 4. return user object
     return result;
   }
 
   async updatePwd({ userId, password }) {
-    // 1. fine user from User table with user_id
     const myuser = await this.userRepository.findOne({
       where: { id: userId },
     });
@@ -178,7 +166,6 @@ export class UsersService {
     if (!myuser)
       throw new UnprocessableEntityException('존재하지 않는 user_id 입니다');
 
-    // 2. replace new password with old password
     const result = this.userRepository.save({
       ...myuser,
       id: userId,
@@ -189,7 +176,6 @@ export class UsersService {
   }
 
   async delete({ userId }) {
-    // 1. fine user
     const myuser = await this.userRepository.findOne({
       where: { id: userId },
     });
@@ -197,7 +183,6 @@ export class UsersService {
     if (!myuser)
       throw new UnprocessableEntityException('존재하지 않는 user_id 입니다');
 
-    // 2. softdelte user
     const result = await this.userRepository.softDelete({
       id: userId,
     });
@@ -206,7 +191,6 @@ export class UsersService {
   }
 
   async undoDelete({ userId }) {
-    // 1. fine user
     const myuser = await this.userRepository.findOne({
       where: { id: userId },
       relations: ['addresses'],
@@ -218,7 +202,6 @@ export class UsersService {
         '삭제 목록에 존재하지 않는 user_id 입니다',
       );
 
-    // 2. restore user
     const result = await this.userRepository.restore({
       id: userId,
     });

@@ -34,7 +34,7 @@ export class TicketsResolver {
   }
 
   @UseGuards(GqlAuthAccessGuard)
-  @Mutation(() => Ticket)
+  @Mutation(() => Ticket, { description: '전문가 ID로 티켓 구매' })
   async createTicket(
     @Context() context: any, //
     @Args('specialistId') specialistId: string,

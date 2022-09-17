@@ -96,19 +96,16 @@ export class AuthsService {
   }
 
   async socialLogin({ req, res }) {
-    // 1. verify if valid user
     let user = await this.usersService.findOneWithEmail({
       email: req.user.email,
     });
 
     if (!user)
-      // 2. register new user
       user = await this.usersService.create({
         ...req.user,
       });
     else throw new ConflictException('이미 등록된 이메일 입니다.');
 
-    // 3. 로그인 (accessToken 만들어서 프론트엔드에 추가)
     this.setRefreshToken({ user, res, req });
     res.redirect(
       'http://localhost:5500/frontend/login/index.html', // 원래 페이지로 돌아기기
