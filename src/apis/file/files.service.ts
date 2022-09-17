@@ -23,7 +23,9 @@ export class FileService {
       myfile
         .createReadStream()
         .pipe(storage.createWriteStream())
-        .on('finish', () => resolve(fname))
+        .on('finish', () =>
+          resolve(`https://storage.googleapis.com/lookatme-storage/${fname}`),
+        )
         .on('error', () => reject('이미지 업로드에 실패했습니다'));
     });
 

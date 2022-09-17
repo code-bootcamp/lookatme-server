@@ -5,6 +5,7 @@ import { UsersService } from './users.service';
 import * as bcrypt from 'bcrypt';
 import {
   CACHE_MANAGER,
+  HttpException,
   // ConflictException,
   // HttpException,
   Inject,
@@ -109,22 +110,22 @@ export class UsersResolver {
 
     // 배포환경
     // 2. 가입환영 템플릿 만들기
-    // const template = this.usersService.getWelcomeTemplate({
-    //   nickname: createUserInput.nickname,
-    // });
+    const template = this.usersService.getWelcomeTemplate({
+      nickname: createUserInput.nickname,
+    });
 
     // 3. 이메일에 가입환영 템플릿 전송하기
-    // try {
-    //   await this.usersService.sendTemplate({
-    //     email: createUserInput.email,
-    //     template,
-    //   });
-    // } catch (error) {
-    //   throw new HttpException(
-    //     error.response.message, //
-    //     error.status,
-    //   );
-    // }
+    try {
+      await this.usersService.sendTemplate({
+        email: createUserInput.email,
+        template,
+      });
+    } catch (error) {
+      throw new HttpException(
+        error.response.message, //
+        error.status,
+      );
+    }
 
     // 4. 회원 생성
     return this.usersService.create({
