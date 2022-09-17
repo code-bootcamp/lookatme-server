@@ -31,6 +31,17 @@ export class SpecialistResolver {
     return this.specialistService.findOneWithId({ id });
   }
 
+  @UseGuards(GqlAuthSpecialistAccessGuard)
+  @Query(() => Specialist, {
+    description: '로그인한 전문가 자신의 프로필 조회',
+  })
+  async fetchLoginSpecialist(
+    @Context() context: any, //
+  ) {
+    const specialistId = context.req.user.id;
+    return await this.specialistService.findLoginSpecialist({ specialistId });
+  }
+
   @Query(() => [Specialist], { description: '높은가격순 전문가 조회' })
   async fetchSpecialistByPrice(
     @Args({ name: 'page', type: () => Int, nullable: true }) page?: number,
