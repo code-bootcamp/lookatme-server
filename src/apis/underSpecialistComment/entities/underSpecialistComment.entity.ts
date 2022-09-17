@@ -1,4 +1,4 @@
-import { Field } from '@nestjs/graphql';
+import { Field, ObjectType } from '@nestjs/graphql';
 import {
   Column,
   CreateDateColumn,
@@ -9,10 +9,11 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { SpecialistComment } from '../specialistComment/entities/specialistComment.entity';
-import { User } from '../user/entities/user.entity';
+import { SpecialistComment } from '../../specialistComment/entities/specialistComment.entity';
+import { User } from '../../user/entities/user.entity';
 
 @Entity()
+@ObjectType()
 export class UnderSpecialistComment {
   @PrimaryGeneratedColumn('uuid')
   @Field(() => String)

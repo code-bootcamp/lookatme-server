@@ -244,12 +244,14 @@ export class StoryService {
     });
     const usersArray = story.likedusers;
 
-    if (usersArray.some((el) => el.id === userId))
-      throw new ConflictException('이미 좋아요를 눌렀습니다.');
-
-    const user = await this.usersService.findOneWithId({ userId });
-
-    usersArray.push(user);
+    if (usersArray.some((el) => el.id === userId)) {
+      const likeUser = usersArray.find((el) => el.id === userId);
+      const idx = usersArray.indexOf(likeUser);
+      usersArray.splice(idx, 1);
+    } else {
+      const user = await this.usersService.findOneWithId({ userId });
+      usersArray.push(user);
+    }
 
     return this.storyRepository.save({
       ...story,
