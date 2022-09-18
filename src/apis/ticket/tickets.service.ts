@@ -21,7 +21,7 @@ export class TicketsService {
       where: {
         user: { id: userId },
       },
-      relations: ['specialist'],
+      relations: ['specialist', 'chatRoom'],
       take: 10,
       skip: page ? (page - 1) * 10 : 0,
     });

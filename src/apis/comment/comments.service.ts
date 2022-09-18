@@ -54,11 +54,13 @@ export class CommentsService {
       where: { id: storyId },
     });
 
-    const result = this.commentsRepository.save({
+    const result = await this.commentsRepository.save({
       text,
       story,
       user,
     });
+    console.log('====================');
+    console.log(result);
     return result;
   }
 
@@ -68,12 +70,16 @@ export class CommentsService {
     const commentToUpdate = await this.commentsRepository.findOne({
       where: { id: commentId, user },
     });
+    console.log(user);
 
     const result = await this.commentsRepository.save({
       ...commentToUpdate,
       id: commentId,
       text,
+      user,
     });
+
+    console.log(result);
 
     return result;
   }
