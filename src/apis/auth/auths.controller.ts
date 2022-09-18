@@ -14,6 +14,19 @@ interface IOAuthUser {
   };
 }
 
+/**
+ *  Description : API docs for social login
+ *  Constructor : AuthsService
+ *  Content :
+ *    [ Get ]
+ *      /login/google       [ req: Request & IOAuthUsr, res: Response ]
+ *                            : 구글 소셜 로그인 API
+ *      /login/naver        [ req: Request & IOAuthUsr, res: Response ]
+ *                            : 네이버 소셜 로그인 API
+ *      /login/kakao        [ req: Request & IOAuthUsr, res: Response ]
+ *                            : 카카오 소셜 로그인 API
+ */
+
 @Controller()
 export class AuthsController {
   constructor(

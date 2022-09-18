@@ -7,6 +7,18 @@ import { UseGuards } from '@nestjs/common';
 import { GqlAuthAccessGuard } from 'src/commons/auth/gql-auth.guard';
 import { IContext } from 'src/commons/type/context';
 
+/**
+ *  Description : API docs for admin setting
+ *  Constructor : AdminsService
+ *  Content :
+ *    [ Query ]
+ *      isAdmin         [ context: IContext => Boolean ]
+ *                        : 관리자로 로그인 했는지 확인하는 API
+ *    [ Mutation ]
+ *      createAdmin     [ createAdminInput: CreateAdminInput => Admin ]
+ *                        : 관리자 생성 API
+ */
+
 @Resolver()
 export class AdminsResolver {
   constructor(

@@ -21,8 +21,12 @@ export class SpecialistCommentsResolver {
   })
   async fetchSpecialistCommentsWithStoryId(
     @Args('storyId') storyId: string, //
+    @Args({ name: 'page', type: () => Int }) page: number,
   ) {
-    return await this.specialistCommentsService.findAllWithStoryId({ storyId });
+    return await this.specialistCommentsService.findAllWithStoryId({
+      storyId,
+      page,
+    });
   }
 
   @UseGuards(GqlAuthSpecialistAccessGuard)
