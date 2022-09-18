@@ -215,18 +215,19 @@ export class StoryService {
       ...rest,
     });
 
-    this.storyImageRepository.delete({ story: id });
+    await this.storyImageRepository.delete({ story: id });
 
     if (imgUrl !== undefined) {
       await Promise.all(
         imgUrl.map((el) => {
           this.storyImageRepository.save({
             url: el,
-            story: id,
+            story: result,
           });
         }),
       );
     }
+
     return result;
   }
 
