@@ -11,3 +11,8 @@ export enum CATEGORY_NAME {
   FAMILY = '가족',
   FREE = '자유주제',
 }
+
+export enum AUTHOR {
+  SPECIALIST = 'SPECIALIST',
+  USER = 'USER',
+}

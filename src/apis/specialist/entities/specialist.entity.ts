@@ -9,7 +9,6 @@ import {
   Column,
   OneToMany,
   DeleteDateColumn,
-  Double,
 } from 'typeorm';
 
 @Entity()

@@ -1,4 +1,4 @@
-import { Field, ObjectType, Float, Int } from '@nestjs/graphql';
+import { Field, ObjectType, Float } from '@nestjs/graphql';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -10,7 +10,6 @@ import {
 } from 'typeorm';
 import { User } from 'src/apis/user/entities/user.entity';
 import { Specialist } from 'src/apis/specialist/entities/specialist.entity';
-import { Max, Min } from 'class-validator';
 
 @Entity()
 @ObjectType()
