@@ -1,5 +1,6 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { ChatRoom } from 'src/apis/chat/entities/chatRoom.entity';
+import { ChatMessage } from 'src/apis/chat/entities/chatMessage.entity';
+import { SpecialistChatMessage } from 'src/apis/chat/entities/specialistChatMessage.entity';
 import { Specialist } from 'src/apis/specialist/entities/specialist.entity';
 import { User } from 'src/apis/user/entities/user.entity';
 import {
@@ -8,7 +9,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
-  OneToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -39,11 +40,6 @@ export class Ticket {
   refunded: boolean;
 
   @JoinColumn()
-  @OneToOne(() => ChatRoom)
-  @Field(() => ChatRoom)
-  chatRoom: ChatRoom;
-
-  @JoinColumn()
   @ManyToOne(() => User)
   @Field(() => User)
   user: User;
@@ -52,4 +48,15 @@ export class Ticket {
   @ManyToOne(() => Specialist)
   @Field(() => Specialist)
   specialist: Specialist;
+
+  @OneToMany(() => ChatMessage, (chatMessages) => chatMessages.ticket)
+  @Field(() => [ChatMessage])
+  chatMessages: ChatMessage[];
+
+  @OneToMany(
+    () => SpecialistChatMessage,
+    (specialistChatMessages) => specialistChatMessages.ticket,
+  )
+  @Field(() => [SpecialistChatMessage])
+  specialistChatMessages: SpecialistChatMessage[];
 }

@@ -1,12 +1,12 @@
 import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { ChatRoom } from './entities/chatRoom.entity';
 import { ChatMessage } from './entities/chatMessage.entity';
 import { SpecialistChatMessage } from './entities/specialistChatMessage.entity';
 import { User } from '../user/entities/user.entity';
 import { Specialist } from '../specialist/entities/specialist.entity';
 import { Ticket } from '../ticket/entities/ticket.entity';
+import { AUTHOR } from 'src/commons/type/enum';
 
 @Injectable()
 export class ChatsService {
@@ -16,9 +16,6 @@ export class ChatsService {
 
     @InjectRepository(SpecialistChatMessage)
     private readonly specialistChatMessageRepository: Repository<SpecialistChatMessage>,
-
-    @InjectRepository(ChatRoom)
-    private readonly chatRoomRepository: Repository<ChatRoom>,
 
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
@@ -33,82 +30,88 @@ export class ChatsService {
   async load({ ticketId }) {
     const ticket = await this.ticketRepository.findOne({
       where: { id: ticketId },
+      relations: ['user', 'specialist'],
     });
 
     if (!ticket)
       throw new UnprocessableEntityException('존재하지 않는 ticket입니다');
 
-    const room = await this.chatRoomRepository.findOne({
-      where: { ticket: ticket },
+    const chatMessages = await this.chatMessageRepository
+      .createQueryBuilder('chatMessage')
+      .leftJoinAndSelect('chatMessage.ticket', 'ticket')
+      .where('chatMessage.ticket = :ticketId', { ticketId })
+      .getMany();
+
+    const specialistChatMessages = await this.specialistChatMessageRepository
+      .createQueryBuilder('specialistChatMessageRepository')
+      .leftJoinAndSelect('specialistChatMessageRepository.ticket', 'ticket')
+      .where('specialistChatMessageRepository.ticket = :ticketId', { ticketId })
+      .getMany();
+
+    const userChatList = chatMessages.map((ele) => {
+      return {
+        author: AUTHOR.USER,
+        nickname: ticket.user.nickname,
+        message: ele.message,
+        createdAt: ele.createdAt,
+      };
     });
 
-    const result = await this.chatMessageRepository.find({
-      where: { room: room },
-      order: { createdAt: 'ASC' },
-      relations: ['user', 'room'],
+    const specialistChatList = specialistChatMessages.map((ele) => {
+      return {
+        author: AUTHOR.SPECIALIST,
+        nickname: ticket.specialist.name,
+        message: ele.message,
+        createdAt: ele.createdAt,
+      };
+    });
+
+    const result = [...userChatList, ...specialistChatList];
+
+    result.sort((a, b) => {
+      if (a.createdAt > b.createdAt) return 1;
+      if (a.createdAt < b.createdAt) return -1;
+      return 0;
     });
 
     return result;
   }
 
-  async userSend({ userId, ticketId, message }) {
+  async userSend({ ticketId, message }) {
+    const ticket = await this.ticketRepository.findOne({
+      where: { id: ticketId },
+      relations: ['user'],
+    });
+
     const user = await this.userRepository.findOne({
-      where: { id: userId },
+      where: { id: ticket.user.id },
     });
 
-    let chatRoom = await this.chatRoomRepository.findOne({
-      where: { room: ticketId },
+    const result = await this.chatMessageRepository.save({
+      user,
+      message,
+      ticket,
     });
 
-    if (!chatRoom)
-      chatRoom = await this.chatRoomRepository.save({
-        room: ticketId,
-      });
-
-    await this.ticketRepository.update(
-      { id: ticketId },
-      { chatRoom: chatRoom },
-    );
-
-    await this.chatMessageRepository.save({
-      user: user,
-      room: chatRoom,
-      message: message,
-    });
-
-    return user.nickname;
+    return result;
   }
 
-  async specialistSend({ specialistId, ticketId, message }) {
+  async specialistSend({ ticketId, message }) {
+    const ticket = await this.ticketRepository.findOne({
+      where: { id: ticketId },
+      relations: ['specialist'],
+    });
+
     const specialist = await this.specialistRepository.findOne({
-      where: { id: specialistId },
+      where: { id: ticket.specialist.id },
     });
 
-    if (!specialist)
-      throw new UnprocessableEntityException(
-        '존재하지 않는 specialist_id 입니다.',
-      );
-
-    let chatRoom = await this.chatRoomRepository.findOne({
-      where: { room: ticketId },
+    const result = await this.specialistChatMessageRepository.save({
+      specialist,
+      message,
+      ticket,
     });
 
-    if (!chatRoom)
-      chatRoom = await this.chatRoomRepository.save({
-        room: ticketId,
-      });
-
-    await this.ticketRepository.update(
-      { id: ticketId },
-      { chatRoom: chatRoom },
-    );
-
-    await this.specialistChatMessageRepository.save({
-      specialist: specialist,
-      room: chatRoom,
-      message: message,
-    });
-
-    return specialist.name;
+    return result;
   }
 }

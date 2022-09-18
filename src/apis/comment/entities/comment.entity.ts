@@ -21,7 +21,7 @@ export class Comment {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ type: 'varchar', length: 300, nullable: false })
+  @Column({ type: 'longtext', nullable: false })
   @Field(() => String)
   text: string;
 
