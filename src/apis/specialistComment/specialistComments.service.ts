@@ -16,10 +16,12 @@ export class SpecialistCommentsService {
     private readonly storyRepository: Repository<Story>,
   ) {}
 
-  async findAllWithStoryId({ storyId }) {
+  async findAllWithStoryId({ storyId, page }) {
     const result = await this.specialistCommentsRepository.find({
       where: { story: { id: storyId } },
       relations: ['underSpecialistComments'],
+      take: 10,
+      skip: page ? (page - 1) * 10 : 0,
     });
 
     return result;
