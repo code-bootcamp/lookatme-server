@@ -23,6 +23,7 @@ export class CommentsService {
       where: { story: { id: storyId } },
       take: 10,
       skip: page ? (page - 1) * 10 : 0,
+      relations: ['user'],
     });
 
     return result;
