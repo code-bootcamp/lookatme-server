@@ -24,11 +24,9 @@
 			console.log(isSpecialist)
 
 			if (isSpecialist === 'n') {
-				userId = prompt('유저id를 알려주세요.');
-				socket.emit('user_enter', ticketId, userId);
+				socket.emit('user_enter', ticketId);
 			} else if (isSpecialist === 'y') {
-				specialistId = prompt('전문가id를 알려주세요.');
-				socket.emit('specialist_enter', ticketId, specialistId);
+				socket.emit('specialist_enter', ticketId );
 			}
 
 			socket.on('connect', () => {
@@ -45,21 +43,21 @@
 			function msg_send() {
 				/* 메시지 전송 */
 				let message = $('#msg').val();
-				socket.emit('user_send', ticketId, message, userId);
+				socket.emit('user_send', ticketId, message);
 				$('#msg').val('');
 				$('#chatList').append(`<div style="color:blue;">나 : ${message}</div>`);
 			}
 
 			function special_msg_send() {
 				/* 메시지 전송 */
-				let message = '안녕하세요';
-				socket.emit('specialist_send', ticketId, message, specialistId);
+				let message = $('#msg2').val();
+				socket.emit('specialist_send', ticketId, message);
 				$('#msg').val('');
 				$('#chatList').append(`<div style="color:blue;">나 : ${message}</div>`);
 			}
 
 			$(document).ready(() => {
-				$('#room').text(`${room}`)
+				$('#room').text(`${ticketId}`)
 			})
 		</script>
 	</head>
@@ -76,7 +74,7 @@
 		</div>
 		<br/>
 		<div id="sendMessage" style="position: fixed; bottom: 10%;">
-			<input type="text" id="msg" />
+			<input type="text" id="msg2" />
 			<button onclick="special_msg_send()">전문가제출</button>
 		</div>
 	</body>

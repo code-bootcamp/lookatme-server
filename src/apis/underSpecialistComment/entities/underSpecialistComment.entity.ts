@@ -19,7 +19,7 @@ export class UnderSpecialistComment {
   @Field(() => String)
   id: string;
 
-  @Column({ type: 'varchar', length: 500, nullable: false })
+  @Column({ type: 'longtext', nullable: false })
   @Field(() => String)
   contents: string;
 

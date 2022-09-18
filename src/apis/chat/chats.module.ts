@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ChatRoom } from './entities/chatRoom.entity';
 import { ChatMessage } from './entities/chatMessage.entity';
 import { ChatsResolver } from './chats.resolver';
 import { ChatsService } from './chats.service';
@@ -9,14 +8,11 @@ import { User } from '../user/entities/user.entity';
 import { SpecialistChatMessage } from './entities/specialistChatMessage.entity';
 import { Specialist } from '../specialist/entities/specialist.entity';
 import { Ticket } from '../ticket/entities/ticket.entity';
-import { UsersService } from '../user/users.service';
-import { SpecialistService } from '../specialist/specialists.service';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
-      ChatRoom, //
-      ChatMessage,
+      ChatMessage, //
       SpecialistChatMessage,
       User,
       Specialist,
@@ -27,8 +23,6 @@ import { SpecialistService } from '../specialist/specialists.service';
     ChatsResolver, //
     ChatsService,
     ChatsGateway,
-    UsersService,
-    SpecialistService,
   ],
 })
 export class ChatsModule {}

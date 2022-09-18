@@ -20,7 +20,7 @@ export class SpecialistComment {
   @Field(() => String)
   id: string;
 
-  @Column({ type: 'varchar', length: 300, nullable: false })
+  @Column({ type: 'longtext', nullable: false })
   @Field(() => String)
   text: string;
 

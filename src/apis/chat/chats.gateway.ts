@@ -8,8 +8,9 @@ import {
 } from '@nestjs/websockets';
 import { Injectable } from '@nestjs/common';
 import { ChatsService } from './chats.service';
-import { UsersService } from '../user/users.service';
-import { SpecialistService } from '../specialist/specialists.service';
+import { Ticket } from '../ticket/entities/ticket.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @WebSocketGateway({
   namespace: 'chat',
@@ -20,9 +21,8 @@ export class ChatsGateway {
   constructor(
     private readonly chatsService: ChatsService,
 
-    private readonly usersService: UsersService,
-
-    private readonly specialistsService: SpecialistService,
+    @InjectRepository(Ticket)
+    private readonly ticketRepository: Repository<Ticket>,
   ) {}
 
   @WebSocketServer()
@@ -32,16 +32,15 @@ export class ChatsGateway {
 
   @SubscribeMessage('user_enter')
   async connectUser(
-    @MessageBody() data: string, //
+    @MessageBody() ticketId: string, //
     @ConnectedSocket() client,
   ) {
-    // 채팅방 입장!
-    const [ticketId, userId] = data;
+    const ticket = await this.ticketRepository.findOne({
+      where: { id: ticketId },
+      relations: ['user'],
+    });
 
-    // 유저 닉네임 찾아오기
-    const user = await this.usersService.findOneWithId({ userId });
-
-    const receive = `${user.nickname}님이 입장했습니다.`;
+    const receive = `${ticket.user.nickname}님이 입장했습니다.`;
 
     this.server.emit('receive' + ticketId, receive);
     this.wsClients.push(client);
@@ -49,16 +48,16 @@ export class ChatsGateway {
 
   @SubscribeMessage('specialist_enter')
   async connectSpecialist(
-    @MessageBody() data: string, //
+    @MessageBody() ticketId: string, //
     @ConnectedSocket() client,
   ) {
-    const [ticketId, specialistId] = data;
-
-    const specialist = await this.specialistsService.findOneWithId({
-      id: specialistId,
+    // 유저 닉네임 찾아오기
+    const ticket = await this.ticketRepository.findOne({
+      where: { id: ticketId },
+      relations: ['specialist'],
     });
 
-    const receive = `${specialist.name}님이 입장했습니다.`;
+    const receive = `${ticket.specialist.name}님이 입장했습니다.`;
 
     this.server.emit('receive' + ticketId, receive);
     this.wsClients.push(client);
@@ -76,13 +75,14 @@ export class ChatsGateway {
     @MessageBody() data: string, //
     @ConnectedSocket() client,
   ) {
-    const [ticketId, message, userId] = data;
+    const [ticketId, message] = data;
 
-    const nickname = await this.chatsService.userSend({
-      userId,
+    const result = await this.chatsService.userSend({
       ticketId,
       message,
     });
+
+    const nickname = result.user.nickname;
 
     this.broadcast(ticketId, client, [nickname, message]);
   }
@@ -92,13 +92,14 @@ export class ChatsGateway {
     @MessageBody() data: string, //
     @ConnectedSocket() client,
   ) {
-    const [ticketId, message, specialistId] = data;
+    const [ticketId, message] = data;
 
-    const nickname = await this.chatsService.specialistSend({
-      specialistId,
+    const result = await this.chatsService.specialistSend({
       ticketId,
       message,
     });
+
+    const nickname = result.specialist.name;
 
     this.broadcast(ticketId, client, [nickname, message]);
   }
