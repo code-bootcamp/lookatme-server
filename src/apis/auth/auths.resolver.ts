@@ -19,6 +19,23 @@ import { Repository } from 'typeorm';
 import { Specialist } from '../specialist/entities/specialist.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 
+/**
+ *  Description : API docs for access authorization
+ *  Constructor : Specialist, AuthsService, UsersService, AdminsService
+ *  Content :
+ *    [ Mutation ]
+ *      login                 [ email: string, password: string, context: IContext, => String ]
+ *                              : 일반 유저 로그인 API
+ *      adminLogin            [ email: string, password: string, context: IContext, => String ]
+ *                              : 관리자 로그인 API
+ *      specialistLogin       [ account: string, password: string, context: IContext, => String ]
+ *                              : 전문가 로그인 API
+ *      logout                [ context: IContext => String ]
+ *                              : 모든 유저 로그아웃 API
+ *      restoreAccessToken    [ context: IContext => String ]
+ *                              : Access Token 재발급 API
+ */
+
 @Resolver()
 export class AuthsResolver {
   constructor(
