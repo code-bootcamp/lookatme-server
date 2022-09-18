@@ -181,8 +181,25 @@ export class StoryService {
   }
 
   async update({ id, userId, updateStoryInput }) {
-    const { imgUrl, ...rest } = updateStoryInput;
+    const { imgUrl, categoryName, ...rest } = updateStoryInput;
     const user = await this.userRepository.findOne({ where: { id: userId } });
+    const category = { id: '', name: '' };
+
+    const existCategory = await this.categoryRepository.findOne({
+      where: { name: categoryName },
+    });
+
+    if (existCategory) {
+      category.id = existCategory.id;
+      category.name = existCategory.name;
+    } else {
+      const newCategory = await this.categoryRepository.save({
+        name: categoryName,
+      });
+
+      category.id = newCategory.id;
+      category.name = newCategory.name;
+    }
 
     const storyToUpdate = await this.storyRepository.findOne({
       where: {
@@ -194,6 +211,7 @@ export class StoryService {
     const result = await this.storyRepository.save({
       ...storyToUpdate,
       id,
+      category,
       ...rest,
     });
 
