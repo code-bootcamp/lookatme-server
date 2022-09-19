@@ -136,6 +136,7 @@ export class StoryService {
 
     return this.storyRepository.find({
       where: { user: user },
+      relations: ['user', 'category'],
       take: 10,
       skip: page ? (page - 1) * 10 : 0,
     });
@@ -145,6 +146,11 @@ export class StoryService {
     const { title, text, imgUrl, categoryName } = createStoryInput;
     const category = { id: '', name: '' };
     const user = await this.userRepository.findOne({ where: { id: userId } });
+
+    if (!user) {
+      throw new UnprocessableEntityException('존재하지 않는 유저입니다.');
+    }
+
     const foundCategory = await this.categoryRepository.findOne({
       where: { name: categoryName },
     });
