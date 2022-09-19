@@ -1,8 +1,4 @@
-import {
-  ConflictException,
-  Injectable,
-  UnprocessableEntityException,
-} from '@nestjs/common';
+import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CategoryService } from '../categories/category.service';
@@ -285,25 +281,6 @@ export class StoryService {
       likes: usersArray.length,
     });
   }
-
-  // async userUndoLikeStory({ userId, storyId }) {
-  //   const story = await this.storyRepository.findOne({
-  //     where: { id: storyId },
-  //     relations: ['likedusers'],
-  //   });
-
-  //   if (story.likedusers.every((el) => el.id !== userId))
-  //     throw new ConflictException('좋아요를 누르시지 않은 사연입니다.');
-
-  //   const usersArray = story.likedusers.filter((el) => el.id !== userId);
-
-  //   return this.storyRepository.save({
-  //     ...story,
-  //     id: storyId,
-  //     likedusers: usersArray,
-  //     likes: usersArray.length,
-  //   });
-  // }
 
   async report({ storyId }) {
     const storyToReport = await this.storyRepository.findOne({

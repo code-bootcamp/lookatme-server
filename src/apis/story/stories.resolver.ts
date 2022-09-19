@@ -127,18 +127,6 @@ export class StoryResolver {
     });
   }
 
-  // @UseGuards(GqlAuthAccessGuard)
-  // @Mutation(() => Story, { description: '사연 좋아요 취소' })
-  // deleteLikeStory(
-  //   @Args('storyId') storyId: string, //
-  //   @Context() context: IContext,
-  // ) {
-  //   return this.storyService.userUndoLikeStory({
-  //     userId: context.req.user.id,
-  //     storyId,
-  //   });
-  // }
-
   @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => Boolean, { description: '사연 글 신고' })
   reportStory(@Args('storyId') storyId: string) {
