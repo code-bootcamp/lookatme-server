@@ -91,10 +91,10 @@ export class CommentsResolver {
   @Mutation(() => Boolean, { description: '자신 댓글 삭제' })
   deleteOwnComment(
     @Context() context: any, //
-    @Args('id') id: string,
+    @Args('commentId') commentId: string,
   ) {
     const userId = context.req.user.id;
-    return this.commentsService.deleteOwn({ userId, id });
+    return this.commentsService.deleteOwn({ userId, commentId });
   }
 
   @UseGuards(GqlAuthAdminAccessGuard)

@@ -19,6 +19,8 @@ import { TicketsService } from './tickets.service';
  *    [ Mutation ]
  *      createTicket                  [ context: any, specialistId: String => Ticket ]
  *                                      : 전문가 ID로 티켓 구매 API
+ *      completeTicket                [ context: any, ticketId: String => Ticket ]
+ *                                      : 유저의 티켓 사용 API
  */
 
 @Resolver()
@@ -55,5 +57,15 @@ export class TicketsResolver {
   ) {
     const userId = context.req.user.id;
     return await this.ticketsService.create({ userId, specialistId });
+  }
+
+  @UseGuards(GqlAuthAccessGuard)
+  @Mutation(() => Ticket, { description: '유저의 티켓 사용' })
+  async completeTicket(
+    @Context() context: any, //
+    @Args('ticketId') ticketId: string,
+  ) {
+    const userId = context.req.user.id;
+    return await this.ticketsService.useTicket({ userId, ticketId });
   }
 }
