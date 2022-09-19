@@ -21,7 +21,7 @@ import { IContext } from 'src/commons/type/context';
  *      fetchSpecialists              [ page: Int => [Specialist]] ]
  *                                      : 전문가 전체 목록 조회 API
  *      fetchSpecialist               [ id: String => Specialist ]
- *                                      : ID로 명언 조회 API
+ *                                      : ID로 전문가 조회 API
  *      fetchLoginSpecialist          [ context: any => Specialist ]
  *                                      : 로그인한 전문가 자신의 프로필 조회 API
  *      fetchSpecialistByPrice        [ page?: Int => [Specialist] ]

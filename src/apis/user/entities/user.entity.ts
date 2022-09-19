@@ -7,7 +7,6 @@ import {
   Column,
   DeleteDateColumn,
   Entity,
-  JoinTable,
   ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
