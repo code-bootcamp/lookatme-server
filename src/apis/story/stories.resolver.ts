@@ -11,6 +11,40 @@ import { UpdateStoryInput } from './dto/updateStory.input';
 import { Story } from './entities/story.entity';
 import { StoryService } from './stories.service';
 
+/**
+ *  Description : API docs for story setting
+ *  Constructor : StoryService
+ *  Content :
+ *    [ Query ]
+ *      fetchStory              [ storyId: String => Story ]
+ *                                : ID로 사연 조회 API
+ *      fetchBestStories        [ None => [Story] ]
+ *                                : 베스트 사연 5개 조회 API
+ *      fetchStoriesByTime      [ page: Int, categoryName?: String => [Story] ]
+ *                                : 시간순으로 사연 조회 API
+ *      fetchStoriesByLike      [ page: Int, categoryName?: String => [Story] ]
+ *                                : 좋아요순으로 사연 조회 API
+ *      fetchStoriesByComment   [ page: Int, categoryName?: String => [Story] ]
+ *                                :  댓글 개수순으로 사연 조회 API
+ *      fetchReportedStories    [ page: Int => [Story] ]
+ *                                : 신고된 사연 전체 조회 API
+ *      fetchOwnStories         [ context: IContext, page: Int => [Story] ]
+ *                                : 회원의 사연 조회 API
+ *    [ Mutation ]
+ *      createStory             [ context: any, createStoryInput: CreateStoryInput => Story ]
+ *                                : 사연 등록 API
+ *      updateStory             [ context: any, updateStoryId: String, updateStoryInput: UpdateStoryInput => Story ]
+ *                                : 사연 수정 API
+ *      deleteOwnStory          [ context: any, id: String => Boolean ]
+ *                                : 자신이 등록한 사연 삭제 API
+ *      deleteReportedStory     [ id: String => Boolean ]
+ *                                : 신고된 사연 삭제 API
+ *      likeStory               [ storyId: String, context: IContext => Story ]
+ *                                : 사연 좋아요 / 좋아요 취소 API
+ *      reportStory             [ storyId: String => Boolean ]
+ *                                : 사연 신고 API
+ */
+
 @Resolver()
 export class StoryResolver {
   constructor(
@@ -47,7 +81,7 @@ export class StoryResolver {
     return await this.storyService.findAllByLike({ categoryName, page });
   }
 
-  @Query(() => [Story], { description: '댓글순으로 사연 조회' })
+  @Query(() => [Story], { description: '댓글 개수순으로 사연 조회' })
   async fetchStoriesByComment(
     @Args({ name: 'page', type: () => Int }) page: number,
     @Args({ name: 'categoryName', nullable: true })
@@ -116,7 +150,7 @@ export class StoryResolver {
   }
 
   @UseGuards(GqlAuthAccessGuard)
-  @Mutation(() => Story, { description: '사연 좋아요' })
+  @Mutation(() => Story, { description: '사연 좋아요 / 좋아요 취소 API' })
   likeStory(
     @Args('storyId') storyId: string, //
     @Context() context: IContext,
@@ -128,8 +162,10 @@ export class StoryResolver {
   }
 
   @UseGuards(GqlAuthAccessGuard)
-  @Mutation(() => Boolean, { description: '사연 글 신고' })
-  reportStory(@Args('storyId') storyId: string) {
+  @Mutation(() => Boolean, { description: '사연 신고' })
+  reportStory(
+    @Args('storyId') storyId: string, //
+  ) {
     return this.storyService.report({ storyId });
   }
 }

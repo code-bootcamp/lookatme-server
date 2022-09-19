@@ -7,6 +7,20 @@ import {
 import { Ticket } from './entities/ticket.entity';
 import { TicketsService } from './tickets.service';
 
+/**
+ *  Description : API docs for ticket setting
+ *  Constructor : TicketsService
+ *  Content :
+ *    [ Query ]
+ *      fetchOwnTickets               [ context: any, page: Int => [Ticket] ]
+ *                                      : 유저 자신이 구매한 티켓 조회 PAI
+ *      fetchSpecialistOwnCustomer    [ context: any, page: Int => [Ticket] ]
+ *                                      : 전문가 자신의 고객 조회 API
+ *    [ Mutation ]
+ *      createTicket                  [ context: any, specialistId: String => Ticket ]
+ *                                      : 전문가 ID로 티켓 구매 API
+ */
+
 @Resolver()
 export class TicketsResolver {
   constructor(

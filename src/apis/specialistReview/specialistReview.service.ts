@@ -16,10 +16,13 @@ export class SpecialistReviewsService {
     private readonly usersRepository: Repository<User>,
   ) {}
 
-  async findAllWithSpecialistId({ specialistId }) {
+  async findAllWithSpecialistId({ specialistId, page }) {
     return await this.specialistReviewsRepository.find({
       where: { specialist: { id: specialistId } },
       relations: ['user'],
+      order: { createdAt: 'DESC' },
+      take: 10,
+      skip: page ? (page - 1) * 10 : 0,
     });
   }
 

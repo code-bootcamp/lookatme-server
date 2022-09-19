@@ -9,6 +9,35 @@ import { UpdateUnderCommentInput } from './dto/updateUnderComment.input';
 import { UnderComment } from './entity/underComment.entity';
 import { UnderCommentsService } from './underComment.service';
 
+/**
+ *  Description : API docs for ticket setting
+ *  Constructor : TicketsService
+ *  Content :
+ *    [ Query ]
+ *      fetchUnderCommentsWithCommentId
+ *            [ commentId: String => UnderComment ]
+ *              : 댓글에 달린 대댓글 조회 API
+ *      fetchReportedUnderComments
+ *            [ None => [UnderComment] ]
+ *              : 신고 대댓글 조회 API
+ *    [ Mutation ]
+ *      createUnderComment
+ *            [ context: any, createUnderCommentInput: CreateUnderCommentInput => UnderComment ]
+ *              : 대댓글 등록 API
+ *      updateOwnUnderComment
+ *            [ context:any, updateUnderCommentInput: UpdateUnderCommentInput => UnderComment ]
+ *              : 자신의 대댓글 수정 API
+ *      deleteOwnUnderComment
+ *            [ context: any, underCommentId: String => Boolean ]
+ *              : 자신의 대댓글 삭제 API
+ *      deleteReportedUnderComment
+ *            [ context: any, underCommentId: String => Boolean ]
+ *              : 신고된 대댓글 삭제 API
+ *      reportUnderComment
+ *            [ underCommentId: String => Boolean ]
+ *              : 대댓글 신고 API
+ */
+
 @Resolver()
 export class UnderCommentsResolver {
   constructor(

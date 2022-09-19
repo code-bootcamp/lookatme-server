@@ -15,23 +15,31 @@ import { SpecialistCommentsService } from './specialistComments.service';
  *  Constructor : SpecialistCommentsService
  *  Content :
  *    [ Query ]
- *      fetchSpecialistCommentsWithStoryId    [ storyId: String, page: Int => [SpecialistComment] ]
- *                                              : 사연에 달린 전문가 답변 조회 API
- *      fetchSpecialistOwnComments            [ context: any, page: Int => [SpecialistComment] ]
- *                                              : 전문가 자신의 답변들 조회 API
- *      fetchReportedSpecialistComments       [ page: Int => [SpecialistComment] ]
- *                                              : 신고된 전문가 답변 전체 조회 API
+ *      fetchSpecialistCommentsWithStoryId
+ *          [ storyId: String, page: Int => [SpecialistComment] ]
+ *            : 사연에 달린 전문가 답변 조회 API
+ *      fetchSpecialistOwnComments
+ *          [ context: any, page: Int => [SpecialistComment] ]
+ *            : 전문가 자신의 답변들 조회 API
+ *      fetchReportedSpecialistComments
+ *          [ page: Int => [SpecialistComment] ]
+ *            : 신고된 전문가 답변 전체 조회 API
  *    [ Mutation ]
- *      createSpecialistComment               [ context: any, createSpecialistCommentInput: CreateSpecialistCommentInput => SpecialistComment ]
- *                                              : 전문가 답변 등록 API
- *      updateSpecialistOwnComment            [ context: any, updateSpecialistCommentInput: UpdateSpecialistCommentInput => SpecialistComment ]
- *                                              : 전문가 자신의 답변 수정 API
- *      deleteSpecialistOwnComment            [ specialistCommentId: String => Boolean ]
- *                                              : 전문가 자신의 답변 삭제 API
- *      deleteReportedSpecialistComment       [ specialistCommentId: String => Boolean ]
- *                                              : 신고된 전문가 답변 삭제 API
- *      reportSpecialistComment               [ specialistCommentId: String => Boolean ]
- *                                              : 전문가 답변 신고 API
+ *      createSpecialistComment
+ *          [ context: any, createSpecialistCommentInput: CreateSpecialistCommentInput => SpecialistComment ]
+ *            : 전문가 답변 등록 API
+ *      updateSpecialistOwnComment
+ *          [ context: any, updateSpecialistCommentInput: UpdateSpecialistCommentInput => SpecialistComment ]
+ *            : 전문가 자신의 답변 수정 API
+ *      deleteSpecialistOwnComment
+ *          [ specialistCommentId: String => Boolean ]
+ *            : 전문가 자신의 답변 삭제 API
+ *      deleteReportedSpecialistComment
+ *          [ specialistCommentId: String => Boolean ]
+ *            : 신고된 전문가 답변 삭제 API
+ *      reportSpecialistComment
+ *          [ specialistCommentId: String => Boolean ]
+ *            : 전문가 답변 신고 API
  */
 
 @Resolver()

@@ -22,8 +22,6 @@ export class SpecialistReview {
   @Field(() => String)
   text: string;
 
-  // @Min(0)
-  // @Max(5)
   @Column({ type: 'float', nullable: false })
   @Field(() => Float)
   rate: number;
