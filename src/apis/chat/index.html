@@ -21,8 +21,6 @@
 			const ticketId = prompt('입장할 이용권의 코드를 적어주세요.');
 			const isSpecialist = prompt('전문가인가요? (y/n)');
 
-			console.log(isSpecialist)
-
 			if (isSpecialist === 'n') {
 				socket.emit('user_enter', ticketId);
 			} else if (isSpecialist === 'y') {
