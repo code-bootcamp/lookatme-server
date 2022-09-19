@@ -46,7 +46,6 @@ export class User {
   @Field(() => [Story])
   likedStories: Story[];
 
-  @JoinTable()
   @ManyToMany(() => Comment, (likedComments) => likedComments.likedUsers)
   @Field(() => [Comment])
   likedComments: Comment[];
