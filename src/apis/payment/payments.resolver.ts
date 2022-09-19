@@ -6,6 +6,20 @@ import { IamportsService } from '../iamport/iamports.service';
 import { Payment } from './entities/payment.entity';
 import { PaymentsService } from './payments.service';
 
+/**
+ *  Description : API docs for payment process
+ *  Constructor : PaymentsService, IamportsService
+ *  Content :
+ *    [ Query ]
+ *      fetchPayments       [ context: IContext, page: Int => [Payment] ]
+ *                            : 결제 기록 조회 API
+ *    [ Mutation ]
+ *      createPayment       [ impUid: String, amount: Int, context: IContext => Payment ]
+ *                            : 결제 등록하기 API
+ *      cancelPayment       [ impUid: String, amount: Int, reason: String, context: IContext => Payment ]
+ *                            : 결제 취소하기 API
+ */
+
 @Resolver()
 export class PaymentsResolver {
   constructor(
@@ -14,7 +28,7 @@ export class PaymentsResolver {
   ) {}
 
   @UseGuards(GqlAuthAccessGuard)
-  @Query(() => [Payment], { description: '결제 목록 조회' })
+  @Query(() => [Payment], { description: '결제 기록 조회' })
   fetchPayments(
     @Context() context: IContext, //
     @Args({ name: 'page', type: () => Int }) page: number, //

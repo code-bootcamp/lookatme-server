@@ -9,6 +9,32 @@ import { CreateCommentInput } from './dto/createComment.input';
 import { Comment } from './entities/comment.entity';
 import { UpdateCommentInput } from './dto/updateComment.input';
 
+/**
+ *  Description : API docs for comments setting
+ *  Constructor : CommentsService
+ *  Content :
+ *    [ Query ]
+ *      fetchCommentsWithStoryId        [ ticketId: string => [ChatList] ]
+ *                                        : 사연에 달린 댓글들 조회 API
+ *      fetchOwnComments                [ context: any, page: Int => [Comment] ]
+ *                                        : 자신의 댓글 목록 조회 API
+ *      fetchReportedComments           [ page: Int => [Comment] ]
+ *                                        : 신고 댓글 전체 조회 API
+ *    [ Mutation ]
+ *      createComment                   [ context: any, createCoommentsService: CreateCommentInput => Comment ]
+ *                                        : 유저 댓글 등록 API
+ *      updateComment                   [ context: any, updateCommentInput: UpdateCommentInput => Comment ]
+ *                                        : 유저 댓글 수정 API
+ *      deleteOwnComment                [ context: any, id: String => Boolean ]
+ *                                        : 유저 댓글 삭제 API
+ *      deleteReportedComment           [ id: String => Boolean ]
+ *                                        : 신고 댓글 삭제 API
+ *      reportComment                   [ commentId: String => Boolean ]
+ *                                        : 댓글 신고 API
+ *      likeComment                     [ context: any, commentId: String => Comment ]
+ *                                        : 댓글 좋아요 / 좋아요 취소 API
+ */
+
 @Resolver()
 export class CommentsResolver {
   constructor(
@@ -86,7 +112,7 @@ export class CommentsResolver {
   }
 
   @UseGuards(GqlAuthAccessGuard)
-  @Mutation(() => Comment, { description: '댓글 좋아요' })
+  @Mutation(() => Comment, { description: '댓글 좋아요 / 좋아요 취소' })
   async likeComment(
     @Context() context: any, //
     @Args('commentId') commentId: string,
@@ -94,14 +120,4 @@ export class CommentsResolver {
     const userId = context.req.user.id;
     return await this.commentsService.like({ userId, commentId });
   }
-
-  // @UseGuards(GqlAuthAccessGuard)
-  // @Mutation(() => Comment, { description: '댓글 좋아요 취소' })
-  // async deleteLikeComment(
-  //   @Context() context: any, //
-  //   @Args('commentId') commentId: string,
-  // ) {
-  //   const userId = context.req.user.id;
-  //   return this.commentsService.undoLike({ userId, commentId });
-  // }
 }

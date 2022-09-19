@@ -2,6 +2,15 @@ import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { FileUpload, GraphQLUpload } from 'graphql-upload';
 import { FileService } from './files.service';
 
+/**
+ *  Description : API docs for file setting
+ *  Constructor : FileService
+ *  Content :
+ *    [ Mutation ]
+ *      uploadFile        [ file: [GraphQLUpload] => String ]
+ *                          : 이미지 업로드 API
+ */
+
 @Resolver()
 export class FileResolver {
   constructor(

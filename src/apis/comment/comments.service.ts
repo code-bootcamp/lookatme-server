@@ -1,4 +1,4 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Story } from '../story/entities/story.entity';
@@ -139,28 +139,4 @@ export class CommentsService {
 
     return result;
   }
-
-  // async undoLike({ userId, commentId }) {
-  //   const commentToUndoLike = await this.commentsRepository.findOne({
-  //     where: { id: commentId },
-  //     relations: ['likedUsers'],
-  //   });
-
-  //   if (commentToUndoLike.likedUsers.every((el) => el.id !== userId)) {
-  //     throw new ConflictException('좋아요를 누르지 않은 사연입니다.');
-  //   }
-
-  //   const likedUsers = commentToUndoLike.likedUsers.filter(
-  //     (el) => el.id !== userId,
-  //   );
-
-  //   const result = this.commentsRepository.save({
-  //     ...commentToUndoLike,
-  //     id: commentId,
-  //     likedUsers,
-  //     likes: likedUsers.length,
-  //   });
-
-  //   return result;
-  // }
 }

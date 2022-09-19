@@ -6,6 +6,28 @@ import { UpdateQuoteInput } from './dto/updateQuote.input';
 import { Quote } from './entities/quote.entity';
 import { QuoteService } from './quotes.service';
 
+/**
+ *  Description : API docs for quote setting
+ *  Constructor : QuoteService
+ *  Content :
+ *    [ Query ]
+ *      fetchQuotes               [ page: Int => [Quote] ]
+ *                                  : 명언 전체 목록 조회 API
+ *      fetchQuote                [ id: String => Quote ]
+ *                                  : ID로 명언 조회 API
+ *      fetchSelectedQuote        [ None => Quote ]
+ *                                  : /batches/start/quote API로 선택된 명언 조회
+ *    [ Mutation ]
+ *      createQuote               [ createQuoteInput: CreateQuoteInput => Quote ]
+ *                                  : 명언 등록 API
+ *      createQuoteList           [ None => [Quote] ]
+ *                                  : 디폴트 명언 목록 등록 API
+ *      updateQuote               [ id: String, createQuoteInputc: CreateQuoteInput => Quote ]
+ *                                  : 명언 수정 API
+ *      deleteQuote               [ id: String => Boolean ]
+ *                                  : 명언 삭제 API
+ */
+
 @Resolver()
 export class QuoteResolver {
   constructor(
@@ -21,12 +43,16 @@ export class QuoteResolver {
   }
 
   @UseGuards(GqlAuthAdminAccessGuard)
-  @Query(() => Quote, { description: '명언 조회' })
-  async fetchQuote(@Args('id') id: string) {
+  @Query(() => Quote, { description: 'ID로 명언 조회' })
+  async fetchQuote(
+    @Args('id') id: string, //
+  ) {
     return this.quoteService.findOne({ id });
   }
 
-  @Query(() => Quote, { description: '선택된 명언 조회' })
+  @Query(() => Quote, {
+    description: '/batches/start/quote API로 선택된 명언 조회',
+  })
   async fetchSelectedQuote() {
     return this.quoteService.findSelectedQuote();
   }
