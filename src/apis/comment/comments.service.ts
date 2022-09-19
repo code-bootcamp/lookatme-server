@@ -87,16 +87,19 @@ export class CommentsService {
     return result;
   }
 
-  async deleteOwn({ userId, id }) {
+  async deleteOwn({ userId, commentId }) {
     const user = await this.usersRepository.findOne({
       where: { id: userId },
     });
 
-    const result = await this.commentsRepository.softDelete({ id, user });
-
     const comment = await this.commentsRepository.findOne({
-      where: { id: id },
+      where: { id: commentId },
       relations: ['story'],
+    });
+
+    const result = await this.commentsRepository.delete({
+      id: commentId,
+      user,
     });
 
     await this.storiesRepository.update(
@@ -108,12 +111,12 @@ export class CommentsService {
   }
 
   async deleteReported({ id }) {
-    const result = await this.commentsRepository.softDelete({ id });
-
     const comment = await this.commentsRepository.findOne({
       where: { id: id },
       relations: ['story'],
     });
+
+    const result = await this.commentsRepository.delete({ id });
 
     await this.storiesRepository.update(
       { id: comment.story.id },

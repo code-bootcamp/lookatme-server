@@ -77,4 +77,29 @@ export class TicketsService {
 
     return result;
   }
+
+  async useTicket({ userId, ticketId }) {
+    const user = await this.usersRepository.findOne({
+      where: { id: userId },
+      relations: ['tickets'],
+    });
+
+    const userTicket = user.tickets;
+
+    if (userTicket.every((ele) => ele.id !== ticketId))
+      throw new ConflictException('해당 유저의 ticket이 아닙니다.');
+
+    const ticket = await this.ticketsRepository.findOne({
+      where: { id: ticketId },
+    });
+
+    if (ticket.used)
+      throw new ConflictException('이미 사용 완료된 티켓입니다.');
+
+    return this.ticketsRepository.save({
+      ...ticket,
+      id: ticketId,
+      used: true,
+    });
+  }
 }
