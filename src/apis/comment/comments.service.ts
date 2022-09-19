@@ -1,9 +1,8 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Story } from '../story/entities/story.entity';
 import { User } from '../user/entities/user.entity';
-import { UsersService } from '../user/users.service';
 import { Comment } from './entities/comment.entity';
 
 @Injectable()
@@ -11,11 +10,12 @@ export class CommentsService {
   constructor(
     @InjectRepository(Comment)
     private readonly commentsRepository: Repository<Comment>,
+
     @InjectRepository(Story)
     private readonly storiesRepository: Repository<Story>,
+
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
-    private readonly usersService: UsersService,
   ) {}
 
   async findAllWithStoryId({ storyId, page }) {
@@ -47,9 +47,11 @@ export class CommentsService {
 
   async create({ userId, createCommentInput }) {
     const { text, storyId } = createCommentInput;
+
     const user = await this.usersRepository.findOne({
       where: { id: userId },
     });
+
     const story = await this.storiesRepository.findOne({
       where: { id: storyId },
     });
@@ -59,8 +61,12 @@ export class CommentsService {
       story,
       user,
     });
-    console.log('====================');
-    console.log(result);
+
+    await this.storiesRepository.update(
+      { id: storyId },
+      { commentCounts: story.commentCounts + 1 },
+    );
+
     return result;
   }
 
@@ -70,7 +76,6 @@ export class CommentsService {
     const commentToUpdate = await this.commentsRepository.findOne({
       where: { id: commentId, user },
     });
-    console.log(user);
 
     const result = await this.commentsRepository.save({
       ...commentToUpdate,
@@ -79,20 +84,41 @@ export class CommentsService {
       user,
     });
 
-    console.log(result);
-
     return result;
   }
 
   async deleteOwn({ userId, id }) {
-    const user = await this.usersRepository.findOne({ where: { id: userId } });
+    const user = await this.usersRepository.findOne({
+      where: { id: userId },
+    });
+
     const result = await this.commentsRepository.softDelete({ id, user });
+
+    const comment = await this.commentsRepository.findOne({
+      where: { id: id },
+      relations: ['story'],
+    });
+
+    await this.storiesRepository.update(
+      { id: comment.story.id },
+      { commentCounts: comment.story.commentCounts - 1 },
+    );
 
     return result.affected ? true : false;
   }
 
   async deleteReported({ id }) {
     const result = await this.commentsRepository.softDelete({ id });
+
+    const comment = await this.commentsRepository.findOne({
+      where: { id: id },
+      relations: ['story'],
+    });
+
+    await this.storiesRepository.update(
+      { id: comment.story.id },
+      { commentCounts: comment.story.commentCounts - 1 },
+    );
 
     return result.affected ? true : false;
   }
@@ -139,28 +165,4 @@ export class CommentsService {
 
     return result;
   }
-
-  // async undoLike({ userId, commentId }) {
-  //   const commentToUndoLike = await this.commentsRepository.findOne({
-  //     where: { id: commentId },
-  //     relations: ['likedUsers'],
-  //   });
-
-  //   if (commentToUndoLike.likedUsers.every((el) => el.id !== userId)) {
-  //     throw new ConflictException('좋아요를 누르지 않은 사연입니다.');
-  //   }
-
-  //   const likedUsers = commentToUndoLike.likedUsers.filter(
-  //     (el) => el.id !== userId,
-  //   );
-
-  //   const result = this.commentsRepository.save({
-  //     ...commentToUndoLike,
-  //     id: commentId,
-  //     likedUsers,
-  //     likes: likedUsers.length,
-  //   });
-
-  //   return result;
-  // }
 }

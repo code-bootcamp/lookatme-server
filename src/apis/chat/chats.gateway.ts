@@ -51,7 +51,6 @@ export class ChatsGateway {
     @MessageBody() ticketId: string, //
     @ConnectedSocket() client,
   ) {
-    // 유저 닉네임 찾아오기
     const ticket = await this.ticketRepository.findOne({
       where: { id: ticketId },
       relations: ['specialist'],

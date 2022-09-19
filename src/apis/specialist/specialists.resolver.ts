@@ -13,6 +13,34 @@ import {
 } from 'src/commons/auth/gql-auth.guard';
 import { IContext } from 'src/commons/type/context';
 
+/**
+ *  Description : API docs for specialist setting
+ *  Constructor : SpecialistService
+ *  Content :
+ *    [ Query ]
+ *      fetchSpecialists              [ page: Int => [Specialist]] ]
+ *                                      : 전문가 전체 목록 조회 API
+ *      fetchSpecialist               [ id: String => Specialist ]
+ *                                      : ID로 명언 조회 API
+ *      fetchLoginSpecialist          [ context: any => Specialist ]
+ *                                      : 로그인한 전문가 자신의 프로필 조회 API
+ *      fetchSpecialistByPrice        [ page?: Int => [Specialist] ]
+ *                                      : 높은가격순 전문가 조회 API
+ *      fetchSpecialsitByRate         [ page?: Int => [Specialist] ]
+ *                                      : 별점순 전문가 조회 API
+ *      isSpecialist                  [ context: IContext => Boolean ]
+ *                                      : 전문가로 로그인했는지 확인 API
+ *    [ Mutation ]
+ *      createSpecialist              [ createSpecialistInput: CreateSpecialistInput => Specialist ]
+ *                                      : 전문가 등록 API
+ *      updateSpecialistOwnProfile    [ context: any, updateSpecialistInput: UpdateSpecialistInput => Specialist ]
+ *                                      : 전문가 자신의 정보 수정 API
+ *      deleteSpecialist              [ id: String => Boolean ]
+ *                                      : 전문가 소프트 삭제 API
+ *      restoreSpecialist             [ id: String => Boolean ]
+ *                                      : 삭제된 전문가 계정 복구 API
+ */
+
 @Resolver()
 export class SpecialistResolver {
   constructor(
@@ -26,8 +54,10 @@ export class SpecialistResolver {
     return this.specialistService.findAll({ page });
   }
 
-  @Query(() => Specialist, { description: '전문가 조회' })
-  async fetchSpecialist(@Args('id') id: string) {
+  @Query(() => Specialist, { description: 'ID로 전문가 조회' })
+  async fetchSpecialist(
+    @Args('id') id: string, //
+  ) {
     return this.specialistService.findOneWithId({ id });
   }
 
@@ -95,7 +125,7 @@ export class SpecialistResolver {
   }
 
   @UseGuards(GqlAuthAdminAccessGuard)
-  @Mutation(() => Boolean, { description: '전문가 삭제' })
+  @Mutation(() => Boolean, { description: '전문가 소프트 삭제' })
   deleteSpecialist(@Args('id') id: string) {
     return this.specialistService.delete({ id });
   }

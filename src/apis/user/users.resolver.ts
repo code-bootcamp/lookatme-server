@@ -22,6 +22,68 @@ import {
 import { IContext } from 'src/commons/type/context';
 import { Story } from '../story/entities/story.entity';
 
+/**
+ *  Description : API docs for user setting
+ *  Constructor : UsersService, Cache
+ *  Content :
+ *    [ Query ]
+ *      fetchUsers
+ *            [ page: Int => [User] ]
+ *              : 모든 회원 조회 API
+ *      fetchUserWithEmail
+ *            [ email: String => User ]
+ *              : 이메일로 회원 조회 API
+ *      fetchUserWithPhoneNumber
+ *            [ phoneNumber: String => User]
+ *              : 전화번호로 회원 조회 API
+ *      fetchLoginUser
+ *            [ context: any => User ]
+ *              : 로그인한 회원 정보 조회 API
+ *      fetchUsersWithDeleted
+ *            [ page: Int => [User] ]
+ *              : 삭제된 회원도 같이 조회 API
+ *      isUser
+ *            [ context: IContext => Boolean ]
+ *              : 회원으로 로그인했는지 확인 API
+ *      fetchOwnLikedStories
+ *            [ context: IContext, page: Int => [Story] ]
+ *              : 회원이 좋아요 누른 사연 조회 API
+ *    [ Mutation ]
+ *      createUser
+ *            [ createUserInput: CreateUserInput => User ]
+ *              : 회원 가입 및 환영 이메일 전송 API
+ *      updateUserWithAdminAccess
+ *            [ userId: String, updateUserWithAdminAccessInput: ㅕpdateUserWithAdminAccessInput => User ]
+ *              : 관리자 권한으로 회원정보 수정 API
+ *      updateUserPwd
+ *            [ context: any, newPassword: String => User ]
+ *              : 로그인한 회원 비밀번호 변경 API
+ *      updateUserPwdWithEmail
+ *            [ email: String, newPassword: String => User ]
+ *              : 이메일로 회원 비밀번호 변경 API
+ *      updateUser
+ *            [ context: any, updateUserInput: UpdateUserInput => User ]
+ *              : 로그인한 회원 정보 변경 APi
+ *      deleteUser
+ *            [ userId: String => Boolean ]
+ *              : 관리자 권한으로 회원 삭제 APi
+ *      deleteLoginUser
+ *            [ context: any => Boolean ]
+ *              : 로그인한 회원 탈퇴 APi
+ *      restoreUser
+ *            [ userId: String => Boolean ]
+ *              : 관리자 권한으로 삭제된 회원 복구 API
+ *      sendTokenToSMS
+ *            [ phoneNumber: String => String ]
+ *              : 토큰 보내기 API
+ *      checkToken
+ *            [ token: String, phoneNumber: String => Boolean ]
+ *              : 토큰 확인 API
+ *      updateUserPoint
+ *            [ userId: String, amount: Int, isSum: Boolean => User ]
+ *              : 무료 포인트 지급 API
+ */
+
 @Resolver()
 export class UsersResolver {
   constructor(
@@ -211,7 +273,9 @@ export class UsersResolver {
 
   @UseGuards(GqlAuthAdminAccessGuard)
   @Mutation(() => Boolean, { description: '관리자 권한으로 삭제된 회원 복구' })
-  restoreUser(@Args('userId') userId: string) {
+  restoreUser(
+    @Args('userId') userId: string, //
+  ) {
     return this.usersService.undoDelete({ userId });
   }
 
@@ -221,23 +285,22 @@ export class UsersResolver {
   ) {
     const token = this.usersService.getToken();
     // 배포환경
-    // const result = await this.usersService.sendToken({
-    //   phone_number: phoneNumber,
-    //   token,
-    // });
+    const result = await this.usersService.sendToken({
+      phone_number: phoneNumber,
+      token,
+    });
 
     await this.cacheManager.set(token, phoneNumber, {
       ttl: 180,
     });
 
     // 개발환경
-    return `phone:${phoneNumber} token:${token}`;
+    // return `phone:${phoneNumber} token:${token}`;
 
     // 배포환경
-    // if (result.statusCode === '2000')
-    //   // succeed
-    //   return `phone:${phoneNumber} token:${token}`;
-    // else return `${result.statusCode}: ${result.statusMessage}`;
+    if (result.statusCode === '2000')
+      return `phone:${phoneNumber} token:${token}`;
+    else return `${result.statusCode}: ${result.statusMessage}`;
   }
 
   @Mutation(() => Boolean, { description: '토큰 확인' })
