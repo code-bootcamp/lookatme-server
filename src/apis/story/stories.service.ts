@@ -136,7 +136,7 @@ export class StoryService {
 
     return this.storyRepository.find({
       where: { user: user },
-      relations: ['user'],
+      relations: ['user', 'category'],
       take: 10,
       skip: page ? (page - 1) * 10 : 0,
     });
