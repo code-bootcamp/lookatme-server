@@ -24,11 +24,11 @@ import { InjectRepository } from '@nestjs/typeorm';
  *  Constructor : Specialist, AuthsService, UsersService, AdminsService
  *  Content :
  *    [ Mutation ]
- *      login                 [ email: string, password: string, context: IContext, => String ]
+ *      login                 [ email: String, password: String, context: IContext, => String ]
  *                              : 일반 유저 로그인 API
- *      adminLogin            [ email: string, password: string, context: IContext, => String ]
+ *      adminLogin            [ email: String, password: String, context: IContext, => String ]
  *                              : 관리자 로그인 API
- *      specialistLogin       [ account: string, password: string, context: IContext, => String ]
+ *      specialistLogin       [ account: String, password: String, context: IContext, => String ]
  *                              : 전문가 로그인 API
  *      logout                [ context: IContext => String ]
  *                              : 모든 유저 로그아웃 API
