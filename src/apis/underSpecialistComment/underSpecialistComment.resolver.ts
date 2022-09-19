@@ -5,6 +5,20 @@ import { CreateUnderSpecialistCommentInput } from './dto/createUnderSpecialistCo
 import { UnderSpecialistComment } from './entities/underSpecialistComment.entity';
 import { UnderSpecialistCommentsService } from './underSpecialistComment.service';
 
+/**
+ *  Description : API docs for specailist's under comment setting
+ *  Constructor : UnderSpecialistCommentsService
+ *  Content :
+ *    [ Query ]
+ *      fetchUnderSpecialistCommentWithId
+ *            [ specialistCommentId: String => [UnderSpecialistComment] ]
+ *              : 전문가 답변에 달린 대댓글 조회 API
+ *    [ Mutation ]
+ *      createUnderSpecialistComment
+ *            [ context: any, createUnderSpecialistCommentInput: CreateUnderSpecialistCommentInput => UnderSpecialistComment ]
+ *              : 전문가 답변 대댓글 등록
+ */
+
 @Resolver()
 export class UnderSpecialistCommentsResolver {
   constructor(
