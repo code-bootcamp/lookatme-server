@@ -286,24 +286,24 @@ export class StoryService {
     });
   }
 
-  async userUndoLikeStory({ userId, storyId }) {
-    const story = await this.storyRepository.findOne({
-      where: { id: storyId },
-      relations: ['likedusers'],
-    });
+  // async userUndoLikeStory({ userId, storyId }) {
+  //   const story = await this.storyRepository.findOne({
+  //     where: { id: storyId },
+  //     relations: ['likedusers'],
+  //   });
 
-    if (story.likedusers.every((el) => el.id !== userId))
-      throw new ConflictException('좋아요를 누르시지 않은 사연입니다.');
+  //   if (story.likedusers.every((el) => el.id !== userId))
+  //     throw new ConflictException('좋아요를 누르시지 않은 사연입니다.');
 
-    const usersArray = story.likedusers.filter((el) => el.id !== userId);
+  //   const usersArray = story.likedusers.filter((el) => el.id !== userId);
 
-    return this.storyRepository.save({
-      ...story,
-      id: storyId,
-      likedusers: usersArray,
-      likes: usersArray.length,
-    });
-  }
+  //   return this.storyRepository.save({
+  //     ...story,
+  //     id: storyId,
+  //     likedusers: usersArray,
+  //     likes: usersArray.length,
+  //   });
+  // }
 
   async report({ storyId }) {
     const storyToReport = await this.storyRepository.findOne({

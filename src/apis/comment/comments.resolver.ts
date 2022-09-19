@@ -95,13 +95,13 @@ export class CommentsResolver {
     return await this.commentsService.like({ userId, commentId });
   }
 
-  @UseGuards(GqlAuthAccessGuard)
-  @Mutation(() => Comment, { description: '댓글 좋아요 취소' })
-  async deleteLikeComment(
-    @Context() context: any, //
-    @Args('commentId') commentId: string,
-  ) {
-    const userId = context.req.user.id;
-    return this.commentsService.undoLike({ userId, commentId });
-  }
+  // @UseGuards(GqlAuthAccessGuard)
+  // @Mutation(() => Comment, { description: '댓글 좋아요 취소' })
+  // async deleteLikeComment(
+  //   @Context() context: any, //
+  //   @Args('commentId') commentId: string,
+  // ) {
+  //   const userId = context.req.user.id;
+  //   return this.commentsService.undoLike({ userId, commentId });
+  // }
 }

@@ -120,12 +120,15 @@ export class CommentsService {
     const likedUsers = commentToLike.likedUsers;
 
     if (likedUsers.some((el) => el.id === userId)) {
-      throw new ConflictException('이미 좋아요를 누른 댓글입니다.');
+      const likeUser = likedUsers.find((el) => el.id === userId);
+      const idx = likedUsers.indexOf(likeUser);
+      likedUsers.splice(idx, 1);
+    } else {
+      const user = await this.usersRepository.findOne({
+        where: { id: userId },
+      });
+      likedUsers.push(user);
     }
-
-    const user = await this.usersService.findOneWithId({ userId });
-
-    likedUsers.push(user);
 
     const result = await this.commentsRepository.save({
       ...commentToLike,
@@ -137,27 +140,27 @@ export class CommentsService {
     return result;
   }
 
-  async undoLike({ userId, commentId }) {
-    const commentToUndoLike = await this.commentsRepository.findOne({
-      where: { id: commentId },
-      relations: ['likedUsers'],
-    });
+  // async undoLike({ userId, commentId }) {
+  //   const commentToUndoLike = await this.commentsRepository.findOne({
+  //     where: { id: commentId },
+  //     relations: ['likedUsers'],
+  //   });
 
-    if (commentToUndoLike.likedUsers.every((el) => el.id !== userId)) {
-      throw new ConflictException('좋아요를 누르지 않은 사연입니다.');
-    }
+  //   if (commentToUndoLike.likedUsers.every((el) => el.id !== userId)) {
+  //     throw new ConflictException('좋아요를 누르지 않은 사연입니다.');
+  //   }
 
-    const likedUsers = commentToUndoLike.likedUsers.filter(
-      (el) => el.id !== userId,
-    );
+  //   const likedUsers = commentToUndoLike.likedUsers.filter(
+  //     (el) => el.id !== userId,
+  //   );
 
-    const result = this.commentsRepository.save({
-      ...commentToUndoLike,
-      id: commentId,
-      likedUsers,
-      likes: likedUsers.length,
-    });
+  //   const result = this.commentsRepository.save({
+  //     ...commentToUndoLike,
+  //     id: commentId,
+  //     likedUsers,
+  //     likes: likedUsers.length,
+  //   });
 
-    return result;
-  }
+  //   return result;
+  // }
 }
