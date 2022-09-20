@@ -35,8 +35,6 @@ import { IContext } from 'src/commons/type/context';
  *                                      : 전문가 등록 API
  *      updateSpecialistOwnProfile    [ context: any, updateSpecialistInput: UpdateSpecialistInput => Specialist ]
  *                                      : 전문가 자신의 정보 수정 API
- *      deleteSpecialist              [ id: String => Boolean ]
- *                                      : 전문가 삭제 API
  */
 
 @Resolver()
