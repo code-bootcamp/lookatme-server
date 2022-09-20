@@ -85,14 +85,6 @@ export class UsersService {
     return result;
   }
 
-  findWithDeleted({ page }) {
-    return this.userRepository.find({
-      withDeleted: true,
-      take: 10,
-      skip: page ? (page - 1) * 10 : 0,
-    });
-  }
-
   async isUser({ user }) {
     const result = await this.userRepository.findOne({
       where: { id: user.id, email: user.email },
