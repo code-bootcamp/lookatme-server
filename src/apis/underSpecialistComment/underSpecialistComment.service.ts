@@ -19,7 +19,7 @@ export class UnderSpecialistCommentsService {
   async findAllUnderSpecialistCommentWithId({ specialistCommentId }) {
     return await this.underSpecialistCommentsRepository.find({
       where: { specialistComment: { id: specialistCommentId } },
-      relations: ['user'],
+      relations: ['user', 'specialistComment'],
     });
   }
 
@@ -48,13 +48,21 @@ export class UnderSpecialistCommentsService {
     const underSpecialistComment =
       await this.underSpecialistCommentsRepository.findOne({
         where: { id: underSpecialistCommentId, user: { id: userId } },
+        relations: ['specialistComment'],
       });
+
+    const specialistCommentId = underSpecialistComment.specialistComment.id;
+
+    const specialistComment = await this.specialistCommentsRepository.findOne({
+      where: { id: specialistCommentId },
+    });
 
     const result = await this.underSpecialistCommentsRepository.save({
       ...underSpecialistComment,
       id: underSpecialistCommentId,
       contents,
       user,
+      specialistComment,
     });
 
     return result;
