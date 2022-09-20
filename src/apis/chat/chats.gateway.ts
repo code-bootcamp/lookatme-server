@@ -28,7 +28,7 @@ export class ChatsGateway {
   @WebSocketServer()
   server: Server;
 
-  wsClients = [];
+  // wsClients = [];
 
   @SubscribeMessage('user_enter')
   async connectUser(
@@ -40,10 +40,14 @@ export class ChatsGateway {
       relations: ['user'],
     });
 
-    const receive = `${ticket.user.nickname}님이 입장했습니다.`;
+    const nickname = ticket.user.nickname;
+    const message = `${nickname}님이 입장했습니다.`;
 
-    this.server.emit('receive' + ticketId, receive);
-    this.wsClients.push(client);
+    client.join(ticketId);
+    this.server
+      .to(ticketId)
+      .emit('receive', { nickname, message, sender: 'user', type: 'enter' });
+    // this.wsClients.push(client);
   }
 
   @SubscribeMessage('specialist_enter')
@@ -56,18 +60,25 @@ export class ChatsGateway {
       relations: ['specialist'],
     });
 
-    const receive = `${ticket.specialist.name}님이 입장했습니다.`;
+    const nickname = ticket.specialist.name;
+    const message = `${nickname}님이 입장했습니다.`;
 
-    this.server.emit('receive' + ticketId, receive);
-    this.wsClients.push(client);
+    client.join(ticketId);
+    this.server.to(ticketId).emit('receive', {
+      nickname,
+      message,
+      sender: 'specialist',
+      type: 'enter',
+    });
+    // this.wsClients.push(client);
   }
 
-  private broadcast(event, client, message: any) {
-    for (const c of this.wsClients) {
-      if (client.id == c.id) continue;
-      c.emit(event, message);
-    }
-  }
+  // private broadcast(event, client, message: any) {
+  //   for (const c of this.wsClients) {
+  //     if (client.id == c.id) continue;
+  //     c.emit(event, message);
+  //   }
+  // }
 
   @SubscribeMessage('user_send')
   async sendUserMessage(
@@ -83,7 +94,11 @@ export class ChatsGateway {
 
     const nickname = result.user.nickname;
 
-    this.broadcast(ticketId, client, [nickname, message, 'user']);
+    // this.broadcast(ticketId, client, [nickname, message, 'user']);
+    client.join(ticketId);
+    this.server
+      .to(ticketId)
+      .emit('receive', { nickname, message, sender: 'user', type: 'send' });
   }
 
   @SubscribeMessage('specialist_send')
@@ -100,6 +115,13 @@ export class ChatsGateway {
 
     const nickname = result.specialist.name;
 
-    this.broadcast(ticketId, client, [nickname, message, 'specialist']);
+    // this.broadcast(ticketId, client, [nickname, message, 'specialist']);
+    client.join(ticketId);
+    this.server.to(ticketId).emit('receive', {
+      nickname,
+      message,
+      sender: 'specialist',
+      type: 'send',
+    });
   }
 }
