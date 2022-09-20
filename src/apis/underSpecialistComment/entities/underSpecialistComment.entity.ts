@@ -31,12 +31,12 @@ export class UnderSpecialistComment {
   updatedAt: Date;
 
   @JoinColumn()
-  @ManyToOne(() => SpecialistComment)
+  @ManyToOne(() => SpecialistComment, { onDelete: 'CASCADE' })
   @Field(() => SpecialistComment)
   specialistComment: SpecialistComment;
 
   @JoinColumn()
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, { onDelete: 'CASCADE' })
   @Field(() => User)
   user: User;
 }

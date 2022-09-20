@@ -48,7 +48,7 @@ export class Comment {
   user: User;
 
   @JoinColumn()
-  @ManyToOne(() => Story)
+  @ManyToOne(() => Story, { onDelete: 'CASCADE' })
   @Field(() => Story)
   story: Story;
 
@@ -57,7 +57,9 @@ export class Comment {
   @Field(() => [User])
   likedUsers: User[];
 
-  @OneToMany(() => UnderComment, (underComments) => underComments.comment)
+  @OneToMany(() => UnderComment, (underComments) => underComments.comment, {
+    cascade: true,
+  })
   @Field(() => [UnderComment])
   underComments: UnderComment[];
 }

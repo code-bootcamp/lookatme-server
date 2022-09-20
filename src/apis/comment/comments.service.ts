@@ -100,15 +100,11 @@ export class CommentsService {
       where: { id: commentId },
       relations: ['story'],
     });
+    console.log(comment);
 
     const result = await this.commentsRepository.delete({
       id: commentId,
       user,
-    });
-
-    await this.underCommentsRepository.delete({
-      comment: { id: commentId },
-      user: { id: userId },
     });
 
     await this.storiesRepository.update(
