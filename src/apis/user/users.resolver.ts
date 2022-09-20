@@ -70,9 +70,6 @@ import { Story } from '../story/entities/story.entity';
  *      deleteLoginUser
  *            [ context: any => Boolean ]
  *              : 로그인한 회원 탈퇴 APi
- *      restoreUser
- *            [ userId: String => Boolean ]
- *              : 관리자 권한으로 삭제된 회원 복구 API
  *      sendTokenToSMS
  *            [ phoneNumber: String => String ]
  *              : 토큰 보내기 API
@@ -269,14 +266,6 @@ export class UsersResolver {
   ) {
     const userId = context.req.user.id;
     return this.usersService.delete({ userId });
-  }
-
-  @UseGuards(GqlAuthAdminAccessGuard)
-  @Mutation(() => Boolean, { description: '관리자 권한으로 삭제된 회원 복구' })
-  restoreUser(
-    @Args('userId') userId: string, //
-  ) {
-    return this.usersService.undoDelete({ userId });
   }
 
   @Mutation(() => String, { description: '토큰 보내기' })
