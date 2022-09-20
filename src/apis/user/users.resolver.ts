@@ -39,9 +39,6 @@ import { Story } from '../story/entities/story.entity';
  *      fetchLoginUser
  *            [ context: any => User ]
  *              : 로그인한 회원 정보 조회 API
- *      fetchUsersWithDeleted
- *            [ page: Int => [User] ]
- *              : 삭제된 회원도 같이 조회 API
  *      isUser
  *            [ context: IContext => Boolean ]
  *              : 회원으로 로그인했는지 확인 API
@@ -70,9 +67,6 @@ import { Story } from '../story/entities/story.entity';
  *      deleteLoginUser
  *            [ context: any => Boolean ]
  *              : 로그인한 회원 탈퇴 APi
- *      restoreUser
- *            [ userId: String => Boolean ]
- *              : 관리자 권한으로 삭제된 회원 복구 API
  *      sendTokenToSMS
  *            [ phoneNumber: String => String ]
  *              : 토큰 보내기 API
@@ -124,14 +118,6 @@ export class UsersResolver {
   ) {
     const email = context.req.user.email;
     return this.usersService.findOneWithEmail({ email });
-  }
-
-  @UseGuards(GqlAuthAdminAccessGuard)
-  @Query(() => [User], { description: '삭제된 회원도 같이 조회' })
-  fetchUsersWithDeleted(
-    @Args({ name: 'page', type: () => Int }) page: number, //
-  ) {
-    return this.usersService.findWithDeleted({ page });
   }
 
   @UseGuards(GqlAuthAccessGuard)
@@ -269,14 +255,6 @@ export class UsersResolver {
   ) {
     const userId = context.req.user.id;
     return this.usersService.delete({ userId });
-  }
-
-  @UseGuards(GqlAuthAdminAccessGuard)
-  @Mutation(() => Boolean, { description: '관리자 권한으로 삭제된 회원 복구' })
-  restoreUser(
-    @Args('userId') userId: string, //
-  ) {
-    return this.usersService.undoDelete({ userId });
   }
 
   @Mutation(() => String, { description: '토큰 보내기' })

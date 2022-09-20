@@ -83,7 +83,7 @@ export class ChatsGateway {
 
     const nickname = result.user.nickname;
 
-    this.broadcast(ticketId, client, [nickname, message]);
+    this.broadcast(ticketId, client, [nickname, message, 'user']);
   }
 
   @SubscribeMessage('specialist_send')
@@ -100,6 +100,6 @@ export class ChatsGateway {
 
     const nickname = result.specialist.name;
 
-    this.broadcast(ticketId, client, [nickname, message]);
+    this.broadcast(ticketId, client, [nickname, message, 'specialist']);
   }
 }

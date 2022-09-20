@@ -9,12 +9,36 @@ import { User } from './entities/user.entity';
 import * as coolsms from 'coolsms-node-sdk';
 import * as nodemailer from 'nodemailer';
 import { getToday } from 'src/commons/libraries/utills';
+import { UnderSpecialistComment } from '../underSpecialistComment/entities/underSpecialistComment.entity';
+import { Story } from '../story/entities/story.entity';
+import { Ticket } from '../ticket/entities/ticket.entity';
+import { Comment } from '../comment/entities/comment.entity';
+import { UnderComment } from '../underComment/entity/underComment.entity';
+import { StoryImage } from '../storyImage/entities/storyImage.entity';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+
+    @InjectRepository(Story)
+    private readonly storyRepository: Repository<Story>,
+
+    @InjectRepository(Ticket)
+    private readonly ticketRepository: Repository<Ticket>,
+
+    @InjectRepository(UnderSpecialistComment)
+    private readonly underSpecialistCommentRepository: Repository<UnderSpecialistComment>,
+
+    @InjectRepository(Comment)
+    private readonly commentRepository: Repository<Comment>,
+
+    @InjectRepository(UnderComment)
+    private readonly underCommentRepository: Repository<UnderComment>,
+
+    @InjectRepository(StoryImage)
+    private readonly storyImageRepository: Repository<StoryImage>,
   ) {}
 
   findAll({ page }) {
@@ -59,14 +83,6 @@ export class UsersService {
       throw new UnprocessableEntityException('존재하지 않는 user_id값 입니다.');
 
     return result;
-  }
-
-  findWithDeleted({ page }) {
-    return this.userRepository.find({
-      withDeleted: true,
-      take: 10,
-      skip: page ? (page - 1) * 10 : 0,
-    });
   }
 
   async isUser({ user }) {
@@ -178,31 +194,40 @@ export class UsersService {
   async delete({ userId }) {
     const myuser = await this.userRepository.findOne({
       where: { id: userId },
+      relations: ['comments', 'likedStories', 'likedComments', 'stories'],
     });
 
     if (!myuser)
       throw new UnprocessableEntityException('존재하지 않는 user_id 입니다');
 
-    const result = await this.userRepository.softDelete({
-      id: userId,
+    await this.ticketRepository.delete({ user: myuser });
+
+    const storiesId = myuser.stories.map((ele) => ele.id);
+    const commentsId = myuser.comments.map((ele) => ele.id);
+
+    await Promise.all(
+      storiesId.map((ele) =>
+        this.storyImageRepository.delete({ story: { id: ele } }),
+      ),
+    );
+
+    await Promise.all(
+      commentsId.map((ele) => this.commentRepository.delete({ id: ele })),
+    );
+
+    await this.underSpecialistCommentRepository.delete({
+      user: myuser,
     });
 
-    return result.affected ? true : false;
-  }
-
-  async undoDelete({ userId }) {
-    const myuser = await this.userRepository.findOne({
-      where: { id: userId },
-      relations: ['addresses'],
-      withDeleted: true,
+    await this.underCommentRepository.delete({
+      user: myuser,
     });
 
-    if (!myuser)
-      throw new UnprocessableEntityException(
-        '삭제 목록에 존재하지 않는 user_id 입니다',
-      );
+    await Promise.all(
+      storiesId.map((ele) => this.storyRepository.delete({ id: ele })),
+    );
 
-    const result = await this.userRepository.restore({
+    const result = await this.userRepository.delete({
       id: userId,
     });
 
