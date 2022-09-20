@@ -37,13 +37,14 @@ export class SpecialistComment {
   specialist: Specialist;
 
   @JoinColumn()
-  @ManyToOne(() => Story)
+  @ManyToOne(() => Story, { onDelete: 'CASCADE' })
   @Field(() => Story)
   story: Story;
 
   @OneToMany(
     () => UnderSpecialistComment,
     (underSpecialistComments) => underSpecialistComments.specialistComment,
+    { cascade: true },
   )
   @Field(() => [UnderSpecialistComment])
   underSpecialistComments: UnderSpecialistComment[];

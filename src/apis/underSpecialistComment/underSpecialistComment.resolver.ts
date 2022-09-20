@@ -60,7 +60,7 @@ export class UnderSpecialistCommentsResolver {
   })
   async updateUnderSpecialistComment(
     @Context() context: any, //
-    @Args('updateSpecialistCommentInput')
+    @Args('updateUnderSpecialistCommentInput')
     updateUnderSpecialistCommentInput: UpdateUnderSpecialistCommentInput,
   ) {
     const userId = context.req.user.id;

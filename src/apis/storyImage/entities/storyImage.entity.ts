@@ -24,7 +24,7 @@ export class StoryImage {
   deletedAt: Date;
 
   @JoinColumn()
-  @ManyToOne(() => Story)
+  @ManyToOne(() => Story, { onDelete: 'CASCADE' })
   @Field(() => Story)
   story: Story;
 }

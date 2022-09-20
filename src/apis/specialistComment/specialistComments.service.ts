@@ -84,15 +84,16 @@ export class SpecialistCommentsService {
     return result;
   }
 
-  async deleteSpecialistOwn({ specialistCommentId }) {
-    const result = await this.specialistCommentsRepository.softDelete({
+  async deleteSpecialistOwn({ specialistCommentId, specialistId }) {
+    const result = await this.specialistCommentsRepository.delete({
       id: specialistCommentId,
+      specialist: { id: specialistId },
     });
     return result.affected ? true : false;
   }
 
   async deleteReported({ id }) {
-    const result = await this.specialistCommentsRepository.softDelete({ id });
+    const result = await this.specialistCommentsRepository.delete({ id });
     return result.affected ? true : false;
   }
 

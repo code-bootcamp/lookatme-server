@@ -194,38 +194,10 @@ export class UsersService {
   async delete({ userId }) {
     const myuser = await this.userRepository.findOne({
       where: { id: userId },
-      relations: ['comments', 'likedStories', 'likedComments', 'stories'],
     });
 
     if (!myuser)
       throw new UnprocessableEntityException('존재하지 않는 user_id 입니다');
-
-    await this.ticketRepository.delete({ user: myuser });
-
-    const storiesId = myuser.stories.map((ele) => ele.id);
-    const commentsId = myuser.comments.map((ele) => ele.id);
-
-    await Promise.all(
-      storiesId.map((ele) =>
-        this.storyImageRepository.delete({ story: { id: ele } }),
-      ),
-    );
-
-    await Promise.all(
-      commentsId.map((ele) => this.commentRepository.delete({ id: ele })),
-    );
-
-    await this.underSpecialistCommentRepository.delete({
-      user: myuser,
-    });
-
-    await this.underCommentRepository.delete({
-      user: myuser,
-    });
-
-    await Promise.all(
-      storiesId.map((ele) => this.storyRepository.delete({ id: ele })),
-    );
 
     const result = await this.userRepository.delete({
       id: userId,

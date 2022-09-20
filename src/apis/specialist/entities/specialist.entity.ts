@@ -1,5 +1,4 @@
 import { Field, ObjectType, Int, Float } from '@nestjs/graphql';
-import { Max, Min } from 'class-validator';
 import { SpecialistComment } from 'src/apis/specialistComment/entities/specialistComment.entity';
 import { SpecialistReview } from 'src/apis/specialistReview/entities/specialistReview.entity';
 import { Ticket } from 'src/apis/ticket/entities/ticket.entity';
@@ -43,8 +42,6 @@ export class Specialist {
   @Field(() => Int)
   price: number;
 
-  @Min(0)
-  @Max(5)
   @Column({ type: 'float', nullable: false, default: 0 })
   @Field(() => Float)
   averageRate: number;

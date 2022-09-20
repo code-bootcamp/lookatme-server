@@ -35,12 +35,12 @@ export class UnderComment {
   updatedAt: Date;
 
   @JoinColumn()
-  @ManyToOne(() => Comment)
+  @ManyToOne(() => Comment, { onDelete: 'CASCADE' })
   @Field(() => Comment)
   comment: Comment;
 
   @JoinColumn()
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, { onDelete: 'CASCADE' })
   @Field(() => User)
   user: User;
 }

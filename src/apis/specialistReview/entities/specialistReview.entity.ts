@@ -6,9 +6,11 @@ import {
   CreateDateColumn,
   JoinColumn,
   ManyToOne,
+  OneToOne,
 } from 'typeorm';
 import { User } from 'src/apis/user/entities/user.entity';
 import { Specialist } from 'src/apis/specialist/entities/specialist.entity';
+import { Ticket } from 'src/apis/ticket/entities/ticket.entity';
 
 @Entity()
 @ObjectType()
@@ -37,4 +39,9 @@ export class SpecialistReview {
   @ManyToOne(() => Specialist)
   @Field(() => Specialist)
   specialist: Specialist;
+
+  @JoinColumn()
+  @OneToOne(() => Ticket, { onDelete: 'CASCADE' })
+  @Field(() => Ticket)
+  ticket: Ticket;
 }

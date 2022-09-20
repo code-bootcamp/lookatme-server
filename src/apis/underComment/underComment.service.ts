@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Comment } from '../comment/entities/comment.entity';
@@ -19,7 +19,7 @@ export class UnderCommentsService {
   async findAllWithCommentId({ commentId }) {
     return await this.underCommentsRepository.find({
       where: { comment: { id: commentId } },
-      relations: ['user'],
+      relations: ['user', 'comment'],
     });
   }
 
@@ -49,21 +49,34 @@ export class UnderCommentsService {
 
   async updateOwn({ userId, updateUnderCommentInput }) {
     const { contents, underCommentId } = updateUnderCommentInput;
-    const underCommentToUpdate = this.underCommentsRepository.findOne({
+    const underCommentToUpdate = await this.underCommentsRepository.findOne({
       where: { id: underCommentId, user: { id: userId } },
+      relations: ['comment'],
     });
+    const commentId = underCommentToUpdate.comment.id;
+
+    const comment = await this.commentsRepository.findOne({
+      where: { id: commentId },
+    });
+
+    if (underCommentToUpdate.comment.id !== comment.id) {
+      throw new UnprocessableEntityException(
+        '기존의 댓글id와 일치하지 않는 id값입니다.',
+      );
+    }
 
     const result = await this.underCommentsRepository.save({
       ...underCommentToUpdate,
       id: underCommentId,
       contents,
+      comment,
     });
 
     return result;
   }
 
   async deleteOwn({ userId, id }) {
-    const result = await this.underCommentsRepository.softDelete({
+    const result = await this.underCommentsRepository.delete({
       id,
       user: { id: userId },
     });
@@ -72,9 +85,8 @@ export class UnderCommentsService {
   }
 
   async deleteReported({ id }) {
-    const result = await this.underCommentsRepository.softDelete({
+    const result = await this.underCommentsRepository.delete({
       id,
-      isReported: true,
     });
 
     return result.affected ? true : false;
