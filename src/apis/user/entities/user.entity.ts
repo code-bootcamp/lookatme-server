@@ -5,7 +5,6 @@ import { Story } from 'src/apis/story/entities/story.entity';
 import { Ticket } from 'src/apis/ticket/entities/ticket.entity';
 import {
   Column,
-  DeleteDateColumn,
   Entity,
   ManyToMany,
   OneToMany,
@@ -37,9 +36,6 @@ export class User {
   @Column({ type: 'int', unsigned: true, default: 0, nullable: false })
   @Field(() => Int)
   point: number;
-
-  @DeleteDateColumn()
-  deletedAt: Date;
 
   @ManyToMany(() => Story, (likedStories) => likedStories.likedusers)
   @Field(() => [Story])

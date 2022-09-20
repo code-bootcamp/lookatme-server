@@ -2,7 +2,6 @@ import { Field, ObjectType } from '@nestjs/graphql';
 import {
   Column,
   CreateDateColumn,
-  DeleteDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -30,10 +29,6 @@ export class UnderSpecialistComment {
   @UpdateDateColumn()
   @Field(() => Date)
   updatedAt: Date;
-
-  @DeleteDateColumn()
-  @Field(() => Date)
-  deletedAt: Date;
 
   @JoinColumn()
   @ManyToOne(() => SpecialistComment)

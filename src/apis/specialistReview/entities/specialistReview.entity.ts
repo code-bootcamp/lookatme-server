@@ -4,7 +4,6 @@ import {
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
-  DeleteDateColumn,
   JoinColumn,
   ManyToOne,
 } from 'typeorm';
@@ -28,9 +27,6 @@ export class SpecialistReview {
 
   @CreateDateColumn()
   createdAt: Date;
-
-  @DeleteDateColumn()
-  deletedAt: Date;
 
   @JoinColumn()
   @ManyToOne(() => User)
