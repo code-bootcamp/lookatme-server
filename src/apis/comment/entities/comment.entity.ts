@@ -7,12 +7,14 @@ import {
   JoinTable,
   ManyToMany,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { User } from 'src/apis/user/entities/user.entity';
 import { Story } from 'src/apis/story/entities/story.entity';
+import { UnderComment } from 'src/apis/underComment/entity/underComment.entity';
 
 @Entity()
 @ObjectType()
@@ -58,4 +60,8 @@ export class Comment {
   @ManyToMany(() => User, (likedUsers) => likedUsers.likedComments)
   @Field(() => [User])
   likedUsers: User[];
+
+  @OneToMany(() => UnderComment, (underComments) => underComments.comment)
+  @Field(() => [UnderComment])
+  underComments: UnderComment[];
 }
