@@ -40,4 +40,32 @@ export class UnderSpecialistCommentsService {
 
     return result;
   }
+
+  async update({ userId, updateUnderSpecialistCommentInput }) {
+    const { contents, underSpecialistCommentId } =
+      updateUnderSpecialistCommentInput;
+    const user = await this.userRepository.findOne({ where: { id: userId } });
+    const underSpecialistComment =
+      await this.underSpecialistCommentsRepository.findOne({
+        where: { id: underSpecialistCommentId, user: { id: userId } },
+      });
+
+    const result = await this.underSpecialistCommentsRepository.save({
+      ...underSpecialistComment,
+      id: underSpecialistCommentId,
+      contents,
+      user,
+    });
+
+    return result;
+  }
+
+  async delete({ userId, underSpecialistCommentId }) {
+    const result = await this.underSpecialistCommentsRepository.delete({
+      id: underSpecialistCommentId,
+      user: { id: userId },
+    });
+
+    return result.affected ? true : false;
+  }
 }
