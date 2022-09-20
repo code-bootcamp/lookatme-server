@@ -19,6 +19,7 @@ export class UnderCommentsService {
   async findAllWithCommentId({ commentId }) {
     return await this.underCommentsRepository.find({
       where: { comment: { id: commentId } },
+      relations: ['user'],
     });
   }
 
