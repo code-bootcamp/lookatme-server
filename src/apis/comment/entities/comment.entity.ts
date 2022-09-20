@@ -1,7 +1,6 @@
 import {
   Column,
   CreateDateColumn,
-  DeleteDateColumn,
   Entity,
   JoinColumn,
   JoinTable,
@@ -42,9 +41,6 @@ export class Comment {
   @UpdateDateColumn()
   @Field(() => Date)
   updatedAt: Date;
-
-  @DeleteDateColumn()
-  deletedAt: Date;
 
   @JoinColumn()
   @ManyToOne(() => User)

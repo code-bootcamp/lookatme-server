@@ -7,7 +7,6 @@ import { User } from 'src/apis/user/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
-  DeleteDateColumn,
   Entity,
   JoinColumn,
   JoinTable,
@@ -51,9 +50,6 @@ export class Story {
 
   @UpdateDateColumn()
   updatedAt: Date;
-
-  @DeleteDateColumn()
-  deletedAt: Date;
 
   @JoinTable()
   @ManyToOne(() => User)

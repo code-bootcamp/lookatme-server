@@ -4,7 +4,6 @@ import {
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
-  DeleteDateColumn,
   JoinColumn,
   ManyToOne,
   OneToMany,
@@ -31,9 +30,6 @@ export class SpecialistComment {
   @CreateDateColumn()
   @Field(() => Date)
   createdAt: Date;
-
-  @DeleteDateColumn()
-  deletedAt: Date;
 
   @JoinColumn()
   @ManyToOne(() => Specialist)

@@ -3,13 +3,7 @@ import { Max, Min } from 'class-validator';
 import { SpecialistComment } from 'src/apis/specialistComment/entities/specialistComment.entity';
 import { SpecialistReview } from 'src/apis/specialistReview/entities/specialistReview.entity';
 import { Ticket } from 'src/apis/ticket/entities/ticket.entity';
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  OneToMany,
-  DeleteDateColumn,
-} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 
 @Entity()
 @ObjectType()
@@ -54,9 +48,6 @@ export class Specialist {
   @Column({ type: 'float', nullable: false, default: 0 })
   @Field(() => Float)
   averageRate: number;
-
-  @DeleteDateColumn()
-  deletedAt: Date;
 
   @OneToMany(
     () => SpecialistReview,
