@@ -39,9 +39,6 @@ import { Story } from '../story/entities/story.entity';
  *      fetchLoginUser
  *            [ context: any => User ]
  *              : 로그인한 회원 정보 조회 API
- *      fetchUsersWithDeleted
- *            [ page: Int => [User] ]
- *              : 삭제된 회원도 같이 조회 API
  *      isUser
  *            [ context: IContext => Boolean ]
  *              : 회원으로 로그인했는지 확인 API
@@ -121,14 +118,6 @@ export class UsersResolver {
   ) {
     const email = context.req.user.email;
     return this.usersService.findOneWithEmail({ email });
-  }
-
-  @UseGuards(GqlAuthAdminAccessGuard)
-  @Query(() => [User], { description: '삭제된 회원도 같이 조회' })
-  fetchUsersWithDeleted(
-    @Args({ name: 'page', type: () => Int }) page: number, //
-  ) {
-    return this.usersService.findWithDeleted({ page });
   }
 
   @UseGuards(GqlAuthAccessGuard)
