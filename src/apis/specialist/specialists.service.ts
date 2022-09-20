@@ -100,35 +100,4 @@ export class SpecialistService {
 
     return result;
   }
-
-  async delete({ id }) {
-    const specialistToDelete = await this.specialistRepository.findOne({
-      where: { id },
-    });
-
-    if (!specialistToDelete)
-      throw new UnprocessableEntityException(
-        '존재하지 않는 id값이거나 이미 삭제된 대상입니다.',
-      );
-
-    const result = await this.specialistRepository.softDelete({ id });
-
-    return result.affected ? true : false;
-  }
-
-  async restore({ id }) {
-    const deletedSpecialist = await this.specialistRepository.findOne({
-      where: { id },
-      withDeleted: true,
-    });
-
-    if (!deletedSpecialist)
-      throw new UnprocessableEntityException(
-        '삭제 목록에 존재하지 않는 id 입니다',
-      );
-
-    const result = await this.specialistRepository.restore({ id });
-
-    return result.affected ? true : false;
-  }
 }
