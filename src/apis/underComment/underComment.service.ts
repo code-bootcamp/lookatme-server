@@ -63,7 +63,7 @@ export class UnderCommentsService {
   }
 
   async deleteOwn({ userId, id }) {
-    const result = await this.underCommentsRepository.softDelete({
+    const result = await this.underCommentsRepository.delete({
       id,
       user: { id: userId },
     });
@@ -72,9 +72,8 @@ export class UnderCommentsService {
   }
 
   async deleteReported({ id }) {
-    const result = await this.underCommentsRepository.softDelete({
+    const result = await this.underCommentsRepository.delete({
       id,
-      isReported: true,
     });
 
     return result.affected ? true : false;

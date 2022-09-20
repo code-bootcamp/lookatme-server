@@ -119,10 +119,13 @@ export class SpecialistCommentsResolver {
   @UseGuards(GqlAuthSpecialistAccessGuard)
   @Mutation(() => Boolean, { description: '전문가 자신의 답변 삭제' })
   deleteSpecialistOwnComment(
+    @Context() context: any, //
     @Args('specialistCommentId') specialistCommentId: string, //
   ) {
+    const specialistId = context.req.user.id;
     return this.specialistCommentsService.deleteSpecialistOwn({
       specialistCommentId,
+      specialistId,
     });
   }
 

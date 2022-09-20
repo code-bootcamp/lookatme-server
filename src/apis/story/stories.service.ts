@@ -234,27 +234,15 @@ export class StoryService {
   }
 
   async deleteOwn({ id, userId }) {
-    const user = await this.userRepository.findOne({ where: { id: userId } });
-
-    await this.storyImageRepository.softDelete({ story: { id } });
-
-    const result = await this.storyRepository.softDelete({
+    const result = await this.storyRepository.delete({
       id,
-      user,
+      user: { id: userId },
     });
     return result.affected ? true : false;
   }
 
   async deleteReported({ id }) {
-    const storyImages = await this.storyImageRepository.find({
-      where: { story: { id } },
-    });
-
-    if (storyImages) {
-      await this.storyImageRepository.softDelete({ story: { id } });
-    }
-
-    const result = await this.storyRepository.softDelete({ id });
+    const result = await this.storyRepository.delete({ id });
     return result.affected ? true : false;
   }
 

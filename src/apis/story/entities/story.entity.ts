@@ -52,26 +52,31 @@ export class Story {
   updatedAt: Date;
 
   @JoinTable()
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, { onDelete: 'CASCADE' })
   @Field(() => User)
   user: User;
 
   @JoinTable()
-  @ManyToMany(() => User, (likedusers) => likedusers.likedStories)
+  @ManyToMany(() => User, (likedusers) => likedusers.likedStories, {
+    cascade: true,
+  })
   @Field(() => [User])
   likedusers: User[];
 
-  @OneToMany(() => Comment, (comments) => comments.story)
+  @OneToMany(() => Comment, (comments) => comments.story, { cascade: true })
   @Field(() => [Comment])
   comments: Comment[];
 
-  @OneToMany(() => StoryImage, (storyImage) => storyImage.story)
+  @OneToMany(() => StoryImage, (storyImage) => storyImage.story, {
+    cascade: true,
+  })
   @Field(() => [StoryImage])
   storyImage: StoryImage[];
 
   @OneToMany(
     () => SpecialistComment,
     (specialistComments) => specialistComments.story,
+    { cascade: true },
   )
   @Field(() => [SpecialistComment])
   specialistComments: SpecialistComment[];

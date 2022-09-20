@@ -3,6 +3,8 @@ import { Comment } from 'src/apis/comment/entities/comment.entity';
 import { SpecialistReview } from 'src/apis/specialistReview/entities/specialistReview.entity';
 import { Story } from 'src/apis/story/entities/story.entity';
 import { Ticket } from 'src/apis/ticket/entities/ticket.entity';
+import { UnderComment } from 'src/apis/underComment/entity/underComment.entity';
+import { UnderSpecialistComment } from 'src/apis/underSpecialistComment/entities/underSpecialistComment.entity';
 import {
   Column,
   Entity,
@@ -45,11 +47,11 @@ export class User {
   @Field(() => [Comment])
   likedComments: Comment[];
 
-  @OneToMany(() => Story, (stories) => stories.user)
+  @OneToMany(() => Story, (stories) => stories.user, { cascade: true })
   @Field(() => [Story])
   stories: Story[];
 
-  @OneToMany(() => Ticket, (tickets) => tickets.user)
+  @OneToMany(() => Ticket, (tickets) => tickets.user, { cascade: true })
   @Field(() => [Ticket])
   tickets: Ticket[];
 
@@ -60,7 +62,21 @@ export class User {
   @Field(() => [SpecialistReview])
   specialistReviews: SpecialistReview[];
 
-  @OneToMany(() => Comment, (comments) => comments.user)
+  @OneToMany(() => Comment, (comments) => comments.user, { cascade: true })
   @Field(() => [Comment])
   comments: Comment[];
+
+  @OneToMany(() => UnderComment, (underComments) => underComments.user, {
+    cascade: true,
+  })
+  @Field(() => [UnderComment])
+  underComments: UnderComment[];
+
+  @OneToMany(
+    () => UnderSpecialistComment,
+    (underSpecialistComments) => underSpecialistComments.user,
+    { cascade: true },
+  )
+  @Field(() => [UnderSpecialistComment])
+  underSpecialistComments: UnderSpecialistComment[];
 }

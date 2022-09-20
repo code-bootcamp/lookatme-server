@@ -2,6 +2,7 @@ import { Field, ObjectType } from '@nestjs/graphql';
 import { ChatMessage } from 'src/apis/chat/entities/chatMessage.entity';
 import { SpecialistChatMessage } from 'src/apis/chat/entities/specialistChatMessage.entity';
 import { Specialist } from 'src/apis/specialist/entities/specialist.entity';
+import { SpecialistReview } from 'src/apis/specialistReview/entities/specialistReview.entity';
 import { User } from 'src/apis/user/entities/user.entity';
 import {
   Column,
@@ -10,6 +11,7 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -40,7 +42,7 @@ export class Ticket {
   refunded: boolean;
 
   @JoinColumn()
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, { onDelete: 'CASCADE' })
   @Field(() => User)
   user: User;
 
@@ -49,14 +51,25 @@ export class Ticket {
   @Field(() => Specialist)
   specialist: Specialist;
 
-  @OneToMany(() => ChatMessage, (chatMessages) => chatMessages.ticket)
+  @OneToMany(() => ChatMessage, (chatMessages) => chatMessages.ticket, {
+    cascade: true,
+  })
   @Field(() => [ChatMessage])
   chatMessages: ChatMessage[];
 
   @OneToMany(
     () => SpecialistChatMessage,
     (specialistChatMessages) => specialistChatMessages.ticket,
+    { cascade: true },
   )
   @Field(() => [SpecialistChatMessage])
   specialistChatMessages: SpecialistChatMessage[];
+
+  @OneToOne(
+    () => SpecialistReview,
+    (specialistReview) => specialistReview.ticket,
+    { cascade: true },
+  )
+  @Field(() => SpecialistReview)
+  specialistReview: SpecialistReview;
 }
