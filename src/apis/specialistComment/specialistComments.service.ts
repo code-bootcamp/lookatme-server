@@ -19,7 +19,7 @@ export class SpecialistCommentsService {
   async findAllWithStoryId({ storyId, page }) {
     const result = await this.specialistCommentsRepository.find({
       where: { story: { id: storyId } },
-      relations: ['underSpecialistComments'],
+      relations: ['underSpecialistComments', 'specialist'],
       take: 10,
       skip: page ? (page - 1) * 10 : 0,
     });

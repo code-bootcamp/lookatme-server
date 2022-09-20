@@ -19,6 +19,7 @@ export class UnderSpecialistCommentsService {
   async findAllUnderSpecialistCommentWithId({ specialistCommentId }) {
     return await this.underSpecialistCommentsRepository.find({
       where: { specialistComment: { id: specialistCommentId } },
+      relations: ['user'],
     });
   }
 

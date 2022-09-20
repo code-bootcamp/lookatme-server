@@ -35,10 +35,6 @@ import { IContext } from 'src/commons/type/context';
  *                                      : 전문가 등록 API
  *      updateSpecialistOwnProfile    [ context: any, updateSpecialistInput: UpdateSpecialistInput => Specialist ]
  *                                      : 전문가 자신의 정보 수정 API
- *      deleteSpecialist              [ id: String => Boolean ]
- *                                      : 전문가 소프트 삭제 API
- *      restoreSpecialist             [ id: String => Boolean ]
- *                                      : 삭제된 전문가 계정 복구 API
  */
 
 @Resolver()
@@ -122,17 +118,5 @@ export class SpecialistResolver {
       specialistId,
       updateSpecialistInput,
     });
-  }
-
-  @UseGuards(GqlAuthAdminAccessGuard)
-  @Mutation(() => Boolean, { description: '전문가 소프트 삭제' })
-  deleteSpecialist(@Args('id') id: string) {
-    return this.specialistService.delete({ id });
-  }
-
-  @UseGuards(GqlAuthAdminAccessGuard)
-  @Mutation(() => Boolean, { description: '전문가 계정 복구' })
-  restoreSpecialist(@Args('id') id: string) {
-    return this.specialistService.restore({ id });
   }
 }
