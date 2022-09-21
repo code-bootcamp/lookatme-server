@@ -1,61 +1,77 @@
 <h1 style="border-bottom:2px solid gray; margin: 30px 0;">Look AT Me</h1>
 
-<img src="https://user-images.githubusercontent.com/80080990/183401984-5e414592-acbc-4bc7-a62c-d1b5974f00a0.png">
+<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; width:100%; height: 450px; background-color: #73c0a9;">
+<img style="overflow: hidden;" src="http://drive.google.com/uc?export=view&id=13r8IigMJgdQWc-fKmTI8UEULTAh2tJZD">
+</div>
 
 <h2 style="text-align: center;">
-2030을 위한 심리상담소<br> Look At Me
+2030을 위한 심리상담소
+<br>
+Look At Me
 </h2>
 
 <div style="border-top:2px solid gray; margin: 30px 0;"></div>
 
-<div>
-최근, 2030들은 인플레이션으로 인한 물가 상승, 수요에 비해 부족한 일자리 공급, 서로 간의 비교 등 많은 것에 지쳐있고 이로 인해 다양한 심리 문제가 발생하고 있습니다.
-</div>
-<br>
-<div>
-이런 사람들이 정신과에 가서 상담을 받거나 오프라인으로 심리 상담사한테 상담을 받는 등 행동까지 이어지기는 매우 번거롭고 부담스럽습니다.
-</div>
-<br>
-<div>
-이들을 위해, 온라인으로 본인의 고민을 털어놓고 같은 고민으로 힘들어하는 사람들과 소통할 수 있는 커뮤니티를 제공해주고 전문가들과 온라인 채팅을 통해 부담없이 상담을 받을 수 있는 플랫폼을 기획했습니다. </div>
-<br>
-<div>
-인스타그램, 페이스북 등 SNS에서는 본인의 잘난 부분만 자랑하는 사람들이 대부분인 반면, 저희가 기획, 개발한 플랫폼에서는 본인의 가장 약한 부분, 가장 고민되는 부분 등을 거리낌없이 공유함으로써 모든 사람들이 함께 고민을 나눈다는 점에서 “나를 봐!” 라는 의미의 “Look At Me”란 이름으로 기획하였습니다.
-</div>
-<br>
-<div>
-Look At Me의 로고 속 눈동자는 나를 바라보고 있는 눈동자를 의미합니다.
-</div>
+```
+최근, 2030들은 인플레이션으로 인한 많은 것에 지쳐있고 이로 인해 
+다양한 심리적 문제가 발생하고 있습니다. 
 
-<div style="border-top:2px solid gray; margin: 30px 0;"></div>
+하지만, 아직도 우리나라에서 정신과나 심리상담센터의 진입장벽은 상당히 높은 편입니다.
+
+이러한 점을 개선하기 위해 온라인으로 본인의 고민을 털어놓고,
+같은 고민으로 힘들어하는 사람들과 소통할 수 있는 커뮤니티를 제공해주고,
+전문가들과 온라인 채팅을 통해 부담없이 상담을 받을 수 있는 플랫폼을 기획했습니다. 
+
+인스타그램, 페이스북 등 SNS에서는 본인의 잘난 부분만 자랑하는 사람들이 대부분인 반면, 
+저희가 기획, 개발한 플랫폼에서는 본인의 가장 약한 부분, 가장 고민되는 부분 등을 거리낌없이 공유함으로써
+모든사람들이 함께 고민을 나눈다는 점에서 
+
+“나를 봐!” 라는 의미의 “Look At Me”란 이름으로 기획하였습니다.
+```
 
 <h2 style="border-bottom:2px solid gray; margin: 30px 0;">기술 스택</h2>
 
-<img src="https://user-images.githubusercontent.com/80080990/183402203-1a33347f-6b47-4f25-8144-89886cafeb2b.jpg">
+<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; width:100%; height: 450px;">
+<img style="overflow: hidden;" src="http://drive.google.com/uc?export=view&id=1s98uhzGeDbsUjLYEZNT7odYuOl27dVNe">
 </div>
 
-<div style="margin-top: 20px 0">
+<div style="margin-top: 20px">
   <li>TypeScript</li>
-  <li>NodeJS</li>
-  <li>NestJS</li>
-  <li>GraphQL</li>
-  <li>TypeORM</li>
-  <li>Redis</li>
-  <li>Mysql</li>
-  <li>Docker</li>
-  <li>Git, Github</li>
-  <li>Kubernetes</li>
+  <li>Node.js</li>
+  <li>Nest.js</li>
+  <li>MySQL</li>
   <li>GCP</li>
+  <li>TypeORM</li>
+  <li>Graphql</li>
+  <li>WebSocket</li>
+  <li>Cron-Scheduler</li>
+  <li>Kubernetes</li>
+  <li>Redis</li>
+  <li>Git</li>
 </div>
 
 <h2 style="border-bottom:2px solid gray; margin: 30px 0;">Flow Chart</h2>
 
-<img src="https://user-images.githubusercontent.com/80080990/183402451-1c6c1a6c-c635-42a2-9443-0f7d3942ed88.png">
+<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; width:100%;">
+<img src="http://drive.google.com/uc?export=view&id=1q4m00Nb19P7CxRcepAIBxPU7Ku9bjGM6">
+</div>
+
+<h2 style="border-bottom:2px solid gray; margin: 30px 0;">Pipeline</h2>
+
+<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; width:100%; height: 600px;">
+<img style="overflow: hidden;" src="http://drive.google.com/uc?export=view&id=1thrOH-j8DGroS7Vbwf2jWDUKf-wIkVFb">
 </div>
 
 <h2 style="border-bottom:2px solid gray; margin: 30px 0;">ERD</h2>
 
-<img src="https://user-images.githubusercontent.com/80080990/183402619-9d68b1e3-e53a-49e4-b99b-e768c439af13.png">
+<img src="http://drive.google.com/uc?export=view&id=1r9xahl1h_rVgmFw0dZgvdWn8GClDzb08">
+</div>
+
+<h2 style="border-bottom:2px solid gray; margin: 30px 0;">API Docs</h2>
+<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; width:100%;">
+<img src="http://drive.google.com/uc?export=view&id=1UMH_gH2KodnBNlX_YKec3jKY-Ivo-8gM">
+<img src="http://drive.google.com/uc?export=view&id=1zjuVT5pZWQLVLdZsegdsMfjnaSjFhoc7">
+<img src="http://drive.google.com/uc?export=view&id=1R1wnRL1_tR4hpIpftEs3LFbyNOAdzMlX">
 </div>
 
 <h2 style="border-bottom:2px solid gray; margin: 30px 0;">폴더 구조</h2>
@@ -189,25 +205,30 @@ f7b3_team04_server
 
 <h2 style="border-bottom:2px solid gray; margin: 30px 0;">BackEnd 팀원 역할</h2>
 
-<h3>임성준</h3>
+<h3>송재의</h3>
 <div>
-  <li>Email: </li>
-  <li>Github: </li> 
+    <a href = "https://github.com/x0ng120x"> <img alt="GitHub" src ="https://img.shields.io/badge/GitHub-181717.svg?&style=for-the-badge&logo=GitHub&logoColor=white"/> </a>
+    <img alt="Gmail" src="https://img.shields.io/badge/jaysong0120@gmail.com-EA4335.svg?&style=for-the-badge&logo=Gmail&logoColor=white"/>
   <li>Git 관리</li>
-  <li>ERD 설계 및 API DOCS 작업</li>
   <li>Backend CI/CD 배포</li>
-  <li>예약, 리뷰 및 문의 기능 구현</li>
-  <li>테스트 코드 작성</li>
+  <li>ERD 설계 및 API DOCS 작업</li>
+  <li>채팅 기능 구현</li>
+  <li>Task Scheduling을 활용한 명언 주기적 자동 업데이트 기능 구현</li>
+  <li>로그인 기능 구현</li>
+  <li>회원가입 기능 구현</li>
+  <li>결제 기능 구현</li>
 </div>
 
 <h3 style="margin-top: 30px;">조영래</h3>
 <div>
-  <li>Email: </li>
-  <li>Github: </li>
-  <li>ERD 설계 및 API DOCS 작업</li>
-  <li>로그인 기능 구현</li>
-  <li>회원가입 기능 구현</li>
-  <li>결제 기능 구현</li>
-  <li>이미지 업로드 기능 구현</li>
-  <li>테스트 코드 작성</li>
+    <a href = "https://github.com/chohyanglae"> <img alt="GitHub" src ="https://img.shields.io/badge/GitHub-181717.svg?&style=for-the-badge&logo=GitHub&logoColor=white"/> </a>
+    <img alt="Gmail" src="https://img.shields.io/badge/jaws100707@gmail.com-EA4335.svg?&style=for-the-badge&logo=Gmail&logoColor=white"/>
+  <li></li>
+  <li></li>
+  <li></li>
+  <li></li>
+  <li></li>
+  <li></li>
+  <li></li>
+  <li></li>
 </div>
