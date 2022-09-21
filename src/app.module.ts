@@ -63,6 +63,8 @@ import { UnderSpecialistCommentsModule } from './apis/underSpecialistComment/und
           'Accept',
         ],
         credentials: true,
+        // debug: false,
+        // playground: false,
       },
     }),
     TypeOrmModule.forRoot({
