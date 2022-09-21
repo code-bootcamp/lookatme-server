@@ -3,7 +3,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Quote } from '../quote/entities/quote.entity';
 import { QuoteService } from '../quote/quotes.service';
-import { BatchesController } from './batches.controller';
+import { BatchesResolver } from './batches.resolver';
 import { TasksService } from './tasks.service';
 
 @Module({
@@ -13,11 +13,9 @@ import { TasksService } from './tasks.service';
       Quote, //
     ]),
   ],
-  controllers: [
-    BatchesController, //
-  ],
   providers: [
     TasksService, //
+    BatchesResolver,
     QuoteService,
   ],
 })
