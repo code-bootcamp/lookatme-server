@@ -36,7 +36,7 @@ export class Story {
   @Column({ type: 'varchar', length: 100, nullable: false })
   title: string;
 
-  @Column({ type: 'varchar', length: 300, nullable: false })
+  @Column({ type: 'longtext', nullable: false })
   @Field(() => String)
   text: string;
 
