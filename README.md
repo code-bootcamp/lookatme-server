@@ -96,7 +96,7 @@ f8b4_team06_server
 │   │   │   ├── auths.resolver.ts
 │   │   │   └── auths.service.ts
 │   │   ├── batch
-│   │   │   ├── batches.controller.ts
+│   │   │   ├── batches.resolver.ts
 │   │   │   ├── batches.module.ts
 │   │   │   └── batches.service.ts
 │   │   ├── category
