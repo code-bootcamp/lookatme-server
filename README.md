@@ -1,10 +1,10 @@
 <h1 style="border-bottom:2px solid gray; margin: 30px 0;">Look AT Me</h1>
 
-<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; width:100%; height: 450px; background-color: #73c0a9;">
-<img style="overflow: hidden;" src="https://user-images.githubusercontent.com/78432849/191470673-c3010e9c-969d-4dca-b695-bf352f106757.png">
+<div align="center">
+<img src="https://user-images.githubusercontent.com/78432849/191470673-c3010e9c-969d-4dca-b695-bf352f106757.png">
 </div>
 
-<h2 style="text-align: center;">
+<h2 align="center">
 2030을 위한 심리상담소!
 <br>
 Look At Me
