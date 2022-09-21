@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Story } from '../story/entities/story.entity';
-import { UnderComment } from '../underComment/entity/underComment.entity';
 import { User } from '../user/entities/user.entity';
 import { Comment } from './entities/comment.entity';
 
@@ -17,9 +16,6 @@ export class CommentsService {
 
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
-
-    @InjectRepository(UnderComment)
-    private readonly underCommentsRepository: Repository<UnderComment>,
   ) {}
 
   async findAllWithStoryId({ storyId, page }) {
@@ -98,9 +94,10 @@ export class CommentsService {
 
     const comment = await this.commentsRepository.findOne({
       where: { id: commentId },
-      relations: ['story'],
+      relations: ['story', 'underComments'],
     });
-    console.log(comment);
+
+    const underCommentCount = comment.underComments.length;
 
     const result = await this.commentsRepository.delete({
       id: commentId,
@@ -109,7 +106,7 @@ export class CommentsService {
 
     await this.storiesRepository.update(
       { id: comment.story.id },
-      { commentCounts: comment.story.commentCounts - 1 },
+      { commentCounts: comment.story.commentCounts - (1 + underCommentCount) },
     );
 
     return result.affected ? true : false;
@@ -118,14 +115,16 @@ export class CommentsService {
   async deleteReported({ id }) {
     const comment = await this.commentsRepository.findOne({
       where: { id: id },
-      relations: ['story'],
+      relations: ['story', 'underComments'],
     });
+
+    const underCommentCount = comment.underComments.length;
 
     const result = await this.commentsRepository.delete({ id });
 
     await this.storiesRepository.update(
       { id: comment.story.id },
-      { commentCounts: comment.story.commentCounts - 1 },
+      { commentCounts: comment.story.commentCounts - (1 + underCommentCount) },
     );
 
     return result.affected ? true : false;

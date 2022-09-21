@@ -9,36 +9,12 @@ import { User } from './entities/user.entity';
 import * as coolsms from 'coolsms-node-sdk';
 import * as nodemailer from 'nodemailer';
 import { getToday } from 'src/commons/libraries/utills';
-import { UnderSpecialistComment } from '../underSpecialistComment/entities/underSpecialistComment.entity';
-import { Story } from '../story/entities/story.entity';
-import { Ticket } from '../ticket/entities/ticket.entity';
-import { Comment } from '../comment/entities/comment.entity';
-import { UnderComment } from '../underComment/entity/underComment.entity';
-import { StoryImage } from '../storyImage/entities/storyImage.entity';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-
-    @InjectRepository(Story)
-    private readonly storyRepository: Repository<Story>,
-
-    @InjectRepository(Ticket)
-    private readonly ticketRepository: Repository<Ticket>,
-
-    @InjectRepository(UnderSpecialistComment)
-    private readonly underSpecialistCommentRepository: Repository<UnderSpecialistComment>,
-
-    @InjectRepository(Comment)
-    private readonly commentRepository: Repository<Comment>,
-
-    @InjectRepository(UnderComment)
-    private readonly underCommentRepository: Repository<UnderComment>,
-
-    @InjectRepository(StoryImage)
-    private readonly storyImageRepository: Repository<StoryImage>,
   ) {}
 
   findAll({ page }) {
