@@ -1,6 +1,6 @@
 import { Server } from 'socket.io';
 import {
-  ConnectedSocket,
+  // ConnectedSocket,
   MessageBody,
   SubscribeMessage,
   WebSocketGateway,
@@ -14,7 +14,14 @@ import { Repository } from 'typeorm';
 
 @WebSocketGateway({
   namespace: 'chat',
-  cors: { origin: true, credentials: true },
+  cors: {
+    origin: [
+      true,
+      `${process.env.CLIENT_DOMAIN}/`,
+      `${process.env.LOCALHOST_DOMAIN}/`,
+    ],
+    // credentials: true,
+  },
 })
 @Injectable()
 export class ChatsGateway {
@@ -33,7 +40,7 @@ export class ChatsGateway {
   @SubscribeMessage('user_enter')
   async connectUser(
     @MessageBody() ticketId: string, //
-    @ConnectedSocket() client,
+    // @ConnectedSocket() client,
   ) {
     const ticket = await this.ticketRepository.findOne({
       where: { id: ticketId },
@@ -43,13 +50,13 @@ export class ChatsGateway {
     const receive = `${ticket.user.nickname}님이 입장했습니다.`;
 
     this.server.emit('receive' + ticketId, receive);
-    this.wsClients.push(client);
+    // this.wsClients.push(client);
   }
 
   @SubscribeMessage('specialist_enter')
   async connectSpecialist(
     @MessageBody() ticketId: string, //
-    @ConnectedSocket() client,
+    // @ConnectedSocket() client,
   ) {
     const ticket = await this.ticketRepository.findOne({
       where: { id: ticketId },
@@ -59,20 +66,20 @@ export class ChatsGateway {
     const receive = `${ticket.specialist.name}님이 입장했습니다.`;
 
     this.server.emit('receive' + ticketId, receive);
-    this.wsClients.push(client);
+    // this.wsClients.push(client);
   }
 
-  private broadcast(event, client, message: any) {
-    for (const c of this.wsClients) {
-      if (client.id == c.id) continue;
-      c.emit(event, message);
-    }
-  }
+  // private broadcast(event, client, message: any) {
+  //   for (const c of this.wsClients) {
+  //     if (client.id == c.id) continue;
+  //     c.emit(event, message);
+  //   }
+  // }
 
   @SubscribeMessage('user_send')
   async sendUserMessage(
     @MessageBody() data: string, //
-    @ConnectedSocket() client,
+    // @ConnectedSocket() client,
   ) {
     const [ticketId, message] = data;
 
@@ -83,13 +90,14 @@ export class ChatsGateway {
 
     const nickname = result.user.nickname;
 
-    this.broadcast(ticketId, client, [nickname, message, 'user']);
+    // this.broadcast(ticketId, client, [nickname, message, 'user']);
+    this.server.emit(ticketId, [nickname, message, 'user']);
   }
 
   @SubscribeMessage('specialist_send')
   async sendSpecialistMessage(
     @MessageBody() data: string, //
-    @ConnectedSocket() client,
+    // @ConnectedSocket() client,
   ) {
     const [ticketId, message] = data;
 
@@ -100,6 +108,7 @@ export class ChatsGateway {
 
     const nickname = result.specialist.name;
 
-    this.broadcast(ticketId, client, [nickname, message, 'specialist']);
+    // this.broadcast(ticketId, client, [nickname, message, 'specialist']);
+    this.server.emit(ticketId, [nickname, message, 'specialist']);
   }
 }

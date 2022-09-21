@@ -13,13 +13,18 @@ export class StoryService {
   constructor(
     @InjectRepository(Story)
     private readonly storyRepository: Repository<Story>, //
+
     @InjectRepository(StoryImage)
     private readonly storyImageRepository: Repository<StoryImage>,
+
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+
     @InjectRepository(Category)
     private readonly categoryRepository: Repository<Category>,
+
     private readonly categoryService: CategoryService,
+
     private readonly usersService: UsersService,
   ) {}
 
