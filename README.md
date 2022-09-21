@@ -77,70 +77,136 @@ Look At Me
 <h2 style="border-bottom:2px solid gray; margin: 30px 0;">폴더 구조</h2>
 
 ```
-f7b3_team04_server
+f8b4_team06_server
 ├── .vscode
 │   └── settings.json
 ├── src
 │   ├── apis
-│   │   ├── auth
-│   │   │   ├── auth.controller.ts
-│   │   │   ├── auth.module.ts
-│   │   │   ├── auth.resolver.ts
-│   │   │   └── auth.service.ts
-│   │   ├── branch
-│   │   │   ├── __test__
-│   │   │   │   ├── branch.resolver.spec.ts
-│   │   │   │   └── branch.service.spec.ts
-│   │   │   ├── entities
-│   │   │   │   └── branch.entity.ts
-│   │   │   ├── branch.module.ts
-│   │   │   ├── branch.resolver.ts
-│   │   │   └── branch.service.ts
-│   │   ├── file
-│   │   │   ├── file.module.ts
-│   │   │   ├── file.resolver.ts
-│   │   │   └── file.service.ts
-│   │   ├── https
-│   │   │   ├── https.controller.ts
-│   │   │   └── https.module.ts
-│   │   ├── iamport
-│   │   │   └── iamport.service.ts
-│   │   ├── payment
+│   │   ├── admin
 │   │   │   ├── dto
-│   │   │   │   └── createPayment.input.ts
+│   │   │   │   └── createAdmin.input.ts
+│   │   │   ├── entities
+│   │   │   │   └── admin.entity.ts
+│   │   │   ├── admins.module.ts
+│   │   │   ├── admins.resolver.ts
+│   │   │   └── admins.service.ts
+│   │   ├── auth
+│   │   │   ├── auths.controller.ts
+│   │   │   ├── auths.module.ts
+│   │   │   ├── auths.resolver.ts
+│   │   │   └── auths.service.ts
+│   │   ├── batch
+│   │   │   ├── batches.controller.ts
+│   │   │   ├── batches.module.ts
+│   │   │   └── batches.service.ts
+│   │   ├── category
+│   │   │   ├── entites
+│   │   │   │   └── category.entity.ts
+│   │   │   └── categories.service.ts
+│   │   ├── chat
+│   │   │   ├── dto
+│   │   │   │   └── chatList.output.ts
+│   │   │   ├── entities
+│   │   │   │   ├── chatMessage.entity.ts
+│   │   │   │   └── specialistChatMessage.entity.ts
+│   │   │   ├── chats.gateway.ts
+│   │   │   ├── chats.module.ts
+│   │   │   ├── chats.resolver.ts
+│   │   │   └── chats.service.ts
+│   │   ├── comment
+│   │   │   ├── dto
+│   │   │   │   ├── createComment.input.ts
+│   │   │   │   └── updateComment.input.ts
+│   │   │   ├── entities
+│   │   │   │   └── comment.entity.ts
+│   │   │   ├── comments.module.ts
+│   │   │   ├── comments.resolver.ts
+│   │   │   └── comments.service.ts
+│   │   ├── file
+│   │   │   ├── files.module.ts
+│   │   │   ├── files.resolver.ts
+│   │   │   └── files.service.ts
+│   │   ├── iamport
+│   │   │   ├── iamports.module.ts
+│   │   │   └── iamports.service.ts
+│   │   ├── payment
 │   │   │   ├── entities
 │   │   │   │   └── payment.entity.ts
-│   │   │   ├── payment.module.ts
-│   │   │   ├── payment.resolver.ts
-│   │   │   └── payment.service.ts
-│   │   ├── question
+│   │   │   ├── payments.module.ts
+│   │   │   ├── payments.resolver.ts
+│   │   │   └── payments.service.ts
+│   │   ├── quote
 │   │   │   ├── dto
-│   │   │   │   ├── createQuestion.input.ts
-│   │   │   │   └── replyQuestion.input.ts
+│   │   │   │   ├── createQuote.input.ts
+│   │   │   │   └── updateQuote.input.ts
 │   │   │   ├── entities
-│   │   │   │   └── question.entity.ts
-│   │   │   ├── question.module.ts
-│   │   │   ├── question.resolver.ts
-│   │   │   └── question.service.ts
-│   │   ├── review
+│   │   │   │   └── quote.entity.ts
+│   │   │   ├── defaultQuoteList.ts
+│   │   │   ├── quotes.module.ts
+│   │   │   ├── quotes.resolver.ts
+│   │   │   └── quotes.service.ts
+│   │   ├── specialist
 │   │   │   ├── dto
-│   │   │   │   └── createReview.input.ts
+│   │   │   │   ├── createSpecialist.input.ts
+│   │   │   │   └── updateSpecialist.input.ts
 │   │   │   ├── entities
-│   │   │   │   └── review.entity.ts
-│   │   │   ├── review.module.ts
-│   │   │   ├── review.resolver.ts
-│   │   │   └── review.service.ts
-│   │   ├── room
+│   │   │   │   └── specialist.entity.ts
+│   │   │   ├── specialists.module.ts
+│   │   │   ├── specialists.resolver.ts
+│   │   │   └── specialists.service.ts
+│   │   ├── specialistComment
 │   │   │   ├── dto
-│   │   │   │   ├── createRoom.input.ts
-│   │   │   │   └── updateRoom.input.ts
+│   │   │   │   ├── createSpecialistComment.input.ts
+│   │   │   │   └── updateSpecialistComment.input.ts
 │   │   │   ├── entities
-│   │   │   │   ├── images.entity.ts
-│   │   │   │   ├── room.entity.ts
-│   │   │   │   └── review.entity.ts
-│   │   │   ├── room.module.ts
-│   │   │   ├── room.resolver.ts
-│   │   │   └── room.service.ts
+│   │   │   │   └── specialistComment.entity.ts
+│   │   │   ├── specialistComments.module.ts
+│   │   │   ├── specialistComments.resolver.ts
+│   │   │   └── specialistComments.service.ts
+│   │   ├── specialistReview
+│   │   │   ├── dto
+│   │   │   │   └── createSpecialistReveiw.input.ts
+│   │   │   ├── entities
+│   │   │   │   └── specialistReveiw.entity.ts
+│   │   │   ├── specialistReveiws.module.ts
+│   │   │   ├── specialistReveiws.resolver.ts
+│   │   │   └── specialistReveiws.service.ts
+│   │   ├── story
+│   │   │   ├── dto
+│   │   │   │   ├── createStory.input.ts
+│   │   │   │   └── updateStory.input.ts
+│   │   │   ├── entities
+│   │   │   │   └── story.entity.ts
+│   │   │   ├── stories.module.ts
+│   │   │   ├── stories.resolver.ts
+│   │   │   └── stories.service.ts
+│   │   ├── storyImage
+│   │   │   ├── entities
+│   │   │   │   └── storyImage.entity.ts
+│   │   ├── ticket
+│   │   │   ├── entities
+│   │   │   │   └── ticket.entity.ts
+│   │   │   ├── tickets.module.ts
+│   │   │   ├── tickets.resolver.ts
+│   │   │   └── tickets.service.ts
+│   │   ├── underComment
+│   │   │   ├── dto
+│   │   │   │   ├── createunderComment.input.ts
+│   │   │   │   └── updateunderComment.input.ts
+│   │   │   ├── entities
+│   │   │   │   └── UnderComment.entity.ts
+│   │   │   ├── underComments.module.ts
+│   │   │   ├── underComments.resolver.ts
+│   │   │   └── underComments.service.ts
+│   │   ├── underSpecialistComment
+│   │   │   ├── dto
+│   │   │   │   ├── createUnderSpecialistComment.input.ts
+│   │   │   │   └── updateUnderSpecialistComment.input.ts
+│   │   │   ├── entities
+│   │   │   │   └── underSpecialistComment.entity.ts
+│   │   │   ├── underSpecialistComments.module.ts
+│   │   │   ├── underSpecialistComments.resolver.ts
+│   │   │   └── underSpecialistComments.service.ts
 │   │   └── user
 │   │       ├── dto
 │   │       │   ├── createUser.input.ts
@@ -152,24 +218,36 @@ f7b3_team04_server
 │   │       └── user.service.ts
 │   ├── commons
 │   │   ├── auth
+│   │   │   ├── gql-auth.guard.ts
 │   │   │   ├── jwt-access.strategy.ts
+│   │   │   ├── jwt-admin-access.strategy.ts
 │   │   │   ├── jwt-refresh.strategy.ts
 │   │   │   ├── jwt-social-google.strategy.ts
 │   │   │   ├── jwt-social-kakao.strategy.ts
-│   │   │   └── jwt-social-naver.strategy.ts
+│   │   │   ├── jwt-social-naver.strategy.ts
+│   │   │   └── jwt-specialist-access.strategy.ts
 │   │   ├── filter
 │   │   │   └── http-exception.filter.ts
 │   │   └── graphql
-│   │       └── http-exception.filter.ts
+│   │   │    └── schema.gql
+│   │   └── libraries
+│   │   │   └── utills.ts
+│   │   └── type
+│   │   │   ├── context.ts
+│   │   │   └── enum.ts
+│   ├── app.controller.ts
 │   ├── app.module.ts
-│   ├── app.moduleLocal.ts
 │   └── main.ts
 ├── test
 ├── .dockerignore
+├── .env
+├── .env.docker
+├── .env.prod
 ├── .eslintrc.js
 ├── .gitignore
 ├── .prettierrc
 ├── cloudbuild.yaml
+├── docker-compose.dev.yaml
 ├── docker-compose.prod.yaml
 ├── docker-compose.yaml
 ├── Dockerfile
@@ -185,22 +263,36 @@ f7b3_team04_server
 <h2 style="border-bottom:2px solid gray; margin: 30px 0;">. env 설정</h2>
 
 <div>
-  <li>EMAIL_USER</li>
-  <li>EMAIL_PASS</li>
-  <li>EMAIL_SENDER</li>
+  <li>DATABASE_TYPE</li>
+  <li>DATABASE_HOST</li>
+  <li>DATABASE_PORT</li>
+  <li>DATABASE_USERNAME</li>
+  <li>DATABASE_PASSWORD</li>
+  <li>DATABASE_DATABASE</li>
   <li>GOOGLE_CLIENT_ID</li>
   <li>GOOGLE_CLIENT_SECRET</li>
   <li>NAVER_CLIENT_ID</li>
   <li>NAVER_CLIENT_SECRET</li>
   <li>KAKAO_CLIENT_ID</li>
   <li>KAKAO_CLIENT_SECRET</li>
-  <li>GCP_STORAGE_KEYFILENAME</li>
-  <li>GCP_STORAGE_PROJECTID</li>
-  <li>GCP_STORAGE_BUCKET</li>
-  <li>IMP_KEY</li>
-  <li>IMP_SECRET</li>
-  <li>ACCESS_KEY</li>
-  <li>REFRESH_KEY</li>
+  <li>IMP_CLIENT_KEY</li>
+  <li>IMP_CLIENT_SECRET</li>
+  <li>PROJECT_ID</li>
+  <li>KEY_FILENAME</li>
+  <li>BUCKET_NAME</li>
+  <li>HASH_SALT</li>
+  <li>JWT_ACCESS_SECRET</li>
+  <li>JWT_REFRESH_SECRET</li>
+  <li>SMS_KEY</li>
+  <li>SMS_SECRET</li>
+  <li>SMS_SENDER</li>
+  <li>EMAIL_USER</li>
+  <li>EMAIL_PASS</li>
+  <li>EMAIL_SENDER</li>
+  <li>CLIENT_DOMAIN</li>
+  <li>LOCALHOST_DOMAIN</li>
+  <li>SERVER_DOMAIN</li>
+  <li>REDIS_IP</li>
 </div>
 
 <h2 style="border-bottom:2px solid gray; margin: 30px 0;">BackEnd 팀원 역할</h2>
@@ -219,16 +311,12 @@ f7b3_team04_server
   <li>결제 기능 구현</li>
 </div>
 
-<h3 style="margin-top: 30px;">조영래</h3>
+<h3 style="margin-top: 30px;">조향래</h3>
 <div>
     <a href = "https://github.com/chohyanglae"> <img alt="GitHub" src ="https://img.shields.io/badge/GitHub-181717.svg?&style=for-the-badge&logo=GitHub&logoColor=white"/> </a>
     <img alt="Gmail" src="https://img.shields.io/badge/jaws100707@gmail.com-EA4335.svg?&style=for-the-badge&logo=Gmail&logoColor=white"/>
-  <li></li>
-  <li></li>
-  <li></li>
-  <li></li>
-  <li></li>
-  <li></li>
-  <li></li>
-  <li></li>
+  <li>ERD 설계 및 API DOCS 작업</li>
+  <li>파이프라인 작성</li>
+  <li>이미지 파일 업로드 구현</li>
+  <li>CRUD API 구현</li>
 </div>
