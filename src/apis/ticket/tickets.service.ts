@@ -10,8 +10,10 @@ export class TicketsService {
   constructor(
     @InjectRepository(Ticket)
     private readonly ticketsRepository: Repository<Ticket>,
+
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
+
     @InjectRepository(Specialist)
     private readonly specialistRepository: Repository<Specialist>,
   ) {}

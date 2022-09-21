@@ -10,8 +10,10 @@ export class SpecialistReviewsService {
   constructor(
     @InjectRepository(SpecialistReview)
     private readonly specialistReviewsRepository: Repository<SpecialistReview>,
+
     @InjectRepository(Specialist)
     private readonly specialistsRepository: Repository<Specialist>,
+
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
   ) {}

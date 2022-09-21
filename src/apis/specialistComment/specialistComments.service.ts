@@ -10,8 +10,10 @@ export class SpecialistCommentsService {
   constructor(
     @InjectRepository(SpecialistComment)
     private readonly specialistCommentsRepository: Repository<SpecialistComment>,
+
     @InjectRepository(Specialist)
     private readonly specialistRepository: Repository<Specialist>,
+
     @InjectRepository(Story)
     private readonly storyRepository: Repository<Story>,
   ) {}
@@ -48,9 +50,11 @@ export class SpecialistCommentsService {
 
   async create({ specialistId, createSpecialistCommentInput }) {
     const { text, storyId } = createSpecialistCommentInput;
+
     const specialist = await this.specialistRepository.findOne({
       where: { id: specialistId },
     });
+
     const story = await this.storyRepository.findOne({
       where: { id: storyId },
     });
@@ -60,6 +64,11 @@ export class SpecialistCommentsService {
       specialist,
       story,
     });
+
+    await this.storyRepository.update(
+      { id: storyId },
+      { commentCounts: story.commentCounts + 1 },
+    );
 
     return result;
   }
@@ -85,15 +94,53 @@ export class SpecialistCommentsService {
   }
 
   async deleteSpecialistOwn({ specialistCommentId, specialistId }) {
+    const specialistComment = await this.specialistCommentsRepository.findOne({
+      where: { id: specialistCommentId },
+      relations: ['story', 'underSpecialistComments'],
+    });
+
+    const underSpecialistCommentCount =
+      specialistComment.underSpecialistComments.length;
+
     const result = await this.specialistCommentsRepository.delete({
       id: specialistCommentId,
       specialist: { id: specialistId },
     });
+
+    await this.storyRepository.update(
+      { id: specialistComment.story.id },
+      {
+        commentCounts:
+          specialistComment.story.commentCounts -
+          (1 + underSpecialistCommentCount),
+      },
+    );
+
     return result.affected ? true : false;
   }
 
   async deleteReported({ id }) {
-    const result = await this.specialistCommentsRepository.delete({ id });
+    const specialistComment = await this.specialistCommentsRepository.findOne({
+      where: { id: id },
+      relations: ['story', 'underSpecialistComments'],
+    });
+
+    const underSpecialistCommentCount =
+      specialistComment.underSpecialistComments.length;
+
+    const result = await this.specialistCommentsRepository.delete({
+      id: id,
+    });
+
+    await this.storyRepository.update(
+      { id: specialistComment.story.id },
+      {
+        commentCounts:
+          specialistComment.story.commentCounts -
+          (1 + underSpecialistCommentCount),
+      },
+    );
+
     return result.affected ? true : false;
   }
 
