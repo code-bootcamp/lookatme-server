@@ -18,7 +18,7 @@ export class TasksService {
   addCronJob() {
     const name = 'cronQuote';
 
-    const job = new CronJob(CronExpression.EVERY_10_SECONDS, async () => {
+    const job = new CronJob(CronExpression.EVERY_30_SECONDS, async () => {
       await this.quotesService.selectRandomQuote();
     });
 
