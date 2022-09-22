@@ -23,5 +23,7 @@ export class TasksService {
     });
 
     this.schedulerRegistry.addCronJob(name, job);
+
+    this.logger.warn(`job ${name} added!`);
   }
 }
