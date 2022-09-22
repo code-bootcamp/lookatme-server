@@ -33,14 +33,14 @@ export class AdminsResolver {
     return this.adminsService.isAdmin({ admin: context.req.user });
   }
 
-  @Mutation(() => Admin, { description: '관리자 회원가입' })
-  async createAdmin(
-    @Args('createAdminInput') createAdminInput: CreateAdminInput, //
-  ) {
-    const hashedPassword = await bcrypt.hash(
-      createAdminInput.password,
-      Number(process.env.HASH_SALT),
-    );
-    return this.adminsService.create({ hashedPassword, ...createAdminInput });
-  }
+  // @Mutation(() => Admin, { description: '관리자 회원가입' })
+  // async createAdmin(
+  //   @Args('createAdminInput') createAdminInput: CreateAdminInput, //
+  // ) {
+  //   const hashedPassword = await bcrypt.hash(
+  //     createAdminInput.password,
+  //     Number(process.env.HASH_SALT),
+  //   );
+  //   return this.adminsService.create({ hashedPassword, ...createAdminInput });
+  // }
 }
