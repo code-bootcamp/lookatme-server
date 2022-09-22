@@ -35,7 +35,7 @@ export class User {
   @Field(() => String)
   phone_number: string;
 
-  @Column({ type: 'int', unsigned: true, default: 0, nullable: false })
+  @Column({ type: 'int', unsigned: true, default: 50000, nullable: false })
   @Field(() => Int)
   point: number;
 
