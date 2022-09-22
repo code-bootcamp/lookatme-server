@@ -69,9 +69,9 @@ Look At Me
 
 <h2 style="border-bottom:2px solid gray; margin: 30px 0;">API Docs</h2>
 <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; width:100%;">
-<img src="https://user-images.githubusercontent.com/78432849/191498959-3fe69384-3204-4815-a6b3-0bec6e780bb7.png">
-<img src="https://user-images.githubusercontent.com/78432849/191498968-9785b2ad-fbaf-48d3-b45c-1ea9e93bf8d7.png">
-<img src="https://user-images.githubusercontent.com/78432849/191498970-4b1b074f-896e-40ee-ac95-13fbfc161dd4.png">
+<img src="https://user-images.githubusercontent.com/78432849/191713336-33847cf7-d410-4d19-be64-89352dff7332.png">
+<img src="https://user-images.githubusercontent.com/78432849/191713366-673be413-1421-400e-a583-95ddd9127bd8.png">
+<img src="https://user-images.githubusercontent.com/78432849/191713379-5e21f398-41a5-4e1d-95a5-24a203b172a8.png">
 </div>
 
 <h2 style="border-bottom:2px solid gray; margin: 30px 0;">폴더 구조</h2>
