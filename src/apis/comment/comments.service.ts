@@ -32,6 +32,7 @@ export class CommentsService {
   async findOwnComments({ userId, page }) {
     return await this.commentsRepository.find({
       where: { user: { id: userId } },
+      relations: ['story'],
       take: 10,
       skip: page ? (page - 1) * 10 : 0,
     });
