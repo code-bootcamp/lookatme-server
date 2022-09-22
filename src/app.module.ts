@@ -76,7 +76,7 @@ import { UnderSpecialistCommentsModule } from './apis/underSpecialistComment/und
       database: process.env.DATABASE_DATABASE,
       entities: [__dirname + '/apis/**/*.entity.*'],
       synchronize: true,
-      logging: true, //SQL query will be displayed on terminal
+      logging: false, //SQL query will be displayed on terminal
     }),
     CacheModule.register<RedisClientOptions>({
       store: redisStore, // type of storage
