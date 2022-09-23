@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Story } from '../story/entities/story.entity';
@@ -77,6 +77,9 @@ export class CommentsService {
     const commentToUpdate = await this.commentsRepository.findOne({
       where: { id: commentId, user },
     });
+
+    if (!commentToUpdate)
+      throw new UnprocessableEntityException('수정 권한이 없습니다.');
 
     const result = await this.commentsRepository.save({
       ...commentToUpdate,
